@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Latte · Location off</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;font-family:'Geist',system-ui,-apple-system,sans-serif;background:#FAF7F3}
+.t{--bg:#FAF7F3;--surface:#FFFFFF;--ink:#1F1712;--muted:#6B5D53;--line:#EAE2D9;--accent:#C8894A;--icon:#9C6230;--pill:#F3ECE4;--btn:#1F1712;--btnfg:#FAF7F3;--map:#F2EDE6;--blk:#E6DDD2;--street:#FFFFFF;--water:#D9DFE0;--sh:rgba(31,23,18,.16);color:var(--ink);font-family:'Geist',system-ui,sans-serif}
+a{color:inherit}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.ar{height:40px;padding:0 14px;border-radius:20px;border:1px solid var(--line);background:var(--surface);font:600 14px 'Geist',sans-serif;color:var(--ink);display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.n{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;font-weight:400;color:var(--muted)}
+</style>
+</helmet>
+<div class="t" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: var(--map)">
+<svg width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<defs><pattern id="blocks" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect x="3" y="3" width="16" height="16" rx="3" style="fill: var(--blk)"></rect></pattern></defs>
+<rect width="390" height="844" style="fill: var(--map)"></rect><rect width="390" height="844" fill="url(#blocks)"></rect>
+<path d="M190 844 L390 380 L390 844 Z" style="fill: var(--water)"></path>
+</svg>
+
+<div style="position: absolute; left: 16px; right: 16px; top: 16px; display: flex; gap: 10px">
+<button style="flex-grow: 1; height: 54px; border-radius: 16px; background: var(--surface); border: 0; box-shadow: 0 4px 16px var(--sh); display: flex; align-items: center; gap: 10px; padding: 0 16px; font: 700 17px 'Geist', sans-serif; color: var(--ink)"><span>Barcelona</span><svg class="i" style="width: 16px; height: 16px" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 28px 28px 0 0; box-shadow: 0 -6px 24px var(--sh); padding: 10px 20px 28px; display: flex; flex-direction: column; gap: 18px">
+<div style="align-self: center; width: 44px; height: 5px; border-radius: 3px; background: var(--line)"></div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding-top: 6px">
+<span style="font-size: 26px; font-weight: 800; letter-spacing: -0.03em">Where are you working from?</span>
+<span style="font-size: 15px; line-height: 1.5; color: var(--muted)">Location is off, so we can't sort places by distance. Turn it on, or pick an area.</span>
+</div>
+<a href="LatteHome.dc.html" style="height: 56px; border-radius: 16px; background: var(--btn); color: var(--btnfg); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-size: 16px; font-weight: 700"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8z"></path></svg>Use my location</a>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--muted)">AREAS IN BARCELONA</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<a class="ar" href="LatteHome.dc.html">Gràcia <span class="n">9</span></a>
+<a class="ar" href="LatteHome.dc.html">Eixample <span class="n">7</span></a>
+<a class="ar" href="LatteHome.dc.html">Poblenou <span class="n">5</span></a>
+<a class="ar" href="LatteHome.dc.html">El Born <span class="n">3</span></a>
+<a class="ar" href="LatteHome.dc.html">Sant Antoni <span class="n">2</span></a>
+<a class="ar" href="LatteHome.dc.html">Poble-sec <span class="n">1</span></a>
+</div>
+<span class="n">Numbers = certified places</span>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

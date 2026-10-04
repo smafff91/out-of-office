@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Latte · List</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;font-family:'Geist',system-ui,-apple-system,sans-serif;background:#FAF7F3}
+.t{--bg:#FAF7F3;--surface:#FFFFFF;--ink:#1F1712;--muted:#6B5D53;--line:#EAE2D9;--accent:#C8894A;--icon:#9C6230;--pill:#F3ECE4;--photo:#D6C6B6;--btn:#1F1712;--btnfg:#FAF7F3;--sh:rgba(31,23,18,.14);color:var(--ink);font-family:'Geist',system-ui,sans-serif}
+a{color:inherit}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.pill{font-size:12px;font-weight:500;padding:4px 8px;border-radius:8px;background:var(--pill);white-space:nowrap}
+.seal{width:18px;height:18px;border-radius:9px;background:var(--accent);color:#1F1712;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.row{display:flex;gap:14px;align-items:center;text-decoration:none;padding:12px 0;border-top:1px solid var(--line)}
+.ph{width:64px;height:64px;border-radius:16px;background:var(--photo);flex-shrink:0}
+.ghost{width:64px;height:64px;border-radius:16px;border:1.5px dashed var(--line);box-sizing:border-box;flex-shrink:0}
+.nr{display:flex;align-items:center;gap:7px}
+.nm{font-weight:700;font-size:17px;letter-spacing:-0.01em}
+.meta{font-size:13px;color:var(--muted)}
+.sc{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:15px;font-weight:800;letter-spacing:-0.01em;white-space:nowrap}
+.low{margin-left:auto;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--muted);white-space:nowrap}
+.sub{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--muted);padding:14px 0 6px}
+.srt{height:34px;padding:0 12px;border:0;border-radius:9px;font:600 13px 'Geist',sans-serif;cursor:pointer}
+</style>
+</helmet>
+<div class="t" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: var(--surface)">
+<div style="padding: 16px 16px 12px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; gap: 10px">
+<div style="flex-grow: 1; height: 54px; border-radius: 16px; background: var(--pill); display: flex; align-items: center; gap: 12px; padding: 0 16px"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg><span style="font-size: 17px; font-weight: 600">Where to work today?</span></div>
+<a href="LatteProfile.dc.html" aria-label="Account" style="width: 54px; height: 54px; border-radius: 16px; background: var(--pill); display: flex; align-items: center; justify-content: center"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></a>
+</div>
+<div style="display: flex"><a href="LatteNoResults.dc.html" style="display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px 0 10px; border-radius: 19px; border: 1px solid var(--line); font-size: 14px; font-weight: 600; text-decoration: none"><span class="seal"><svg class="i" style="width: 11px; height: 11px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span>Certified for remote work</a></div>
+</div>
+
+<div style="padding: 4px 20px 0; display: flex; flex-direction: column">
+<div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px">
+<span style="font-size: 24px; font-weight: 800; letter-spacing: -0.025em">Work nearby</span>
+<div role="group" aria-label="Sort by" style="display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: var(--pill)">
+<button class="srt" style="{{ nearStyle }}" onClick="{{ setNear }}">Nearest</button>
+<button class="srt" style="{{ topStyle }}" onClick="{{ setTop }}">Top rated</button>
+</div>
+</div>
+
+<sc-if value="{{ near }}" hint-placeholder-val="{{ true }}">
+<a class="row" href="LattePlace.dc.html"><div class="ph"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px"><div class="nr"><span class="nm">Café Tramuntana</span><span class="seal"><svg class="i" style="width: 11px; height: 11px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span><span class="sc"><svg class="i" style="width: 16px; height: 16px" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>94%</span></div><span class="meta">3 min walk · Gràcia · Open until 20:00</span><div style="display: flex; gap: 6px"><span class="pill">Fast Wi‑Fi</span><span class="pill">Plenty of outlets</span><span class="pill">Quiet</span></div></div></a>
+<a class="row" href="LattePlaceUnverified.dc.html"><div class="ghost"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px"><span class="nm" style="font-weight: 600; color: var(--muted)">Bar La Plaça</span><span class="meta">4 min walk · Gràcia · Open until 23:00</span><span class="meta">No work info yet</span></div></a>
+<a class="row" href="LattePlace.dc.html"><div class="ph" style="background: #CDB9A5"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px"><div class="nr"><span class="nm">Llum Coffee Lab</span><span class="seal"><svg class="i" style="width: 11px; height: 11px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span><span class="sc"><svg class="i" style="width: 16px; height: 16px" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>88%</span></div><span class="meta">6 min walk · Gràcia · Open until 19:00</span><div style="display: flex; gap: 6px"><span class="pill">Fast Wi‑Fi</span><span class="pill">A few outlets</span><span class="pill">Noisy</span></div></div></a>
+<a class="row" href="LattePlaceCommunity.dc.html"><div class="ph" style="background: #DCCDBE"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px"><div class="nr"><span class="nm">Cafè del Racó</span><span class="low" style="display: inline-flex; align-items: center; gap: 4px"><svg class="i" style="width: 13px; height: 13px" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>2 of 2</span></div><span class="meta">7 min walk · Gràcia · Opens 8:00</span><div style="display: flex; gap: 6px"><span class="pill">Fast Wi‑Fi</span><span class="pill">No outlets</span></div></div></a>
+<a class="row" href="LattePlace.dc.html"><div class="ph" style="background: #E2D5C7"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px"><div class="nr"><span class="nm">Mirador Coffee</span><span class="seal"><svg class="i" style="width: 11px; height: 11px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span><span class="sc"><svg class="i" style="width: 16px; height: 16px" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>71%</span></div><span class="meta">10 min walk · Eixample · Open until 21:00</span><div style="display: flex; gap: 6px"><span class="pill" style="background: transparent; border: 1.5px solid var(--accent)">No laptops 13:00–15:30</span></div></div></a>
+</sc-if>
+
+<sc-if value="{{ top }}" hint-placeholder-val="{{ false }}">
+<a class="row" href="LattePlace.dc.html"><div class="ph"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px"><div class="nr"><span class="nm">Café Tramuntana</span><span class="seal"><svg class="i" style="width: 11px; height: 11px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span><span class="sc"><svg class="i" style="width: 16px; height: 16px" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>94%</span></div><span class="meta">3 min walk · Gràcia · 17 votes</span></div></a>
+<a class="row" href="LattePlace.dc.html"><div class="ph" style="background: #CDB9A5"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px"><div class="nr"><span class="nm">Llum Coffee Lab</span><span class="seal"><svg class="i" style="width: 11px; height: 11px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span><span class="sc"><svg class="i" style="width: 16px; height: 16px" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>88%</span></div><span class="meta">6 min walk · Gràcia · 9 votes</span></div></a>
+<a class="row" href="LattePlace.dc.html"><div class="ph" style="background: #E2D5C7"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px"><div class="nr"><span class="nm">Mirador Coffee</span><span class="seal"><svg class="i" style="width: 11px; height: 11px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span><span class="sc"><svg class="i" style="width: 16px; height: 16px" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>71%</span></div><span class="meta">10 min walk · Eixample · 7 votes</span></div></a>
+<span class="sub">NOT ENOUGH VOTES YET</span>
+<a class="row" href="LattePlaceCommunity.dc.html"><div class="ph" style="background: #DCCDBE"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px"><div class="nr"><span class="nm">Cafè del Racó</span><span class="low" style="display: inline-flex; align-items: center; gap: 4px"><svg class="i" style="width: 13px; height: 13px" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>2 of 2</span></div><span class="meta">7 min walk · Gràcia</span></div></a>
+<a class="row" href="LattePlaceUnverified.dc.html"><div class="ghost"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px"><span class="nm" style="font-weight: 600; color: var(--muted)">Bar La Plaça</span><span class="meta">4 min walk · No work info yet</span></div></a>
+</sc-if>
+</div>
+
+<a href="LatteHome.dc.html" style="position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); height: 48px; padding: 0 20px; border-radius: 24px; background: var(--btn); color: var(--btnfg); display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 700; font-size: 15px; box-shadow: 0 6px 18px var(--sh)"><svg class="i" style="width: 18px; height: 18px" viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z M9 4v14 M15 6v14"></path></svg>Map</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { sort: 'near' };
+}
+renderVals() {
+const on = 'background: #FFFFFF; color: #1F1712; box-shadow: 0 1px 3px rgba(31,23,18,.14)';
+const off = 'background: transparent; color: #6B5D53';
+const near = this.state.sort === 'near';
+return {
+near: near,
+top: !near,
+nearStyle: near ? on : off,
+topStyle: near ? off : on,
+setNear: () => this.setState({ sort: 'near' }),
+setTop: () => this.setState({ sort: 'top' })
+};
+}
+}
+</script>
+</body>
+</html>

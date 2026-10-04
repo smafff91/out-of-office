@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Latte · Café Tramuntana</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;font-family:'Geist',system-ui,-apple-system,sans-serif;background:#FAF7F3}
+.t{--bg:#FAF7F3;--surface:#FFFFFF;--ink:#1F1712;--muted:#6B5D53;--line:#EAE2D9;--accent:#C8894A;--icon:#9C6230;--pill:#F3ECE4;--photo:#D6C6B6;--photo2:#C9B7A4;--btn:#1F1712;--btnfg:#FAF7F3;--sh:rgba(31,23,18,.14);color:var(--ink);font-family:'Geist',system-ui,sans-serif}
+a{color:inherit}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.tile{background:var(--surface);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:4px;box-shadow:0 1px 3px var(--sh)}
+.lab{font-size:12px;color:var(--muted);font-weight:500}
+.val{font-size:18px;font-weight:700;letter-spacing:-0.01em}
+.fr{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--muted)}
+.seal{width:22px;height:22px;border-radius:11px;background:var(--accent);color:#1F1712;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.av{width:28px;height:28px;border-radius:14px;background:var(--photo2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:2px solid var(--bg);box-sizing:border-box;color:var(--ink)}
+</style>
+</helmet>
+<div class="t" style="width: 390px; height: 980px; position: relative; overflow: hidden; background: var(--bg)">
+<div style="height: 300px; background: var(--photo); position: relative">
+<div style="position: absolute; left: 0; top: 0; width: 60%; height: 100%; background: var(--photo2)"></div>
+<a href="LatteHome.dc.html" aria-label="Back to map" style="position: absolute; left: 16px; top: 16px; width: 44px; height: 44px; border-radius: 22px; background: var(--surface); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px var(--sh)"><svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<button aria-label="Share" style="position: absolute; right: 16px; top: 16px; width: 44px; height: 44px; border-radius: 22px; background: var(--surface); border: 0; display: flex; align-items: center; justify-content: center; color: var(--ink); box-shadow: 0 2px 8px var(--sh)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"></path></svg></button>
+<span style="position: absolute; right: 16px; bottom: 40px; font-family: 'Geist Mono', monospace; font-size: 11px; background: rgba(31,23,18,.7); color: #FAF7F3; padding: 4px 9px; border-radius: 10px">1 / 6</span>
+</div>
+
+<div style="position: absolute; left: 0; right: 0; top: 272px; bottom: 0; background: var(--bg); border-radius: 28px 28px 0 0; padding: 24px 20px 0; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<a href="LatteAbout.dc.html" style="display: flex; align-items: center; gap: 8px; text-decoration: none"><span class="seal"><svg class="i" style="width: 13px; height: 13px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span><span style="font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--icon)">CERTIFIED FOR REMOTE WORK</span><svg class="i" style="width: 14px; height: 14px; color: var(--muted)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg></a>
+<span class="fr" style="margin-top: -4px">Visited by our team · certified Sep 2026</span>
+<h1 style="margin: 0; font-size: 31px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05">Café Tramuntana</h1>
+<span style="font-size: 14px; color: var(--muted)">Gràcia · 3 min walk · <span style="color: var(--ink); font-weight: 600">Open</span> until 20:00</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700"><svg class="i" style="width: 18px; height: 18px" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>94% would work here again<span class="fr" style="font-weight: 400">· 17 votes</span></span>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div class="tile"><span style="color: var(--icon)"><svg class="i" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"></path><circle cx="12" cy="19.5" r="1"></circle></svg></span><span class="lab">Wi‑Fi</span><span class="val">Fast</span><span class="fr">4 confirm · 3d ago</span></div>
+<div class="tile"><span style="color: var(--icon)"><svg class="i" viewBox="0 0 24 24"><path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0z M12 17v5"></path></svg></span><span class="lab">Outlets</span><span class="val">Plenty</span><span class="fr">3 confirm · 1w ago</span></div>
+<div class="tile"><span style="color: var(--icon)"><svg class="i" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z M17 9a4 4 0 0 1 0 6"></path></svg></span><span class="lab">Noise</span><span class="val">Quiet</span><span class="fr">5 confirm · 3d ago</span></div>
+<div class="tile"><span style="color: var(--icon)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><span class="lab">Long stays</span><span class="val">Welcome</span><span class="fr">4 confirm · 3d ago</span></div>
+</div>
+
+<div style="display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 18px; border: 1.5px solid var(--accent)">
+<span style="color: var(--icon)"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16v10H4z M2 19h20"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 700">No laptops 13:00–15:30 and weekends</span><span class="fr">Laptop policy · 2 confirm · 2w ago</span></div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 10px">
+<div style="display: flex"><div class="av">MR</div><div class="av" style="margin-left: -8px">LB</div><div class="av" style="margin-left: -8px; background: var(--pill)">+5</div></div>
+<span style="font-size: 13px; color: var(--muted)">Kept fresh by <span style="color: var(--ink); font-weight: 600">Marta R.</span> and 6 others</span>
+</div>
+</div>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 20px 26px; background: var(--bg); border-top: 1px solid var(--line); display: flex; gap: 10px">
+<a href="LatteContribute.dc.html" style="flex-grow: 1; height: 56px; border-radius: 16px; background: var(--btn); color: var(--btnfg); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-size: 16px; font-weight: 700">Check in here</a>
+<a href="https://www.openstreetmap.org" aria-label="Directions" style="width: 56px; height: 56px; border-radius: 16px; background: var(--pill); display: flex; align-items: center; justify-content: center; color: var(--ink)"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8z"></path></svg></a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":980}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

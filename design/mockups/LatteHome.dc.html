@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Latte · Home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;font-family:'Geist',system-ui,-apple-system,sans-serif;background:#FAF7F3}
+.t{--bg:#FAF7F3;--surface:#FFFFFF;--ink:#1F1712;--muted:#6B5D53;--line:#EAE2D9;--accent:#C8894A;--icon:#9C6230;--pill:#F3ECE4;--photo:#D6C6B6;--btn:#1F1712;--btnfg:#FAF7F3;--pin:#1F1712;--pinfg:#E0A866;--map:#F2EDE6;--blk:#E6DDD2;--street:#FFFFFF;--water:#D9DFE0;--dot:#A89A8E;--dotbg:#FFFFFF;--me:#1F1712;--sh:rgba(31,23,18,.16);color:var(--ink);font-family:'Geist',system-ui,sans-serif}
+a{color:inherit}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.dot{position:absolute;width:12px;height:12px;border-radius:6px;background:var(--dotbg);border:2px solid var(--dot);box-sizing:border-box}
+.pin{position:absolute;width:34px;height:34px;border-radius:11px;background:var(--pin);color:var(--pinfg);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px var(--sh);text-decoration:none}
+.pill{font-size:12px;font-weight:500;padding:4px 8px;border-radius:8px;background:var(--pill);color:var(--ink);white-space:nowrap}
+.seal{width:18px;height:18px;border-radius:9px;background:var(--accent);color:#1F1712;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+</style>
+</helmet>
+<div class="t" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: var(--map)">
+<svg width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<defs><pattern id="blocks" width="44" height="44" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><polygon points="11,4 33,4 40,11 40,33 33,40 11,40 4,33 4,11" style="fill: var(--blk)"></polygon></pattern></defs>
+<rect width="390" height="844" style="fill: var(--map)"></rect>
+<rect width="390" height="844" fill="url(#blocks)"></rect>
+<path d="M-20 650 L420 130" style="stroke: var(--street); stroke-width: 14; fill: none"></path>
+<path d="M60 -10 L150 860" style="stroke: var(--street); stroke-width: 9; fill: none"></path>
+<path d="M240 844 L390 620 L390 844 Z" style="fill: var(--water)"></path>
+</svg>
+
+<span class="dot" style="left: 54px; top: 206px"></span>
+<span class="dot" style="left: 300px; top: 222px"></span>
+<span class="dot" style="left: 214px; top: 190px"></span>
+<span class="dot" style="left: 334px; top: 326px"></span>
+<span class="dot" style="left: 108px; top: 380px"></span>
+<span class="dot" style="left: 300px; top: 420px"></span>
+<span class="dot" style="left: 34px; top: 312px"></span>
+<span class="dot" style="left: 238px; top: 290px"></span>
+
+<a class="pin" href="LattePreview.dc.html" aria-label="Café Tramuntana" style="left: 128px; top: 270px; width: 42px; height: 42px; border-radius: 13px; outline: 3px solid var(--surface)"><svg class="i" style="width: 18px; height: 18px; stroke-width: 2.6" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></a>
+<div style="position: absolute; left: 178px; top: 280px; font-size: 13px; font-weight: 700; background: var(--surface); padding: 4px 9px; border-radius: 8px; box-shadow: 0 2px 6px var(--sh)">Café Tramuntana</div>
+<a class="pin" href="LattePlace.dc.html" aria-label="Llum Coffee Lab" style="left: 256px; top: 356px"><svg class="i" style="width: 15px; height: 15px; stroke-width: 2.6" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></a>
+<a class="pin" href="LattePlace.dc.html" aria-label="Mirador Coffee" style="left: 58px; top: 424px"><svg class="i" style="width: 15px; height: 15px; stroke-width: 2.6" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></a>
+<a href="LattePlaceCommunity.dc.html" aria-label="Cafè del Racó (community info)" style="position: absolute; left: 290px; top: 262px; width: 28px; height: 28px; border-radius: 9px; background: #FFFFFF; border: 2.5px solid var(--ink); box-sizing: border-box; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px var(--sh)"><span style="width: 8px; height: 8px; border-radius: 4px; background: var(--ink)"></span></a>
+<a href="LattePlaceCommunity.dc.html" aria-label="Community info" style="position: absolute; left: 150px; top: 440px; width: 28px; height: 28px; border-radius: 9px; background: #FFFFFF; border: 2.5px solid var(--ink); box-sizing: border-box; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px var(--sh)"><span style="width: 8px; height: 8px; border-radius: 4px; background: var(--ink)"></span></a>
+<div style="position: absolute; left: 186px; top: 392px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface); border: 5px solid var(--me); box-sizing: border-box; box-shadow: 0 0 0 9px rgba(200,137,74,.22)" aria-label="Your location"></div>
+
+<div style="position: absolute; left: 16px; right: 16px; top: 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 10px">
+<div style="flex-grow: 1; height: 54px; border-radius: 16px; background: var(--surface); box-shadow: 0 4px 16px var(--sh); display: flex; align-items: center; gap: 12px; padding: 0 16px">
+<svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+<span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Where to work today?</span>
+</div>
+<a href="LatteProfile.dc.html" aria-label="Account" style="width: 54px; height: 54px; border-radius: 16px; background: var(--surface); box-shadow: 0 4px 16px var(--sh); display: flex; align-items: center; justify-content: center; color: var(--ink)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></a>
+</div>
+<div style="display: flex">
+<button style="display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px 0 10px; border-radius: 19px; background: var(--surface); border: 0; box-shadow: 0 2px 8px var(--sh); font: 600 14px 'Geist', sans-serif; color: var(--ink)"><span class="seal"><svg class="i" style="width: 11px; height: 11px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span>Certified for remote work</button>
+</div>
+</div>
+
+<button aria-label="Show my location" style="position: absolute; right: 16px; bottom: 322px; width: 48px; height: 48px; border-radius: 14px; background: var(--surface); border: 0; box-shadow: 0 3px 12px var(--sh); display: flex; align-items: center; justify-content: center; color: var(--ink)"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8z"></path></svg></button>
+<div style="position: absolute; left: 12px; bottom: 316px; font-family: 'Geist Mono', monospace; font-size: 10px; color: var(--muted)">© OpenStreetMap</div>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 300px; background: var(--surface); border-radius: 28px 28px 0 0; box-shadow: 0 -6px 24px var(--sh); padding: 10px 20px 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 6px">
+<a href="LatteList.dc.html" aria-label="Expand list" style="align-self: center; width: 44px; height: 5px; border-radius: 3px; background: var(--line); display: block"></a>
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0 6px">
+<span style="font-size: 24px; font-weight: 800; letter-spacing: -0.025em">Work nearby</span>
+<span style="font-size: 13px; color: var(--muted)">14 places · nearest first</span>
+</div>
+<a href="LattePlace.dc.html" style="display: flex; gap: 14px; align-items: center; text-decoration: none; padding: 10px 0">
+<div style="width: 68px; height: 68px; border-radius: 16px; background: var(--photo); flex-shrink: 0"></div>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0">
+<div style="display: flex; align-items: center; gap: 7px"><span style="font-weight: 700; font-size: 17px; letter-spacing: -0.01em">Café Tramuntana</span><span class="seal" aria-label="Certified"><svg class="i" style="width: 11px; height: 11px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 800"><svg class="i" style="width: 16px; height: 16px" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>94%</span></div>
+<span style="font-size: 13px; color: var(--muted)">3 min walk · Gràcia · Open until 20:00</span>
+<div style="display: flex; gap: 6px"><span class="pill">Fast Wi‑Fi</span><span class="pill">Plenty of outlets</span><span class="pill">Quiet</span></div>
+</div>
+</a>
+<div style="height: 1px; background: var(--line)"></div>
+<a href="LattePlaceUnverified.dc.html" style="display: flex; gap: 14px; align-items: center; text-decoration: none; padding: 10px 0">
+<div style="width: 68px; height: 68px; border-radius: 16px; border: 1.5px dashed var(--line); box-sizing: border-box; flex-shrink: 0"></div>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px">
+<span style="font-weight: 600; font-size: 17px; color: var(--muted)">Bar La Plaça</span>
+<span style="font-size: 13px; color: var(--muted)">4 min walk · Gràcia · Open until 23:00</span>
+<span style="font-size: 13px; color: var(--muted)">No work info yet</span>
+</div>
+</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

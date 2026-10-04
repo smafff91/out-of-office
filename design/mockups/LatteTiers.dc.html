@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Tre livelli di informazione</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;font-family:'Geist',system-ui,-apple-system,sans-serif;background:#FAF7F3}
+.t{--bg:#FAF7F3;--surface:#FFFFFF;--ink:#1F1712;--muted:#6B5D53;--line:#EAE2D9;--accent:#C8894A;--icon:#9C6230;--pill:#F3ECE4;--photo:#D6C6B6;--dot:#A89A8E;color:var(--ink);font-family:'Geist',system-ui,sans-serif}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.card{background:var(--surface);border-radius:22px;padding:22px;display:grid;grid-template-columns:72px minmax(0,1fr);gap:18px;align-items:start}
+.lv{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--muted)}
+.ti{font-size:22px;font-weight:800;letter-spacing:-0.02em}
+.tx{font-size:14px;line-height:1.5;color:var(--muted)}
+.row{display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--bg)}
+.pill{font-size:11px;font-weight:500;padding:3px 7px;border-radius:7px;background:var(--pill);white-space:nowrap}
+.fr{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--muted)}
+</style>
+</helmet>
+<div class="t" style="width: 860px; height: 844px; box-sizing: border-box; padding: 36px; display: flex; flex-direction: column; gap: 18px; background: var(--bg)">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 30px; font-weight: 800; letter-spacing: -0.03em">Tre livelli di informazione</span>
+<span class="tx">Ogni locale sale di livello con i contributi. Al lancio quasi tutti sono al livello 1: la mappa deve invitare a contribuire, non sembrare vuota.</span>
+</div>
+
+<div class="card">
+<div style="height: 72px; border-radius: 18px; background: var(--bg); display: flex; align-items: center; justify-content: center"><span style="width: 14px; height: 14px; border-radius: 7px; background: #FFFFFF; border: 2.5px solid var(--dot); box-sizing: border-box"></span></div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span class="lv">LIVELLO 1 · DA OPENSTREETMAP</span>
+<span class="ti">Not checked yet</span>
+<span class="tx">Solo nome, posizione, orari. Puntino grigio piccolo. In lista: testo attenuato e "No work info yet", senza score. Tap → anteprima con "Be the first to check it".</span>
+<div class="row"><div style="width: 44px; height: 44px; border-radius: 12px; border: 1.5px dashed var(--line); box-sizing: border-box"></div><div style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 15px; font-weight: 600; color: var(--muted)">Bar La Plaça</span><span style="font-size: 12px; color: var(--muted)">No work info yet</span></div></div>
+</div>
+</div>
+
+<div class="card">
+<div style="height: 72px; border-radius: 18px; background: var(--bg); display: flex; align-items: center; justify-content: center"><span style="width: 30px; height: 30px; border-radius: 10px; background: #FFFFFF; border: 2.5px solid var(--ink); box-sizing: border-box; display: flex; align-items: center; justify-content: center"><span style="width: 8px; height: 8px; border-radius: 4px; background: var(--ink)"></span></span></div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span class="lv">LIVELLO 2 · ALMENO UN CONTRIBUTO</span>
+<span class="ti">Community info</span>
+<span class="tx">Qualcuno ha condiviso Wi‑Fi, prese, rumore. Pin bianco con bordo espresso, niente crema. La scheda mostra quanti utenti mancano alla certificazione ("2 of 10").</span>
+<div class="row"><div style="width: 44px; height: 44px; border-radius: 12px; background: var(--photo)"></div><div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 15px; font-weight: 700">Cafè del Racó</span><div style="display: flex; gap: 5px"><span class="pill">Fast Wi‑Fi</span><span class="pill">No outlets</span></div><span class="fr">Community info · 2 people</span></div></div>
+</div>
+</div>
+
+<div class="card">
+<div style="height: 72px; border-radius: 18px; background: var(--bg); display: flex; align-items: center; justify-content: center"><span style="width: 36px; height: 36px; border-radius: 12px; background: var(--ink); color: #E0A866; display: flex; align-items: center; justify-content: center"><svg class="i" style="width: 16px; height: 16px; stroke-width: 2.8" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span></div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span class="lv">LIVELLO 3 · VISITATO DA NOI O CONFERMATO DALLA COMMUNITY</span>
+<span class="ti">Certified for remote work</span>
+<span class="tx">Un solo badge, due strade: visita di persona, oppure in automatico con almeno 10 utenti (metà con check-in verificato, voti su 2+ settimane) e score ≥75%. La scheda dice come è arrivato. Pin espresso con spunta crema: unico livello che usa il crema.</span>
+<div class="row"><div style="width: 44px; height: 44px; border-radius: 12px; background: var(--photo)"></div><div style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 6px"><span style="font-size: 15px; font-weight: 700">Café Tramuntana</span><span style="width: 16px; height: 16px; border-radius: 8px; background: var(--accent); color: #1F1712; display: flex; align-items: center; justify-content: center"><svg class="i" style="width: 10px; height: 10px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span></div><div style="display: flex; gap: 5px"><span class="pill">Fast Wi‑Fi</span><span class="pill">Plenty of outlets</span></div></div></div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":860,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

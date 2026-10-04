@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Latte · Update place</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;font-family:'Geist',system-ui,-apple-system,sans-serif;background:#FAF7F3}
+.t{--bg:#FAF7F3;--surface:#FFFFFF;--ink:#1F1712;--muted:#6B5D53;--line:#EAE2D9;--accent:#C8894A;--icon:#9C6230;--pill:#F3ECE4;--btn:#1F1712;--btnfg:#FAF7F3;--sh:rgba(31,23,18,.12);color:var(--ink);font-family:'Geist',system-ui,sans-serif}
+a{color:inherit}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.q{display:flex;flex-direction:column;gap:10px}
+.ql{display:flex;justify-content:space-between;align-items:baseline;font-size:16px;font-weight:700}
+.fr{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;font-weight:400;color:var(--muted)}
+.segs{display:grid;gap:4px;padding:4px;border-radius:14px;background:var(--pill)}
+.seg{height:42px;border:0;border-radius:10px;background:transparent;font:500 14px 'Geist',sans-serif;color:var(--muted)}
+.seg.on{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:0 1px 4px var(--sh)}
+.chip{height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:var(--surface);font:500 14px 'Geist',sans-serif;color:var(--ink)}
+.chip.on{background:var(--btn);color:var(--btnfg);border-color:var(--btn)}
+.big{height:60px;border-radius:16px;border:1.5px solid var(--line);background:var(--surface);font:700 16px 'Geist',sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:10px}
+.big.on{background:var(--btn);color:var(--btnfg);border-color:var(--btn)}
+</style>
+</helmet>
+<div class="t" style="width: 390px; height: 1560px; position: relative; overflow: hidden; background: var(--bg)">
+<div style="height: 68px; display: flex; align-items: center; gap: 10px; padding: 0 12px">
+<a href="LattePlace.dc.html" aria-label="Close" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></svg></a>
+<span style="font-size: 17px; font-weight: 700">Café Tramuntana</span>
+</div>
+
+<div style="padding: 4px 20px 140px; display: flex; flex-direction: column; gap: 26px">
+<div style="display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 16px; background: var(--surface); box-shadow: 0 1px 3px var(--sh)">
+<span style="width: 36px; height: 36px; border-radius: 18px; background: var(--accent); color: #1F1712; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg class="i" style="width: 18px; height: 18px; stroke-width: 2.4" viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg></span>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">You're here · check-in verified</span><span class="fr">35 m from the entrance</span></div>
+</div>
+
+<div class="q">
+<div class="ql" style="font-size: 20px; font-weight: 800; letter-spacing: -0.02em"><span>Would you work here again?</span></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<button class="big on"><svg class="i" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>Yes</button>
+<button class="big"><svg class="i" style="transform: rotate(180deg)" viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>No</button>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.03em">Still right?</h1>
+<span style="font-size: 15px; color: var(--muted); line-height: 1.45">We filled in what others reported. Change only what's different.</span>
+</div>
+
+<a href="LatteSignIn.dc.html" style="height: 56px; border-radius: 16px; border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-size: 16px; font-weight: 700"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg>Everything's still right</a>
+
+<div class="q"><div class="ql"><span>Wi‑Fi</span><span class="fr">now: Fast · 3d ago</span></div><div class="segs" style="grid-template-columns: repeat(3, minmax(0, 1fr))"><button class="seg">None</button><button class="seg">Slow</button><button class="seg on">Fast</button></div></div>
+<div class="q"><div class="ql"><span>Outlets</span><span class="fr">now: Plenty · 1w ago</span></div><div class="segs" style="grid-template-columns: repeat(3, minmax(0, 1fr))"><button class="seg">None</button><button class="seg">A few</button><button class="seg on">Plenty</button></div></div>
+<div class="q"><div class="ql"><span>Noise</span><span class="fr">now: Quiet · 3d ago</span></div><div class="segs" style="grid-template-columns: repeat(2, minmax(0, 1fr))"><button class="seg on">Quiet</button><button class="seg">Noisy</button></div></div>
+<div class="q"><div class="ql"><span>Long stays</span><span class="fr">now: Welcome · 3d ago</span></div><div class="segs" style="grid-template-columns: repeat(2, minmax(0, 1fr))"><button class="seg on">Welcome</button><button class="seg">Not really</button></div></div>
+
+<div style="display: flex; align-items: center; gap: 12px"><div style="flex-grow: 1; height: 1px; background: var(--line)"></div><span style="font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--muted)">OPTIONAL</span><div style="flex-grow: 1; height: 1px; background: var(--line)"></div></div>
+
+<div class="q"><div class="ql"><span>Laptop rules</span><span class="fr">now: 2 rules · 2w ago</span></div><div style="display: flex; flex-wrap: wrap; gap: 8px"><button class="chip on">No laptops at lunch</button><button class="chip on">No laptops on weekends</button><button class="chip">Time limit</button><button class="chip">No rules</button></div></div>
+<div class="q"><div class="ql"><span>More details</span></div><div style="display: flex; flex-wrap: wrap; gap: 8px"><button class="chip on">Air conditioning</button><button class="chip on">Toilet</button><button class="chip">Large tables</button><button class="chip">Minimum spend</button></div></div>
+<div class="q"><div class="ql"><span>Photos</span></div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button style="aspect-ratio: 1; border: 1.5px dashed var(--accent); border-radius: 16px; background: var(--surface); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font: 600 12px 'Geist', sans-serif; color: var(--ink)"><svg class="i" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>Add photo</button>
+<div style="aspect-ratio: 1; border-radius: 16px; background: var(--pill)"></div><div style="aspect-ratio: 1; border-radius: 16px; background: var(--pill)"></div>
+</div>
+<span style="font-size: 13px; color: var(--muted)">Show tables and outlets. Please avoid other people's faces.</span></div>
+<div class="q"><label for="note" class="ql"><span>Short note</span><span class="fr">0 / 140</span></label><textarea id="note" rows="2" placeholder="e.g. Best tables with outlets are upstairs" style="border: 1px solid var(--line); border-radius: 14px; padding: 14px; font: 400 15px 'Geist', sans-serif; resize: none; background: var(--surface); color: var(--ink)"></textarea></div>
+</div>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; background: var(--bg); border-top: 1px solid var(--line); padding: 14px 20px 26px; display: flex; flex-direction: column; gap: 8px">
+<a href="LatteSignIn.dc.html" style="height: 56px; border-radius: 16px; background: var(--btn); color: var(--btnfg); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; font-weight: 700">Send update</a>
+<span style="text-align: center; font-size: 12px; color: var(--muted)">Your first name will appear on this place</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1560}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Latte · Add a place</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;font-family:'Geist',system-ui,-apple-system,sans-serif;background:#FAF7F3}
+.t{--bg:#FAF7F3;--surface:#FFFFFF;--ink:#1F1712;--muted:#6B5D53;--line:#EAE2D9;--accent:#C8894A;--pill:#F3ECE4;--btn:#1F1712;--btnfg:#FAF7F3;--map:#F2EDE6;--blk:#E6DDD2;--street:#FFFFFF;--dot:#A89A8E;--sh:rgba(31,23,18,.16);color:var(--ink);font-family:'Geist',system-ui,sans-serif}
+a{color:inherit}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.dot{position:absolute;width:12px;height:12px;border-radius:6px;background:#FFFFFF;border:2px solid var(--dot);box-sizing:border-box}
+.segs{display:grid;gap:4px;padding:4px;border-radius:14px;background:var(--pill)}
+.seg{height:42px;border:0;border-radius:10px;background:transparent;font:500 14px 'Geist',sans-serif;color:var(--muted)}
+.seg.on{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:0 1px 4px rgba(31,23,18,.12)}
+</style>
+</helmet>
+<div class="t" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: var(--map)">
+<svg width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<defs><pattern id="blocks" width="44" height="44" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><polygon points="11,4 33,4 40,11 40,33 33,40 11,40 4,33 4,11" style="fill: var(--blk)"></polygon></pattern></defs>
+<rect width="390" height="844" style="fill: var(--map)"></rect><rect width="390" height="844" fill="url(#blocks)"></rect>
+<path d="M-20 520 L420 20" style="stroke: var(--street); stroke-width: 14; fill: none"></path>
+</svg>
+<span class="dot" style="left: 80px; top: 190px"></span><span class="dot" style="left: 290px; top: 160px"></span><span class="dot" style="left: 256px; top: 330px"></span>
+
+<div style="position: absolute; left: 16px; right: 16px; top: 16px; height: 54px; border-radius: 16px; background: var(--surface); box-shadow: 0 4px 16px var(--sh); display: flex; align-items: center; gap: 8px; padding: 0 8px">
+<a href="LatteHome.dc.html" aria-label="Close" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></svg></a>
+<span style="font-size: 17px; font-weight: 700">Add a missing place</span>
+</div>
+<div style="position: absolute; left: 50%; top: 86px; transform: translateX(-50%); background: var(--btn); color: var(--btnfg); font-size: 13px; font-weight: 600; padding: 9px 14px; border-radius: 18px; white-space: nowrap">Move the map to put the pin on the entrance</div>
+
+<div style="position: absolute; left: 176px; top: 214px">
+<svg width="38" height="50" viewBox="0 0 38 50" aria-hidden="true"><path d="M19 49 C19 49 2 30 2 18 A17 17 0 0 1 36 18 C36 30 19 49 19 49 Z" fill="#1F1712" stroke="#FFFFFF" stroke-width="2.5"></path><circle cx="19" cy="18" r="6" fill="#E0A866"></circle></svg>
+</div>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 28px 28px 0 0; box-shadow: 0 -6px 24px var(--sh); padding: 24px 20px 28px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="pname" style="font-size: 14px; font-weight: 700">Name</label>
+<input id="pname" type="text" value="Bicicleta Café" style="height: 54px; border: 1px solid var(--line); border-radius: 14px; padding: 0 16px; font: 400 16px 'Geist', sans-serif; background: var(--bg); color: var(--ink)">
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; font-weight: 700">Type</span>
+<div class="segs" style="grid-template-columns: repeat(2, minmax(0, 1fr))"><button class="seg on">Café</button><button class="seg">Bar</button></div>
+</div>
+<span style="font-size: 13px; color: var(--muted)">Carrer de Pujades · Poblenou, Barcelona (from the pin)</span>
+<label for="here" style="display: flex; align-items: center; gap: 12px; font-size: 15px"><input id="here" type="checkbox" checked style="width: 22px; height: 22px; margin: 0; accent-color: #1F1712">I'm here now, let me add work info next</label>
+<a href="LatteContribute.dc.html" style="height: 56px; border-radius: 16px; background: var(--btn); color: var(--btnfg); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; font-weight: 700">Continue</a>
+<span style="font-size: 12px; color: var(--muted)">New places show on the map after a quick review.</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

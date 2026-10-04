@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Latte · Preview</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;font-family:'Geist',system-ui,-apple-system,sans-serif;background:#FAF7F3}
+.t{--bg:#FAF7F3;--surface:#FFFFFF;--ink:#1F1712;--muted:#6B5D53;--line:#EAE2D9;--accent:#C8894A;--icon:#9C6230;--pill:#F3ECE4;--photo:#D6C6B6;--photo2:#C9B7A4;--btn:#1F1712;--btnfg:#FAF7F3;--pin:#1F1712;--pinfg:#E0A866;--map:#F2EDE6;--blk:#E6DDD2;--street:#FFFFFF;--dot:#A89A8E;--sh:rgba(31,23,18,.16);color:var(--ink);font-family:'Geist',system-ui,sans-serif}
+a{color:inherit}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.dot{position:absolute;width:12px;height:12px;border-radius:6px;background:#FFFFFF;border:2px solid var(--dot);box-sizing:border-box}
+.pin{position:absolute;width:34px;height:34px;border-radius:11px;background:var(--pin);color:var(--pinfg);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px var(--sh)}
+.seal{width:20px;height:20px;border-radius:10px;background:var(--accent);color:#1F1712;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.at{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:11px 12px;background:var(--pill);border-radius:12px}
+</style>
+</helmet>
+<div class="t" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: var(--map)">
+<svg width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<defs><pattern id="blocks" width="44" height="44" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><polygon points="11,4 33,4 40,11 40,33 33,40 11,40 4,33 4,11" style="fill: var(--blk)"></polygon></pattern></defs>
+<rect width="390" height="844" style="fill: var(--map)"></rect><rect width="390" height="844" fill="url(#blocks)"></rect>
+<path d="M-20 560 L420 40" style="stroke: var(--street); stroke-width: 14; fill: none"></path>
+</svg>
+<span class="dot" style="left: 54px; top: 136px"></span><span class="dot" style="left: 300px; top: 150px"></span><span class="dot" style="left: 214px; top: 110px"></span><span class="dot" style="left: 330px; top: 250px"></span><span class="dot" style="left: 80px; top: 280px"></span>
+<a class="pin" href="LattePreview.dc.html" aria-label="Llum Coffee Lab" style="left: 262px; top: 300px"><svg class="i" style="width: 15px; height: 15px; stroke-width: 2.6" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></a>
+<div style="position: absolute; left: 164px; top: 190px; width: 54px; height: 54px; border-radius: 17px; background: var(--pin); color: var(--pinfg); display: flex; align-items: center; justify-content: center; outline: 4px solid #FFFFFF; box-shadow: 0 8px 20px var(--sh)"><svg class="i" style="width: 22px; height: 22px; stroke-width: 2.6" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></div>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 28px 28px 0 0; box-shadow: 0 -6px 24px var(--sh); padding: 10px 20px 28px; display: flex; flex-direction: column; gap: 16px">
+<div style="align-self: center; width: 44px; height: 5px; border-radius: 3px; background: var(--line)"></div>
+<div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 6px">
+<div style="height: 104px; border-radius: 16px 6px 6px 16px; background: var(--photo2)"></div>
+<div style="height: 104px; border-radius: 6px; background: var(--photo)"></div>
+<div style="height: 104px; border-radius: 6px 16px 16px 6px; background: var(--photo); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">+4</div>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: flex-start">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-size: 24px; font-weight: 800; letter-spacing: -0.025em">Café Tramuntana</span><span class="seal"><svg class="i" style="width: 12px; height: 12px; stroke-width: 3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></span></div>
+<span style="font-size: 14px; color: var(--muted)">3 min walk · Gràcia · <span style="color: var(--ink); font-weight: 600">Open</span> until 20:00</span>
+</div>
+<a href="LatteHome.dc.html" aria-label="Close" style="width: 36px; height: 36px; border-radius: 18px; background: var(--pill); display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg class="i" style="width: 16px; height: 16px" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></svg></a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<div class="at"><span style="color: var(--icon)"><svg class="i" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"></path><circle cx="12" cy="19.5" r="1"></circle></svg></span>Fast Wi‑Fi</div>
+<div class="at"><span style="color: var(--icon)"><svg class="i" viewBox="0 0 24 24"><path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0z M12 17v5"></path></svg></span>Plenty of outlets</div>
+<div class="at"><span style="color: var(--icon)"><svg class="i" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z M17 9a4 4 0 0 1 0 6"></path></svg></span>Quiet</div>
+<div class="at"><span style="color: var(--icon)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>Long stays welcome</div>
+</div>
+<span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--muted)">Confirmed by 4 people · last 3 days ago</span>
+<div style="display: flex; gap: 10px">
+<a href="LattePlace.dc.html" style="flex-grow: 1; height: 56px; border-radius: 16px; background: var(--btn); color: var(--btnfg); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; font-weight: 700">See details</a>
+<a href="https://www.openstreetmap.org" aria-label="Directions" style="width: 56px; height: 56px; border-radius: 16px; background: var(--pill); display: flex; align-items: center; justify-content: center"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8z"></path></svg></a>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
