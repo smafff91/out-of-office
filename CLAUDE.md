@@ -35,7 +35,8 @@ Costo obiettivo: zero. Usa solo piani gratuiti che permettono l'uso commerciale.
 
 ## Architettura: costruire pensando all'app
 La stessa base di codice produce due build: web (SSR per la SEO) e app (statica, impacchettata con Capacitor). Quindi:
-- `BUILD_TARGET=web|app` sceglie l'adapter in `svelte.config.js`.
+- `BUILD_TARGET=web|app` sceglie l'adapter in `vite.config.ts` (SvelteKit 3: niente `svelte.config.js`, la configurazione di Kit sta nel plugin `sveltekit()`).
+- I file condivisi si importano con `#lib/...` (non `$lib`), con l'estensione per i moduli TS (es. `#lib/copy.ts`).
 - **I dati passano dal client Supabase** (`supabase-js` con chiave anon + RLS), che è la nostra "API separata": funziona uguale nel browser, nel server e nell'app.
 - Per caricare i dati usa load **universali** (`+page.ts`), non `+page.server.ts`. `+page.server.ts`, form actions ed endpoint server solo per cose solo-web (sitemap, robots, immagini Open Graph).
 - La logica di dominio (score, Wilson, livello del locale, certificazione, revoca, anti-manipolazione) sta **nel database** come funzioni SQL, viste e job pg_cron, non nel frontend.
@@ -88,6 +89,8 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 - Una feature per sessione, **un commit per feature** (messaggi in inglese, stile conventional commits).
 - Ogni modifica allo schema = nuova migrazione in `supabase/migrations/` (mai modificare quelle già applicate) + seed aggiornato, applicata al progetto di sviluppo con `npx supabase db push`. Mai modifiche allo schema a mano dalla dashboard.
 - Chiavi e segreti solo in `.env` (mai nel repository); tieni aggiornato `.env.example`.
+- `npm run gen` rigenera i tipi Cloudflare (`worker-configuration.d.ts`): lancialo quando cambia `wrangler.jsonc`.
+- `CLAUDE.md`, `docs/` e `design/` sono esclusi da Prettier (`.prettierignore`): non riformattarli.
 - Dopo ogni feature: `npm run check` e `npm run lint` senza errori; spiega in 3-5 righe come provarla nel browser.
 - Se una decisione di prodotto non è in questi documenti, chiedi invece di inventarla.
 
