@@ -23,6 +23,9 @@ export const copy = {
 	},
 	tokens: {
 		title: 'Design tokens',
+		database: 'Database',
+		cityFromDb: 'City from database:',
+		dbUnavailable: 'Could not reach the database.',
 		intro: 'Temporary page to check colors, fonts and buttons against the Latte mockups.',
 		colors: 'Colors',
 		type: 'Type',

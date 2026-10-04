@@ -88,8 +88,12 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 ## Modo di lavorare
 - **Plan mode** prima di ogni feature non banale; aspetta l'ok del fondatore prima di implementare.
 - Una feature per sessione, **un commit per feature** (messaggi in inglese, stile conventional commits).
-- Ogni modifica allo schema = nuova migrazione in `supabase/migrations/` (mai modificare quelle già applicate) + seed aggiornato, applicata al progetto di sviluppo con `npx supabase db push`. Mai modifiche allo schema a mano dalla dashboard.
+- Ogni modifica allo schema = nuova migrazione in `supabase/migrations/` (mai modificare quelle già applicate) + seed aggiornato, applicata al progetto di sviluppo con `npx supabase db push --include-seed` (chiede la password del database: lo lancia il fondatore nel suo terminale). Mai modifiche allo schema a mano dalla dashboard.
+- Dopo ogni migrazione: `npm run db:types` rigenera `src/lib/supabase/database.types.ts`. Per query di verifica sul progetto di sviluppo: `npx supabase db query --linked` (niente password).
+- L'esposizione automatica delle tabelle è disattivata: ogni migrazione concede i permessi (`grant`) ad `anon` e `authenticated` in modo esplicito, e attiva la RLS.
+- La tabella `contributions` non è leggibile pubblicamente (solo le proprie righe): la scheda usa le viste aggregate `place_scores`, `place_attributes`, `place_laptop_rules`, `place_notes`.
 - Chiavi e segreti solo in `.env` (mai nel repository); tieni aggiornato `.env.example`.
+- Variabili d'ambiente dichiarate in `src/env.ts` (SvelteKit 3) e importate da `$app/env/public`; il client è `createSupabaseClient(fetch)` in `#lib/supabase/client.ts`.
 - `npm run gen` rigenera i tipi Cloudflare (`worker-configuration.d.ts`): lancialo quando cambia `wrangler.jsonc`.
 - `CLAUDE.md`, `docs/` e `design/` sono esclusi da Prettier (`.prettierignore`): non riformattarli.
 - Dopo ogni feature: `npm run check` e `npm run lint` senza errori; spiega in 3-5 righe come provarla nel browser.

@@ -2,6 +2,9 @@
 	// Temporary token showcase; replaced by the map Home in feature 4.
 	import { APP_NAME } from '#lib/config.ts';
 	import { copy } from '#lib/copy.ts';
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
 
 	const t = copy.tokens;
 
@@ -42,6 +45,17 @@
 		<h1>{APP_NAME}</h1>
 		<p class="muted">{t.intro}</p>
 	</header>
+
+	<section>
+		<h2>{t.database}</h2>
+		{#if data.dbError}
+			<p class="danger">{t.dbUnavailable}</p>
+		{:else}
+			{#each data.cities as city (city.slug)}
+				<p class="body">{t.cityFromDb} <strong>{city.name}</strong></p>
+			{/each}
+		{/if}
+	</section>
 
 	<section>
 		<h2>{t.colors}</h2>
@@ -124,6 +138,10 @@
 
 	.muted {
 		color: var(--muted);
+	}
+
+	.danger {
+		color: var(--danger);
 	}
 
 	.small {
