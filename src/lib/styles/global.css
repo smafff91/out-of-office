@@ -26,3 +26,22 @@ button {
 	font: inherit;
 	color: inherit;
 }
+
+/*
+ * Touch targets: add `.tap-target` to any tappable element drawn smaller than 44px.
+ * An invisible pseudo-element extends the hit area to at least --tap in each direction,
+ * centered on the element, without changing its visual size.
+ */
+.tap-target {
+	position: relative;
+}
+
+.tap-target::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: max(100%, var(--tap));
+	height: max(100%, var(--tap));
+	transform: translate(-50%, -50%);
+}

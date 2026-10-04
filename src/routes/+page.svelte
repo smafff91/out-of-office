@@ -75,7 +75,7 @@
 			<button class="btn-primary" type="button">{t.primaryButton}</button>
 			<button class="btn-secondary" type="button">{t.secondaryButton}</button>
 			<div>
-				<button class="certified-chip" type="button">
+				<button class="certified-chip tap-target" type="button">
 					<span class="seal" aria-hidden="true">
 						<svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg>
 					</span>
@@ -215,7 +215,7 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
-		min-height: var(--tap);
+		height: 38px;
 		padding: 0 14px 0 10px;
 		border-radius: 19px;
 		border: 0;

@@ -77,7 +77,7 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 ## Design
 - Riproduci i mockup in `design/mockups/` (si parte dalla Home). I token stanno nel blocco `.t{...}` di ogni file: portali in `src/lib/styles/tokens.css`.
 - Palette: Milk #FAF7F3 · Espresso #1F1712 · Crema #C8894A (**solo** per i certificati) · Roast #6B5D53 · Foam #F3ECE4 · Map #F2EDE6 · icone #9C6230 · distruttivo #9B2C1F.
-- Pulsante primario espresso 56 px, raggio 16. Aree di tocco ≥44 px. Mobile-first; desktop = lista a sinistra, mappa a destra.
+- Pulsante primario espresso 56 px, raggio 16. Aree di tocco ≥44 px: gli elementi toccabili disegnati più piccoli usano la classe globale `.tap-target` (estensione invisibile). Mobile-first; desktop = lista a sinistra, mappa a destra.
 - Offline e caricamento: righe "fantasma" e messaggio "You're offline", con gli stili esistenti.
 
 ## Dati OSM
