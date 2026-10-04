@@ -1,6 +1,6 @@
 /**
  * All user-facing text lives here, so it can be reviewed and translated in one place.
- * Follow the copy rules in CLAUDE.md: contributors are always "users"; city and neighbourhood names
+ * Follow the copy rules in CLAUDE.md: contributors are always "users"; city and neighborhood names
  * come from data (pass them in), never written in the copy.
  */
 export const copy = {
@@ -23,8 +23,8 @@ export const copy = {
 	},
 	tokens: {
 		title: 'Design tokens',
-		intro: 'Temporary page to check colours, fonts and buttons against the Latte mockups.',
-		colors: 'Colours',
+		intro: 'Temporary page to check colors, fonts and buttons against the Latte mockups.',
+		colors: 'Colors',
 		type: 'Type',
 		components: 'Components',
 		titleSample: 'Work nearby',

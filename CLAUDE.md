@@ -17,6 +17,7 @@ Dettagli di prodotto (leggili quando servono, non tutti a ogni sessione):
 - Nome dell'app solo da `src/lib/config.ts` (`APP_NAME = 'Out of Office'`): è provvisorio, non scriverlo a mano altrove.
 - Nome città e quartieri sono dati: nei testi usa variabili (`{city}`), mai "Barcelona" scritto nel copy.
 - Tutti i testi dell'interfaccia in un unico modulo (`src/lib/copy.ts`), per poterli rivedere e tradurre in futuro.
+- **Inglese americano** in tutti i testi, nei commenti e nei nomi del codice (es. colors, favorites, neighborhood, center).
 
 ## Stack
 | Pezzo | Scelta |
