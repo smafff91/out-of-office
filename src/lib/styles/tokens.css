@@ -1,0 +1,54 @@
+/*
+ * Design tokens — Latte theme.
+ * Names match the `.t{...}` block in design/mockups/*.dc.html, so mockup markup ports as-is.
+ */
+:root {
+	/* Palette */
+	--bg: #faf7f3; /* Milk — page background */
+	--surface: #ffffff; /* cards, sheets, floating controls */
+	--ink: #1f1712; /* Espresso — text, buttons, pins */
+	--muted: #6b5d53; /* Roast — secondary text */
+	--line: #eae2d9; /* dividers, borders, sheet handle */
+	--accent: #c8894a; /* Crema — ONLY for certified places */
+	--icon: #9c6230; /* accent icons */
+	--pill: #f3ece4; /* Foam — pills, tiles, secondary buttons */
+	--photo: #d6c6b6; /* photo placeholder */
+	--photo2: #c9b7a4; /* alternate photo placeholder */
+	--danger: #9b2c1f; /* destructive actions */
+
+	/* Buttons */
+	--btn: var(--ink);
+	--btnfg: var(--bg);
+
+	/* Map */
+	--map: #f2ede6;
+	--blk: #e6ddd2; /* city blocks */
+	--street: #ffffff;
+	--water: #d9dfe0;
+	--dot: #a89a8e; /* OSM-only place dot border */
+	--dotbg: #ffffff;
+	--pin: var(--ink); /* certified pin */
+	--pinfg: #e0a866; /* certified pin check */
+	--me: var(--ink); /* user location */
+	--me-halo: rgba(200, 137, 74, 0.22);
+
+	/* Shadows (Espresso at four strengths, as used across the mockups) */
+	--sh-1: rgba(31, 23, 18, 0.1);
+	--sh-2: rgba(31, 23, 18, 0.12);
+	--sh-3: rgba(31, 23, 18, 0.14);
+	--sh-4: rgba(31, 23, 18, 0.16);
+
+	/* Type */
+	--font-sans: 'Geist Variable', system-ui, -apple-system, sans-serif;
+	--font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+	--tracking-title: -0.025em;
+	--tracking-tight: -0.01em;
+
+	/* Shape & size */
+	--radius-sm: 8px; /* pills */
+	--radius: 16px; /* buttons, search bar, photos */
+	--radius-sheet: 28px; /* bottom sheet top corners */
+	--btn-height: 56px;
+	--tap: 44px; /* minimum touch target */
+	--gutter: 16px;
+}

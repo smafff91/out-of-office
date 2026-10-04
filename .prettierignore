@@ -1,0 +1,17 @@
+# Package Managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lock
+bun.lockb
+
+# Miscellaneous
+/static/
+
+# Project docs and design handoff: not ours to reformat
+/CLAUDE.md
+/docs/
+/design/
+
+# Generated
+worker-configuration.d.ts
