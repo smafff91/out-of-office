@@ -76,36 +76,51 @@ export type Database = {
 			cities: {
 				Row: {
 					bbox: unknown;
+					boundary: unknown;
 					center: unknown;
 					country_code: string;
 					created_at: string;
+					district_admin_level: number | null;
 					id: string;
 					is_active: boolean;
+					last_osm_import_at: string | null;
 					name: string;
+					neighborhood_admin_level: number | null;
+					osm_data_at: string | null;
 					osm_relation_id: number | null;
 					slug: string;
 					timezone: string;
 				};
 				Insert: {
 					bbox: unknown;
+					boundary?: unknown;
 					center: unknown;
 					country_code: string;
 					created_at?: string;
+					district_admin_level?: number | null;
 					id?: string;
 					is_active?: boolean;
+					last_osm_import_at?: string | null;
 					name: string;
+					neighborhood_admin_level?: number | null;
+					osm_data_at?: string | null;
 					osm_relation_id?: number | null;
 					slug: string;
 					timezone: string;
 				};
 				Update: {
 					bbox?: unknown;
+					boundary?: unknown;
 					center?: unknown;
 					country_code?: string;
 					created_at?: string;
+					district_admin_level?: number | null;
 					id?: string;
 					is_active?: boolean;
+					last_osm_import_at?: string | null;
 					name?: string;
+					neighborhood_admin_level?: number | null;
+					osm_data_at?: string | null;
 					osm_relation_id?: number | null;
 					slug?: string;
 					timezone?: string;
@@ -213,6 +228,60 @@ export type Database = {
 					}
 				];
 			};
+			neighborhoods: {
+				Row: {
+					city_id: string;
+					created_at: string;
+					geom: unknown;
+					id: string;
+					kind: Database['public']['Enums']['neighborhood_kind'];
+					name: string;
+					osm_relation_id: number;
+					parent_id: string | null;
+					short_name: string | null;
+					updated_at: string;
+				};
+				Insert: {
+					city_id: string;
+					created_at?: string;
+					geom: unknown;
+					id?: string;
+					kind: Database['public']['Enums']['neighborhood_kind'];
+					name: string;
+					osm_relation_id: number;
+					parent_id?: string | null;
+					short_name?: string | null;
+					updated_at?: string;
+				};
+				Update: {
+					city_id?: string;
+					created_at?: string;
+					geom?: unknown;
+					id?: string;
+					kind?: Database['public']['Enums']['neighborhood_kind'];
+					name?: string;
+					osm_relation_id?: number;
+					parent_id?: string | null;
+					short_name?: string | null;
+					updated_at?: string;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'neighborhoods_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'cities';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'neighborhoods_parent_id_fkey';
+						columns: ['parent_id'];
+						isOneToOne: false;
+						referencedRelation: 'neighborhoods';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			photos: {
 				Row: {
 					contribution_id: string | null;
@@ -287,7 +356,7 @@ export type Database = {
 					level: Database['public']['Enums']['place_level'];
 					lng: number | null;
 					name: string;
-					neighborhood: string | null;
+					neighborhood_id: string | null;
 					opening_hours: string | null;
 					osm_id: number | null;
 					osm_missing_since: string | null;
@@ -314,7 +383,7 @@ export type Database = {
 					level?: Database['public']['Enums']['place_level'];
 					lng?: number | null;
 					name: string;
-					neighborhood?: string | null;
+					neighborhood_id?: string | null;
 					opening_hours?: string | null;
 					osm_id?: number | null;
 					osm_missing_since?: string | null;
@@ -341,7 +410,7 @@ export type Database = {
 					level?: Database['public']['Enums']['place_level'];
 					lng?: number | null;
 					name?: string;
-					neighborhood?: string | null;
+					neighborhood_id?: string | null;
 					opening_hours?: string | null;
 					osm_id?: number | null;
 					osm_missing_since?: string | null;
@@ -366,6 +435,13 @@ export type Database = {
 						columns: ['city_id'];
 						isOneToOne: false;
 						referencedRelation: 'cities';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'places_neighborhood_id_fkey';
+						columns: ['neighborhood_id'];
+						isOneToOne: false;
+						referencedRelation: 'neighborhoods';
 						referencedColumns: ['id'];
 					}
 				];
@@ -527,6 +603,11 @@ export type Database = {
 			};
 		};
 		Functions: {
+			assign_place_neighborhoods: { Args: { p_city_id: string }; Returns: Json };
+			import_osm_boundaries: {
+				Args: { p_areas: Json; p_city_id: string; p_city_lines: Json };
+				Returns: Json;
+			};
 			is_admin: { Args: never; Returns: boolean };
 			is_api_caller: { Args: never; Returns: boolean };
 		};
@@ -534,6 +615,7 @@ export type Database = {
 			cert_origin: 'manual' | 'community';
 			laptop_rule: 'no_laptops_lunch' | 'no_laptops_weekends' | 'time_limit' | 'none';
 			long_stays: 'welcome' | 'not_really';
+			neighborhood_kind: 'district' | 'neighborhood';
 			noise_level: 'quiet' | 'noisy';
 			osm_type: 'node' | 'way' | 'relation';
 			outlets_level: 'none' | 'a_few' | 'plenty';
@@ -675,6 +757,7 @@ export const Constants = {
 			cert_origin: ['manual', 'community'],
 			laptop_rule: ['no_laptops_lunch', 'no_laptops_weekends', 'time_limit', 'none'],
 			long_stays: ['welcome', 'not_really'],
+			neighborhood_kind: ['district', 'neighborhood'],
 			noise_level: ['quiet', 'noisy'],
 			osm_type: ['node', 'way', 'relation'],
 			outlets_level: ['none', 'a_few', 'plenty'],

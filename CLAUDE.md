@@ -84,6 +84,8 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 ## Dati OSM
 - `scripts/import-osm.ts --city <slug>`: Overpass API, `amenity=cafe` + `amenity=bar` (niente pub e ristoranti), upsert per osm_id.
 - Un locale che sparisce da OSM non si cancella: si imposta `osm_missing_since` e si conservano i contributi.
+- Si lancia con `npm run import:osm -- --city <slug> [--dry-run] [--from-cache]`; la risposta grezza resta in `.cache/osm/` (esclusa da Git). Quartieri: tabella `neighborhoods` (distretti e barri dai confini OSM, `short_name` compilato a mano), assegnati in SQL. Slug dei nuovi locali: nome → nome + barri (nome ufficiale) → nome + via → nome + numero.
+- Lo script scrive con `SUPABASE_SECRET_KEY` (ruolo `service_role`, con grant minimi dati dalle migrazioni): **solo in `scripts/`**, mai con prefisso `PUBLIC_`, mai letta da `src/` (regola ESLint). Dopo una build, `npm run check:secrets`.
 
 ## Modo di lavorare
 - **Plan mode** prima di ogni feature non banale; aspetta l'ok del fondatore prima di implementare.

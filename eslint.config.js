@@ -35,6 +35,27 @@ export default defineConfig(
 		}
 	},
 	{
+		// The secret key is for scripts/ only: the site must never read it.
+		files: ['src/**'],
+		rules: {
+			'no-restricted-syntax': [
+				'error',
+				{
+					selector: "MemberExpression[object.name='process'][property.name='env']",
+					message: 'Use $app/env/public in src/: process.env may hold scripts-only secrets.'
+				},
+				{
+					selector: 'Literal[value=/SUPABASE_SECRET_KEY|sb_secret_/]',
+					message: 'The Supabase secret key is for scripts/ only.'
+				},
+				{
+					selector: "Identifier[name='SUPABASE_SECRET_KEY']",
+					message: 'The Supabase secret key is for scripts/ only.'
+				}
+			]
+		}
+	},
+	{
 		// Override or add rule settings here, such as:
 		// 'svelte/button-has-type': 'error'
 		rules: {}

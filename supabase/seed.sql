@@ -1,7 +1,19 @@
 -- Seed data. Safe to run more than once.
 
--- Launch city. osm_relation_id is the Barcelona municipality boundary on OpenStreetMap.
-insert into public.cities (slug, name, country_code, timezone, center, bbox, osm_relation_id, is_active)
+-- Launch city. osm_relation_id is the Barcelona municipality boundary on OpenStreetMap;
+-- districtes are admin_level 9 and barris admin_level 10.
+insert into public.cities (
+	slug,
+	name,
+	country_code,
+	timezone,
+	center,
+	bbox,
+	osm_relation_id,
+	district_admin_level,
+	neighborhood_admin_level,
+	is_active
+)
 values (
 	'barcelona',
 	'Barcelona',
@@ -10,6 +22,8 @@ values (
 	extensions.st_setsrid(extensions.st_makepoint(2.1686, 41.3874), 4326),
 	extensions.st_makeenvelope(2.0524, 41.3170, 2.2280, 41.4682, 4326),
 	347950,
+	9,
+	10,
 	true
 )
 on conflict (slug) do nothing;

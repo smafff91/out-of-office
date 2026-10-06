@@ -13,5 +13,8 @@ bun.lockb
 /docs/
 /design/
 
+# Raw downloads
+/.cache/
+
 # Generated
 worker-configuration.d.ts

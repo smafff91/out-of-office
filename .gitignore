@@ -10,6 +10,9 @@ build/
 .DS_Store
 Thumbs.db
 
+# Raw downloads (e.g. Overpass responses for scripts/import-osm.ts)
+.cache/
+
 # Env
 .env
 .env.*
