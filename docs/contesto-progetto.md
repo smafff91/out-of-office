@@ -1,7 +1,7 @@
 # Contesto progetto — Cafe List Barcellona
 
 *File di contesto per la knowledge base del progetto. Aggiornare quando vengono prese nuove decisioni.*
-*Ultimo aggiornamento: 4 ottobre 2026 (**target = lavoratori da remoto, non solo nomadi; la parola "nomads" non compare mai nell'app; utenti = "users"**). Aggiornamenti precedenti (28 set): visione multi-città, struttura UX, direzione visiva, score "would work here again", tre livelli di informazione, piano app nativa, certificazione v2 a due strade. Dettagli design in `claude/design-ux.md`, certificazione in `claude/certificazione.md`, naming in `claude/naming.md`.*
+*Ultimo aggiornamento: 9 ottobre 2026 (**lingue al lancio: inglese, spagnolo e catalano, con i18n dal giorno 1**; messaggio di fondo verso i locali, dettagli in `claude/rapporto-locali-citta.md`). Aggiornamenti precedenti — 4 ott: target = lavoratori da remoto, non solo nomadi; la parola "nomads" non compare mai nell'app; utenti = "users". 28 set: visione multi-città, struttura UX, direzione visiva, score "would work here again", tre livelli di informazione, piano app nativa, certificazione v2 a due strade. Dettagli design in `claude/design-ux.md`, certificazione in `claude/certificazione.md`, naming in `claude/naming.md`.*
 
 ---
 
@@ -13,7 +13,7 @@ Web app per trovare dove lavorare bene in città — non una lista statica di ca
 
 ## Target utente (aggiornato 4 ott 2026)
 
-**Lavoratori da remoto (remote worker)** — target primario, deciso. Comprende: dipendenti in smart working o full remote, freelance, expat che lavorano da remoto e **anche** i nomadi digitali, che sono una parte del target e non il target intero. Al lancio: quelli che vivono o passano da Barcellona.
+**Lavoratori da remoto (remote worker)** — target primario, deciso. Comprende: dipendenti in smart working o full remote, freelance, expat che lavorano da remoto e **anche** i nomadi digitali, che sono una parte del target e non il target intero. Al lancio: quelli che vivono o passano da Barcellona, **residenti locali compresi**.
 
 **Terminologia (deciso 4 ott 2026):**
 - **La parola "nomads" non compare mai nell'app** (interfaccia, badge, copy, brand). Il badge è **"Certified for remote work"**.
@@ -21,6 +21,13 @@ Web app per trovare dove lavorare bene in città — non una lista statica di ca
 - Nei documenti interni "nomadi digitali" resta solo per indicare quel segmento specifico o canali che portano quel nome (es. r/digitalnomad, Nomad List).
 
 Barcellona è un mercato favorevole per il lancio: molte persone che lavorano da remoto (residenti in smart working, freelance, expat), una delle community di nomadi digitali più grandi d'Europa (oltre il 30% dei permessi di residenza per nomadi digitali in Spagna rilasciati nell'area di Barcellona), ecosistema coworking molto denso (350+ spazi), città compatta e camminabile. Inoltre il fondatore ci vive (raccolta dati e certificazione sul campo).
+
+## Rapporto con i locali e la città (9 ott 2026 — dettagli in `claude/rapporto-locali-citta.md`)
+
+Rischio di percezione: app "per expat che occupano i tavoli", in una città sensibile al tema della gentrificazione. Messaggio di fondo (approvato):
+> **Portiamo clienti nelle ore vuote ai locali che li vogliono, e lasciamo in pace quelli che non li vogliono.**
+
+Non si difende il brand sul dibattito macro (expat, affitti, stipendi) ma sul concreto: rispetto delle regole dei locali, ospiti che consumano, scelta del gestore. Decisa la presenza di spagnolo e catalano (vedi "Lingue"); le altre misure (codice del buon ospite, voce ai gestori, controllo dei bar ad alto ricambio, comunicazione nei canali locali) sono proposte da valutare.
 
 ## Concorrenza e differenziazione
 
@@ -60,6 +67,20 @@ Mobile-first perché il momento d'uso tipico è per strada, telefono in mano. De
 - URL delle schede (`/{city}/{locale}`) pensati per diventare **deep link / universal link** nell'app
 - Evitare dipendenze solo-browser non replicabili in app; geolocalizzazione, fotocamera e upload foto implementati in modo sostituibile con le API native
 - Stati offline e di caricamento curati (servono sia al web sia all'app)
+- **Tutti i testi in file di lingua (i18n) fin dal primo commit**, nessun testo scritto direttamente nel codice (vedi "Lingue")
+
+## Lingue (deciso 9 ott 2026)
+
+**Al lancio: inglese, spagnolo e catalano.** Motivo: un'app solo in inglese a Barcellona conferma lo stereotipo dell'app per expat; spagnolo e catalano dicono che l'app è anche per chi ci vive.
+
+- **i18n dal giorno 1:** il costo non è la traduzione ma l'architettura; con i testi in file di lingua, ogni lingua in più è un file
+- **Inglese = lingua sorgente** del copy; spagnolo e catalano tradotti da lì
+- **Catalano rivisto da un madrelingua** (revisore individuato dal fondatore): un catalano tradotto male fa più danno che non averlo
+- **Si traduce:** interfaccia, pagine statiche (About, How certification works, privacy, termini), email del login
+- **Non si traduce:** contenuti degli utenti (note nella lingua originale), nomi dei locali
+- **Lingua di default** dalle impostazioni del browser, con selettore visibile
+- **SEO per lingua** (URL `/es/`, `/ca/`, hreflang): da valutare a parte, può slittare di qualche settimana dopo il lancio
+- Vale anche per l'espansione: la lingua di una nuova città (es. portoghese per Lisbona) costa un file di testi, non un refactor
 
 ## Scope MVP
 
@@ -76,12 +97,12 @@ Domanda che l'MVP deve validare: *chi lavora da remoto usa l'app per scegliere d
 - **Account leggero** (accesso con Google o link magico via email, senza password)
 - **Moderazione minima:** pulsante "segnala" su foto e dati + pannello admin per rimuovere contenuti e revocare certificazioni
 - **Pagina "How certification works"** (testo pubblico in `claude/certificazione.md`)
-- Lingua: **inglese**
+- Lingue: **inglese, spagnolo e catalano** (aggiornato 9 ott, vedi "Lingue")
 - Base legale: privacy policy (GDPR), termini d'uso con licenza sulle foto caricate, attribuzione OSM visibile sulla mappa
 - **Metriche definite prima del lancio** (es. utenti attivi settimanali, utenti che tornano, numero di contributi e di contributori distinti)
 - Riconoscimento contributori a costo zero: nome del contributore sulla scheda locale, titolo di "fondatore" ai primi collaboratori
 
-**Escluso dall'MVP web:** stato live, loyalty program strutturato, locali promossi, filtro wifi, filtro "aperto ora", banner/notifiche di prossimità, recensioni testuali classiche, rating a stelle, lingue aggiuntive. L'app nativa non è nel lancio web ma è pianificata subito dopo (vedi "Piattaforma", Fase 2).
+**Escluso dall'MVP web:** stato live, loyalty program strutturato, locali promossi, filtro wifi, filtro "aperto ora", banner/notifiche di prossimità, recensioni testuali classiche, rating a stelle, lingue oltre a EN/ES/CA. L'app nativa non è nel lancio web ma è pianificata subito dopo (vedi "Piattaforma", Fase 2).
 
 ## Scope geografico
 
@@ -96,6 +117,7 @@ Implicazioni pratiche:
 - Stato live, zone, soglie: definiti per città
 - Utente in una città non coperta: schermata "Not in {city} yet" con voto per la città (misura la domanda per l'espansione)
 - La certificazione automatica funziona in ogni città senza lavoro del fondatore: è il motore principale dell'espansione
+- Le lingue sono gestite con i18n: aggiungere la lingua di una nuova città non richiede modifiche al codice
 
 Al lancio: **tutta Barcellona fin da subito** (copertura base da OSM su tutta la città). La tensione "dato live senza densità di utenti" è risolta rimandando lo stato live.
 
@@ -157,7 +179,7 @@ Al lancio: **tutta Barcellona fin da subito** (copertura base da OSM su tutta la
 - **Direzione visiva:** premium e sobria (riferimento Uber) con toni del caffè; tema principale **chiaro ("Latte")** scelto per pulizia, professionalità, accessibilità e inclusività; colore "crema" riservato ai locali certificati
 - **Locali senza feedback** (quasi tutti al lancio): puntino grigio, "No work info yet" in lista, anteprima "Be the first to check it"; home del lancio con messaggio onesto "We're just getting started here"
 - **Locali community:** barra "2 of 10 users to get certified" che invita al check-in
-- **Copy:** mai "nomads"; utenti = "users"
+- **Copy:** mai "nomads"; utenti = "users". Inglese come lingua sorgente, tradotto in spagnolo e catalano (i layout devono reggere testi più lunghi)
 - Canvas con wireframe e mockup: https://claude.ai/artifact/4n41M3RRRxzp9Xkpxbt7Pj
 
 ## Strategia cold start (raccolta dati iniziale)
@@ -184,7 +206,7 @@ Razionale: il dato raccolto a mano (non scrapabile) è il vero *moat* del prodot
 - **Loyalty program:** meccaniche da progettare osservando il comportamento dei primi utenti; i check-in sono la base naturale per i punti.
 - **Locali promossi:** spazio a pagamento, sempre etichettato chiaramente (fiducia utenti + norme UE sulla riconoscibilità della pubblicità), separato dalla certificazione. Un locale promosso non diventa certificato; un certificato non ottiene visibilità extra pagando.
 - **Filtri wifi e "aperto ora"**
-- **Lingue aggiuntive**
+- **Lingue delle nuove città** e SEO per lingua (se non già fatta subito dopo il lancio)
 
 ## Monetizzazione (idee, non priorità attuale)
 
@@ -201,7 +223,7 @@ Riferimento di modello maturo: TheFork — partnership dirette con i locali, rec
 
 - **Claude Code** per lo sviluppo effettivo (codebase persistente su file, non singole chat)
 - **Git** per checkpoint, un commit per feature
-- **File `CLAUDE.md`** nella root del progetto con contesto tecnico persistente (stack, convenzioni, decisioni prese) — letto automaticamente da Claude Code a ogni sessione. Deve includere i requisiti "costruire pensando all'app" (vedi "Piattaforma") e la regola di copy "mai 'nomads', utenti = 'users'"
+- **File `CLAUDE.md`** nella root del progetto con contesto tecnico persistente (stack, convenzioni, decisioni prese) — letto automaticamente da Claude Code a ogni sessione. Deve includere i requisiti "costruire pensando all'app" (vedi "Piattaforma"), la regola di copy "mai 'nomads', utenti = 'users'" e la regola i18n "nessun testo nel codice, solo chiavi nei file di lingua EN/ES/CA"
 - **Plan mode** prima di implementare feature complesse
 - Separazione netta tra "sto decidendo" (chat/brainstorming, anche su Claude.ai) e "ho deciso, implemento" (Claude Code) — per contenere il consumo di token
 
@@ -218,12 +240,14 @@ Riferimento di modello maturo: TheFork — partnership dirette con i locali, rec
 ## Decisioni ancora aperte
 
 - [ ] Nome del progetto/app (serve prima di condividere il link e prima di pubblicare negli store) — **non legato a Barcellona**, niente "nomad" (vedi `claude/naming.md`)
-- [ ] Stack tecnico (framework per la web app, hosting, database, fornitore tile mappe) — **vincolo: impacchettabile come app nativa senza riscrittura (es. Capacitor)**
+- [ ] Stack tecnico (framework per la web app, hosting, database, fornitore tile mappe) — **vincoli: impacchettabile come app nativa senza riscrittura (es. Capacitor); supporto i18n**
 - [ ] App nativa: quali funzioni native nella prima versione (notifiche di prossimità, push, check-in) + account sviluppatore Apple/Google
 - [ ] Validare dopo il lancio le soglie della certificazione automatica (10 utenti, metà check-in, 14 giorni, 75%), se il Wi‑Fi resta obbligatorio, se serve una domanda sui tavoli
 - [ ] Strategia di import OSM (proposta: città per città)
 - [ ] Metriche MVP e soglie di successo
 - [ ] Chi coinvolgere per la raccolta iniziale (nomi/contatti reali di persone che lavorano da remoto a Barcellona)
+- [ ] SEO per lingua (URL `/es/`, `/ca/`, hreflang): al lancio o subito dopo
+- [ ] Rapporto con i locali: codice del buon ospite, voce ai gestori (limiti e opt-out), controllo dei bar ad alto ricambio, contatto con gestori prima del lancio (vedi `claude/rapporto-locali-citta.md`)
 - [ ] *Futuro:* soglia di voti per aprire una nuova città
 - [ ] *Futuro:* soglia di attivazione dello stato live per zona
 - [ ] *Futuro:* meccaniche del loyalty program
@@ -243,3 +267,5 @@ Riferimento di modello maturo: TheFork — partnership dirette con i locali, rec
 - [x] *(28 set)* Certificazione v2: scopo = togliere il rumore; 4 criteri leggeri; un badge con due strade (manuale del fondatore + automatica dalla community con soglie anti-manipolazione); revoca automatica
 - [x] *(4 ott)* Design MVP completo, inclusa la pagina "How certification works"
 - [x] *(4 ott)* **Target = lavoratori da remoto** (i nomadi digitali sono un sottoinsieme); **mai "nomads" nell'app**; badge "Certified for remote work"; utenti = "users"
+- [x] *(9 ott)* **Messaggio di fondo verso i locali:** "Portiamo clienti nelle ore vuote ai locali che li vogliono, e lasciamo in pace quelli che non li vogliono"
+- [x] *(9 ott)* **Lingue al lancio: inglese, spagnolo, catalano**, con i18n dal giorno 1; catalano rivisto da un madrelingua
