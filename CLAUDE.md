@@ -2,7 +2,7 @@
 
 Web app mobile-first per trovare caffè dove si lavora bene da remoto, con dati della community.
 Città di lancio: Barcellona, ma il prodotto è multi-città fin dal primo giorno.
-Il fondatore non scrive codice: spiega le scelte in modo semplice, in italiano. Codice, commenti, nomi e testi dell'interfaccia in inglese.
+Il fondatore non scrive codice: spiega le scelte in modo semplice, in italiano. Codice, commenti e nomi in inglese. L'app è in **inglese, spagnolo e catalano** fin dal lancio: i testi si scrivono in inglese (lingua sorgente) e si traducono in ES e CA.
 
 Dettagli di prodotto (leggili quando servono, non tutti a ogni sessione):
 - `docs/contesto-progetto.md` — visione, scope MVP, schema dati, piattaforma
@@ -11,13 +11,24 @@ Dettagli di prodotto (leggili quando servono, non tutti a ogni sessione):
 - `design/mockups/*.dc.html` — mockup definitivi (tema Latte), una schermata per file; indice in `design/README.md`
 
 ## Regole di copy (non negoziabili)
-- La parola **"nomad"/"nomads" non compare mai** nell'interfaccia, nei metadati, negli store o nel codice visibile all'utente.
-- Chi usa e contribuisce si chiama **"users"** (es. "Confirmed by 12 users", "2 of 10 users to get certified").
+- La parola **"nomad"/"nomads" non compare mai** nell'interfaccia, nei metadati, negli store o nel codice visibile all'utente, in nessuna lingua (né "nómada", né "nòmada").
+- Chi usa e contribuisce si chiama **"users"** (es. "Confirmed by 12 users", "2 of 10 users to get certified"); in ES "usuarios", in CA "usuaris".
 - Badge: **"Certified for remote work"**.
 - Nome dell'app solo da `src/lib/config.ts` (`APP_NAME = 'Out of Office'`): è provvisorio, non scriverlo a mano altrove.
 - Nome città e quartieri sono dati: nei testi usa variabili (`{city}`), mai "Barcelona" scritto nel copy.
-- Tutti i testi dell'interfaccia in un unico modulo (`src/lib/copy.ts`), per poterli rivedere e tradurre in futuro.
-- **Inglese americano** in tutti i testi, nei commenti e nei nomi del codice (es. colors, favorites, neighborhood, center).
+- **Inglese americano** nei testi sorgente (`messages/en.json`), nei commenti e nei nomi del codice (es. colors, favorites, neighborhood, center).
+
+## Lingue (i18n)
+- **Nessun testo dell'interfaccia scritto nel codice.** Ogni testo è una chiave in `messages/en.json` (sorgente), `messages/es.json` e `messages/ca.json` (Paraglide JS 2, formato inlang). Nei componenti: `import * as m from '#lib/paraglide/messages.js'` e `m.place_votes({ count })`.
+- Chiavi in snake_case con prefisso per area (`common_`, `place_`, `city_`, `action_`…). Variabili come `{city}`; plurali con `plural` nel file di lingua, mai `count === 1 ? … : …` nel codice.
+- Numeri, percentuali, date e "3 days ago" fuori dalle frasi: `#lib/i18n/format.ts` (Intl nella lingua attiva).
+- Ogni chiave nuova va in tutte e tre le lingue: ES e CA sono bozze finché un revisore non le approva (il catalano lo rivede un madrelingua). Le approvazioni stanno in `messages/review.json` (`npm run i18n:approve -- --locale ca --keys a,b`); se cambia il testo inglese o la traduzione, la chiave torna "da rivedere" da sola.
+- `npm run check:i18n` (incluso in `npm run lint`) blocca chiavi mancanti o in più, variabili diverse dalla sorgente e "nomad" in ogni lingua. `npm run i18n:export` rigenera `docs/translations/translations.csv` per i revisori.
+- Scelta della lingua, senza prefissi negli URL: scelta salvata (cookie `locale` + localStorage) → lingua del browser → inglese. Server: middleware Paraglide in `src/hooks.server.ts`, che scrive `<html lang>` e manda `Vary: Cookie, Accept-Language` + `Cache-Control: private, no-cache` sulle pagine HTML. Browser e build app: `src/lib/i18n/locale.ts`. Opzioni del compilatore in `project.inlang/paraglide.config.js`.
+- URL per lingua (`/es/`, `/ca/`, hreflang) più avanti: i link interni passano già da `localizeHref` (`#lib/i18n/locale.ts`).
+- Non si traducono: nomi dei locali, contenuti degli utenti, nomi delle lingue nel selettore, `APP_NAME`.
+- Email di login (magic link): vanno tradotte in EN/ES/CA, ma i modelli email di Supabase sono uno per progetto. Da risolvere nella feature 7.
+- Il plugin dei messaggi di inlang è una dipendenza npm a versione fissa, referenziata in locale in `project.inlang/settings.json`: la build non scarica nulla da CDN.
 
 ## Stack
 | Pezzo | Scelta |
@@ -29,6 +40,7 @@ Dettagli di prodotto (leggili quando servono, non tutti a ogni sessione):
 | Mappa | MapLibre GL JS + OpenFreeMap (stile Positron modificato: niente POI, colori Latte) |
 | Email magic link | Resend come SMTP di Supabase (solo in produzione; in sviluppo bastano le email integrate di Supabase, con i loro limiti) |
 | Stile | CSS semplice con variabili (design token) + stili scoped di Svelte. Niente Tailwind né librerie UI |
+| i18n | Paraglide JS 2 (EN sorgente, ES, CA), compilato da Vite in `src/lib/paraglide/` (generato, escluso da Git) |
 | Font | Geist (titoli 800, tracking stretto) e Geist Mono (numeri, freschezza), **self-hosted** in woff2 (niente Google Fonts: GDPR e funzionamento offline in app) |
 | Più avanti, non ora | Cloudflare Turnstile, PostHog (UE, senza cookie), Sentry |
 
@@ -37,7 +49,7 @@ Costo obiettivo: zero. Usa solo piani gratuiti che permettono l'uso commerciale.
 ## Architettura: costruire pensando all'app
 La stessa base di codice produce due build: web (SSR per la SEO) e app (statica, impacchettata con Capacitor). Quindi:
 - `BUILD_TARGET=web|app` sceglie l'adapter in `vite.config.ts` (SvelteKit 3: niente `svelte.config.js`, la configurazione di Kit sta nel plugin `sveltekit()`).
-- I file condivisi si importano con `#lib/...` (non `$lib`), con l'estensione per i moduli TS (es. `#lib/copy.ts`).
+- I file condivisi si importano con `#lib/...` (non `$lib`), con l'estensione per i moduli TS (es. `#lib/config.ts`).
 - **I dati passano dal client Supabase** (`supabase-js` con chiave anon + RLS), che è la nostra "API separata": funziona uguale nel browser, nel server e nell'app.
 - Per caricare i dati usa load **universali** (`+page.ts`), non `+page.server.ts`. `+page.server.ts`, form actions ed endpoint server solo per cose solo-web (sitemap, robots, immagini Open Graph).
 - La logica di dominio (score, Wilson, livello del locale, certificazione, revoca, anti-manipolazione) sta **nel database** come funzioni SQL, viste e job pg_cron, non nel frontend.
@@ -73,7 +85,7 @@ Slug dei locali generati una volta e **salvati**: non cambiano se OSM rinomina i
 - Attribuzione "© OpenStreetMap contributors" sempre visibile sulla mappa.
 
 ## Fuori dall'MVP (non implementare)
-Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loyalty, locali promossi, notifiche/banner di prossimità, altre lingue, foto da Google o da altri siti (mai scraping).
+Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loyalty, locali promossi, notifiche/banner di prossimità, lingue oltre a EN/ES/CA, foto da Google o da altri siti (mai scraping).
 
 ## Design
 - Riproduci i mockup in `design/mockups/` (si parte dalla Home). I token stanno nel blocco `.t{...}` di ogni file: portali in `src/lib/styles/tokens.css`.
@@ -106,6 +118,7 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 1. Scheletro SvelteKit, doppia build web/app, token, font, layout base
 2. Supabase (progetto di sviluppo): schema, RLS, seed della città Barcellona
 3. Import OSM di Barcellona
+3b. i18n: EN/ES/CA con Paraglide, file di lingua, controllo chiavi, CSV per i revisori
 4. Home mappa con i tre tipi di pin + geolocalizzazione con fallback
 5. Lista bottom sheet (Nearest / Top rated) + filtro Certified
 6. Anteprima al tap e scheda `/{city}/{place}` (SSR)

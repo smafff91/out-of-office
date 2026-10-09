@@ -1,0 +1,70 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"common_search_placeholder": "On treballes avui?",
+	"common_certified": "Certificat per teletreballar",
+	"common_account": "Compte",
+	"common_map": "Mapa",
+	"common_osm_attribution": "© OpenStreetMap contributors",
+	"common_offline": "No tens connexió",
+	"common_language": "Idioma",
+	"place_score": "{percent} hi tornaria a treballar",
+	"place_score_few": "{yes} de {total}",
+	"place_votes": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} vot",
+				"countPlural=*": "{countText} vots"
+			}
+		}
+	],
+	"place_confirmed_by": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Confirmat per {countText} usuari",
+				"countPlural=*": "Confirmat per {countText} usuaris"
+			}
+		}
+	],
+	"place_certification_progress": [
+		{
+			"declarations": ["input count", "input total", "local totalPlural = total: plural"],
+			"selectors": ["totalPlural"],
+			"match": {
+				"totalPlural=one": "{count} de {total} usuari per obtenir la certificació",
+				"totalPlural=*": "{count} de {total} usuaris per obtenir la certificació"
+			}
+		}
+	],
+	"place_no_work_info": "Encara sense informació per treballar",
+	"place_walk_time": "A {minutes} min a peu",
+	"place_open_until": "Obert fins a les {time}",
+	"attribute_wifi_fast": "Wi‑Fi ràpida",
+	"attribute_outlets_plenty": "Molts endolls",
+	"attribute_noise_quiet": "Tranquil",
+	"city_not_yet": "Encara no som a {city}",
+	"action_add_experience": "Afegeix la teva experiència",
+	"action_report_problem": "Informa d'un problema",
+	"home_work_nearby": "Per treballar a prop",
+	"tokens_title": "Tokens de disseny",
+	"tokens_intro": "Pàgina temporal per comparar colors, fonts i botons amb els mockups Latte.",
+	"tokens_database": "Base de dades",
+	"tokens_city_from_db": "Ciutat des de la base de dades:",
+	"tokens_db_unavailable": "No s'ha pogut connectar amb la base de dades.",
+	"tokens_colors": "Colors",
+	"tokens_type": "Tipografia",
+	"tokens_components": "Components",
+	"tokens_formatting": "Format",
+	"tokens_body_sample": "Wi‑Fi ràpida, molts endolls i un racó tranquil."
+}

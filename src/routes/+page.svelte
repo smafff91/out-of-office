@@ -1,13 +1,16 @@
 <script lang="ts">
 	// Temporary token showcase; replaced by the map Home in feature 4.
 	import { APP_NAME } from '#lib/config.ts';
-	import { copy } from '#lib/copy.ts';
+	import { formatDaysAgo, formatNumber, formatPercent } from '#lib/i18n/format.ts';
+	import { getLocale, LOCALE_NAMES, locales, setLocale } from '#lib/i18n/locale.ts';
+	import * as m from '#lib/paraglide/messages.js';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 
-	const t = copy.tokens;
+	const activeLocale = getLocale();
 
+	// Palette names come from the design system (docs/design-ux.md): they are not translated.
 	const swatches = [
 		['Milk', '--bg'],
 		['Surface', '--surface'],
@@ -26,6 +29,25 @@
 		['Pin check', '--pinfg']
 	] as const;
 
+	const monoSamples = [
+		formatPercent(0.94),
+		m.place_score_few({ yes: 2, total: 2 }),
+		formatDaysAgo(3),
+		formatNumber(2453)
+	];
+
+	const formattingSamples = [
+		m.place_score({ percent: formatPercent(0.94) }),
+		m.place_confirmed_by({ count: 1 }),
+		m.place_confirmed_by({ count: 4 }),
+		m.place_votes({ count: 17 }),
+		m.place_certification_progress({ count: 2, total: 10 }),
+		formatDaysAgo(0),
+		formatDaysAgo(1),
+		formatDaysAgo(21),
+		m.city_not_yet({ city: 'Lisboa' })
+	];
+
 	let hex = $state<Record<string, string>>({});
 
 	$effect(() => {
@@ -37,28 +59,53 @@
 </script>
 
 <svelte:head>
-	<title>{t.title} · {APP_NAME}</title>
+	<title>{m.tokens_title()} · {APP_NAME}</title>
 </svelte:head>
 
 <main>
 	<header>
 		<h1>{APP_NAME}</h1>
-		<p class="muted">{t.intro}</p>
+		<p class="muted">{m.tokens_intro()}</p>
 	</header>
 
 	<section>
-		<h2>{t.database}</h2>
+		<h2>{m.common_language()}</h2>
+		<div class="segmented" role="group" aria-label={m.common_language()}>
+			{#each locales as locale (locale)}
+				<button
+					type="button"
+					lang={locale}
+					aria-pressed={locale === activeLocale}
+					onclick={() => setLocale(locale)}
+				>
+					{LOCALE_NAMES[locale]}
+				</button>
+			{/each}
+		</div>
+	</section>
+
+	<section>
+		<h2>{m.tokens_formatting()}</h2>
+		<ul class="samples">
+			{#each formattingSamples as sample (sample)}
+				<li>{sample}</li>
+			{/each}
+		</ul>
+	</section>
+
+	<section>
+		<h2>{m.tokens_database()}</h2>
 		{#if data.dbError}
-			<p class="danger">{t.dbUnavailable}</p>
+			<p class="danger">{m.tokens_db_unavailable()}</p>
 		{:else}
 			{#each data.cities as city (city.slug)}
-				<p class="body">{t.cityFromDb} <strong>{city.name}</strong></p>
+				<p class="body">{m.tokens_city_from_db()} <strong>{city.name}</strong></p>
 			{/each}
 		{/if}
 	</section>
 
 	<section>
-		<h2>{t.colors}</h2>
+		<h2>{m.tokens_colors()}</h2>
 		<ul class="swatches">
 			{#each swatches as [label, name] (name)}
 				<li>
@@ -72,36 +119,38 @@
 	</section>
 
 	<section>
-		<h2>{t.type}</h2>
-		<p class="title">{t.titleSample}</p>
-		<p class="body">{t.bodySample}</p>
-		<p class="muted small">{t.mutedSample}</p>
+		<h2>{m.tokens_type()}</h2>
+		<p class="title">{m.home_work_nearby()}</p>
+		<p class="body">{m.tokens_body_sample()}</p>
+		<p class="muted small">
+			{m.place_walk_time({ minutes: 3 })} · {m.place_open_until({ time: '20:00' })}
+		</p>
 		<p class="mono-row">
-			{#each t.monoSamples as sample (sample)}
+			{#each monoSamples as sample (sample)}
 				<span class="mono">{sample}</span>
 			{/each}
 		</p>
 	</section>
 
 	<section>
-		<h2>{t.components}</h2>
+		<h2>{m.tokens_components()}</h2>
 		<div class="stack">
-			<button class="btn-primary" type="button">{t.primaryButton}</button>
-			<button class="btn-secondary" type="button">{t.secondaryButton}</button>
+			<button class="btn-primary" type="button">{m.action_add_experience()}</button>
+			<button class="btn-secondary" type="button">{m.action_report_problem()}</button>
 			<div>
 				<button class="certified-chip tap-target" type="button">
 					<span class="seal" aria-hidden="true">
 						<svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg>
 					</span>
-					{copy.common.certified}
+					{m.common_certified()}
 				</button>
 			</div>
 			<div class="pills">
-				{#each t.pills as pill (pill)}
+				{#each [m.attribute_wifi_fast(), m.attribute_outlets_plenty(), m.attribute_noise_quiet()] as pill (pill)}
 					<span class="pill">{pill}</span>
 				{/each}
 			</div>
-			<p class="muted small">{copy.place.confirmedBy(4)}</p>
+			<p class="muted small">{m.place_confirmed_by({ count: 4 })}</p>
 		</div>
 	</section>
 </main>
@@ -278,5 +327,40 @@
 		border-radius: var(--radius-sm);
 		background: var(--pill);
 		white-space: nowrap;
+	}
+	.segmented {
+		display: inline-flex;
+		gap: 4px;
+		padding: 4px;
+		border-radius: 14px;
+		background: var(--pill);
+	}
+
+	.segmented button {
+		min-height: var(--tap);
+		padding: 0 16px;
+		border: 0;
+		border-radius: 11px;
+		background: transparent;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--muted);
+		cursor: pointer;
+	}
+
+	.segmented button[aria-pressed='true'] {
+		background: var(--surface);
+		color: var(--ink);
+		box-shadow: 0 1px 4px var(--sh-2);
+	}
+
+	.samples {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		font-size: 15px;
 	}
 </style>

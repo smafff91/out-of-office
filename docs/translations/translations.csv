@@ -1,0 +1,36 @@
+﻿key,en,es,es_status,ca,ca_status
+common_search_placeholder,Where to work today?,¿Dónde trabajas hoy?,to review,On treballes avui?,to review
+common_certified,Certified for remote work,Certificado para teletrabajar,to review,Certificat per teletreballar,to review
+common_account,Account,Cuenta,to review,Compte,to review
+common_map,Map,Mapa,to review,Mapa,to review
+common_osm_attribution,© OpenStreetMap contributors,© OpenStreetMap contributors,to review,© OpenStreetMap contributors,to review
+common_offline,You're offline,Estás sin conexión,to review,No tens connexió,to review
+common_language,Language,Idioma,to review,Idioma,to review
+place_score,{percent} would work here again,{percent} volvería a trabajar aquí,to review,{percent} hi tornaria a treballar,to review
+place_score_few,{yes} of {total},{yes} de {total},to review,{yes} de {total},to review
+place_votes [countPlural=one],{countText} vote,{countText} voto,to review,{countText} vot,to review
+place_votes [countPlural=*],{countText} votes,{countText} votos,to review,{countText} vots,to review
+place_confirmed_by [countPlural=one],Confirmed by {countText} user,Confirmado por {countText} usuario,to review,Confirmat per {countText} usuari,to review
+place_confirmed_by [countPlural=*],Confirmed by {countText} users,Confirmado por {countText} usuarios,to review,Confirmat per {countText} usuaris,to review
+place_certification_progress [totalPlural=one],{count} of {total} user to get certified,{count} de {total} usuario para obtener la certificación,to review,{count} de {total} usuari per obtenir la certificació,to review
+place_certification_progress [totalPlural=*],{count} of {total} users to get certified,{count} de {total} usuarios para obtener la certificación,to review,{count} de {total} usuaris per obtenir la certificació,to review
+place_no_work_info,No work info yet,Aún sin información para trabajar,to review,Encara sense informació per treballar,to review
+place_walk_time,{minutes} min walk,A {minutes} min a pie,to review,A {minutes} min a peu,to review
+place_open_until,Open until {time},Abierto hasta las {time},to review,Obert fins a les {time},to review
+attribute_wifi_fast,Fast Wi‑Fi,Wi‑Fi rápido,to review,Wi‑Fi ràpida,to review
+attribute_outlets_plenty,Plenty of outlets,Muchos enchufes,to review,Molts endolls,to review
+attribute_noise_quiet,Quiet,Tranquilo,to review,Tranquil,to review
+city_not_yet,Not in {city} yet,Aún no estamos en {city},to review,Encara no som a {city},to review
+action_add_experience,Add your experience,Añade tu experiencia,to review,Afegeix la teva experiència,to review
+action_report_problem,Report a problem,Informa de un problema,to review,Informa d'un problema,to review
+home_work_nearby,Work nearby,Para trabajar cerca,to review,Per treballar a prop,to review
+tokens_title,Design tokens,Tokens de diseño,to review,Tokens de disseny,to review
+tokens_intro,"Temporary page to check colors, fonts and buttons against the Latte mockups.","Página temporal para comparar colores, fuentes y botones con los mockups Latte.",to review,"Pàgina temporal per comparar colors, fonts i botons amb els mockups Latte.",to review
+tokens_database,Database,Base de datos,to review,Base de dades,to review
+tokens_city_from_db,City from database:,Ciudad desde la base de datos:,to review,Ciutat des de la base de dades:,to review
+tokens_db_unavailable,Could not reach the database.,No se ha podido conectar con la base de datos.,to review,No s'ha pogut connectar amb la base de dades.,to review
+tokens_colors,Colors,Colores,to review,Colors,to review
+tokens_type,Type,Tipografía,to review,Tipografia,to review
+tokens_components,Components,Componentes,to review,Components,to review
+tokens_formatting,Formatting,Formato,to review,Format,to review
+tokens_body_sample,"Fast Wi‑Fi, plenty of outlets and a quiet corner.","Wi‑Fi rápido, muchos enchufes y un rincón tranquilo.",to review,"Wi‑Fi ràpida, molts endolls i un racó tranquil.",to review

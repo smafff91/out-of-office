@@ -1,0 +1,70 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"common_search_placeholder": "Where to work today?",
+	"common_certified": "Certified for remote work",
+	"common_account": "Account",
+	"common_map": "Map",
+	"common_osm_attribution": "© OpenStreetMap contributors",
+	"common_offline": "You're offline",
+	"common_language": "Language",
+	"place_score": "{percent} would work here again",
+	"place_score_few": "{yes} of {total}",
+	"place_votes": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} vote",
+				"countPlural=*": "{countText} votes"
+			}
+		}
+	],
+	"place_confirmed_by": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Confirmed by {countText} user",
+				"countPlural=*": "Confirmed by {countText} users"
+			}
+		}
+	],
+	"place_certification_progress": [
+		{
+			"declarations": ["input count", "input total", "local totalPlural = total: plural"],
+			"selectors": ["totalPlural"],
+			"match": {
+				"totalPlural=one": "{count} of {total} user to get certified",
+				"totalPlural=*": "{count} of {total} users to get certified"
+			}
+		}
+	],
+	"place_no_work_info": "No work info yet",
+	"place_walk_time": "{minutes} min walk",
+	"place_open_until": "Open until {time}",
+	"attribute_wifi_fast": "Fast Wi‑Fi",
+	"attribute_outlets_plenty": "Plenty of outlets",
+	"attribute_noise_quiet": "Quiet",
+	"city_not_yet": "Not in {city} yet",
+	"action_add_experience": "Add your experience",
+	"action_report_problem": "Report a problem",
+	"home_work_nearby": "Work nearby",
+	"tokens_title": "Design tokens",
+	"tokens_intro": "Temporary page to check colors, fonts and buttons against the Latte mockups.",
+	"tokens_database": "Database",
+	"tokens_city_from_db": "City from database:",
+	"tokens_db_unavailable": "Could not reach the database.",
+	"tokens_colors": "Colors",
+	"tokens_type": "Type",
+	"tokens_components": "Components",
+	"tokens_formatting": "Formatting",
+	"tokens_body_sample": "Fast Wi‑Fi, plenty of outlets and a quiet corner."
+}

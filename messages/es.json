@@ -1,0 +1,70 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"common_search_placeholder": "¿Dónde trabajas hoy?",
+	"common_certified": "Certificado para teletrabajar",
+	"common_account": "Cuenta",
+	"common_map": "Mapa",
+	"common_osm_attribution": "© OpenStreetMap contributors",
+	"common_offline": "Estás sin conexión",
+	"common_language": "Idioma",
+	"place_score": "{percent} volvería a trabajar aquí",
+	"place_score_few": "{yes} de {total}",
+	"place_votes": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} voto",
+				"countPlural=*": "{countText} votos"
+			}
+		}
+	],
+	"place_confirmed_by": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Confirmado por {countText} usuario",
+				"countPlural=*": "Confirmado por {countText} usuarios"
+			}
+		}
+	],
+	"place_certification_progress": [
+		{
+			"declarations": ["input count", "input total", "local totalPlural = total: plural"],
+			"selectors": ["totalPlural"],
+			"match": {
+				"totalPlural=one": "{count} de {total} usuario para obtener la certificación",
+				"totalPlural=*": "{count} de {total} usuarios para obtener la certificación"
+			}
+		}
+	],
+	"place_no_work_info": "Aún sin información para trabajar",
+	"place_walk_time": "A {minutes} min a pie",
+	"place_open_until": "Abierto hasta las {time}",
+	"attribute_wifi_fast": "Wi‑Fi rápido",
+	"attribute_outlets_plenty": "Muchos enchufes",
+	"attribute_noise_quiet": "Tranquilo",
+	"city_not_yet": "Aún no estamos en {city}",
+	"action_add_experience": "Añade tu experiencia",
+	"action_report_problem": "Informa de un problema",
+	"home_work_nearby": "Para trabajar cerca",
+	"tokens_title": "Tokens de diseño",
+	"tokens_intro": "Página temporal para comparar colores, fuentes y botones con los mockups Latte.",
+	"tokens_database": "Base de datos",
+	"tokens_city_from_db": "Ciudad desde la base de datos:",
+	"tokens_db_unavailable": "No se ha podido conectar con la base de datos.",
+	"tokens_colors": "Colores",
+	"tokens_type": "Tipografía",
+	"tokens_components": "Componentes",
+	"tokens_formatting": "Formato",
+	"tokens_body_sample": "Wi‑Fi rápido, muchos enchufes y un rincón tranquilo."
+}
