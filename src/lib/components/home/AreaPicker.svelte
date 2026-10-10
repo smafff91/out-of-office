@@ -7,6 +7,13 @@
 
 	const TOP_AREAS = 12;
 
+	/**
+	 * Leading article ignored when sorting (Catalan names such as "el Raval", "l'Antiga
+	 * Esquerra…", "les Corts"); the full name is still shown.
+	 */
+	const LEADING_ARTICLE = /^(el|la|els|les)\s+|^l['’]/i;
+	const sortName = (name: string) => name.replace(LEADING_ARTICLE, '');
+
 	type Props = { city: string; areas: AreaSummary[]; onpick: (area: AreaSummary) => void };
 
 	let { city, areas, onpick }: Props = $props();
@@ -16,7 +23,7 @@
 	const shown = $derived.by(() => {
 		if (showAll) {
 			const collator = new Intl.Collator(getLocale(), { sensitivity: 'base' });
-			return areas.toSorted((a, b) => collator.compare(a.name, b.name));
+			return areas.toSorted((a, b) => collator.compare(sortName(a.name), sortName(b.name)));
 		}
 		return areas
 			.toSorted((a, b) => b.certified - a.certified || b.places - a.places)
