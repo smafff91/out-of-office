@@ -97,10 +97,15 @@
 
 	.attribution {
 		position: absolute;
-		left: 12px;
-		right: 76px;
+		left: 8px;
+		/* Clear of the "Show my location" button on the right. */
+		max-width: calc(100% - 84px);
 		bottom: var(--attribution-bottom, 12px);
 		margin: 0;
+		padding: 2px 6px;
+		border-radius: 6px;
+		/* Map color, slightly see-through: readable over streets and labels. */
+		background: color-mix(in srgb, var(--map) 85%, transparent);
 		font-family: var(--font-mono);
 		font-size: 10px;
 		line-height: 1.4;
