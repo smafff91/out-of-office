@@ -15,7 +15,10 @@ declare global {
 		// interface Error {}
 		// interface Locals {}
 		// interface PageData {}
-		// interface PageState {}
+		interface PageState {
+			/** Area picked on the Home ([west, south, east, north]): the city map opens on it. */
+			area?: [number, number, number, number];
+		}
 	}
 }
 

@@ -24,13 +24,33 @@ city_not_yet,Not in {city} yet,Aún no estamos en {city},to review,Encara no som
 action_add_experience,Add your experience,Añade tu experiencia,to review,Afegeix la teva experiència,to review
 action_report_problem,Report a problem,Informa de un problema,to review,Informa d'un problema,to review
 home_work_nearby,Work nearby,Para trabajar cerca,to review,Per treballar a prop,to review
-tokens_title,Design tokens,Tokens de diseño,to review,Tokens de disseny,to review
-tokens_intro,"Temporary page to check colors, fonts and buttons against the Latte mockups.","Página temporal para comparar colores, fuentes y botones con los mockups Latte.",to review,"Pàgina temporal per comparar colors, fonts i botons amb els mockups Latte.",to review
-tokens_database,Database,Base de datos,to review,Base de dades,to review
-tokens_city_from_db,City from database:,Ciudad desde la base de datos:,to review,Ciutat des de la base de dades:,to review
-tokens_db_unavailable,Could not reach the database.,No se ha podido conectar con la base de datos.,to review,No s'ha pogut connectar amb la base de dades.,to review
-tokens_colors,Colors,Colores,to review,Colors,to review
-tokens_type,Type,Tipografía,to review,Tipografia,to review
-tokens_components,Components,Componentes,to review,Components,to review
-tokens_formatting,Formatting,Formato,to review,Format,to review
-tokens_body_sample,"Fast Wi‑Fi, plenty of outlets and a quiet corner.","Wi‑Fi rápido, muchos enchufes y un rincón tranquilo.",to review,"Wi‑Fi ràpida, molts endolls i un racó tranquil.",to review
+common_tiles_attribution,OpenFreeMap © OpenMapTiles,OpenFreeMap © OpenMapTiles,to review,OpenFreeMap © OpenMapTiles,to review
+common_places_count [countPlural=one],{countText} place,{countText} sitio,to review,{countText} lloc,to review
+common_places_count [countPlural=*],{countText} places,{countText} sitios,to review,{countText} llocs,to review
+common_certified_count [countPlural=one],{countText} certified,{countText} certificado,to review,{countText} certificat,to review
+common_certified_count [countPlural=*],{countText} certified,{countText} certificados,to review,{countText} certificats,to review
+action_dismiss,Dismiss,Cerrar,to review,Tanca,to review
+action_show_my_location,Show my location,Mostrar mi ubicación,to review,Mostra la meva ubicació,to review
+action_use_my_location,Use my location,Usar mi ubicación,to review,Fes servir la meva ubicació,to review
+home_meta_title,Cafés and bars to work from,Cafés y bares para trabajar,to review,Cafès i bars per treballar,to review
+home_meta_description,"Find cafés and bars where you can work on your laptop, with Wi‑Fi, outlets and noise checked by users.","Encuentra cafés y bares donde trabajar con el portátil, con wifi, enchufes y ruido comprobados por los usuarios.",to review,"Troba cafès i bars on treballar amb el portàtil, amb wifi, endolls i soroll comprovats pels usuaris.",to review
+home_intro,"Cafés and bars where you can work on your laptop, checked by people who work there.","Cafés y bares donde trabajar con el portátil, comprobados por quienes trabajan en ellos.",to review,"Cafès i bars on treballar amb el portàtil, comprovats per qui hi treballa.",to review
+home_open_cities,Open cities,Ciudades abiertas,to review,Ciutats obertes,to review
+home_locating,Finding where you are…,Buscando dónde estás…,to review,Buscant on ets…,to review
+city_meta_title,Cafés to work from in {city},Cafés para trabajar en {city},to review,Cafès per treballar a {city},to review
+city_meta_description,"Cafés and bars in {city} where you can work on your laptop, with Wi‑Fi, outlets and noise checked by users.","Cafés y bares de {city} donde trabajar con el portátil, con wifi, enchufes y ruido comprobados por los usuarios.",to review,"Cafès i bars de {city} on treballar amb el portàtil, amb wifi, endolls i soroll comprovats pels usuaris.",to review
+city_not_in_area,We're not in your area yet,Todavía no estamos en tu zona,to review,Encara no som a la teva zona,to review
+city_not_in_area_body,"We open cities one at a time, with places checked by people who work there.","Abrimos las ciudades una a una, con sitios comprobados por quienes trabajan en ellos.",to review,"Obrim les ciutats una a una, amb llocs comprovats per qui hi treballa.",to review
+launch_title,We're just getting started here,Acabamos de empezar aquí,to review,Tot just hem començat aquí,to review
+"launch_counts [certifiedPlural=one, checkedPlural=one]",{certifiedText} certified and {checkedText} checked in {city}.,{certifiedText} certificado y {checkedText} revisado en {city}.,to review,{certifiedText} certificat i {checkedText} revisat a {city}.,to review
+"launch_counts [certifiedPlural=one, checkedPlural=*]",{certifiedText} certified and {checkedText} checked in {city}.,{certifiedText} certificado y {checkedText} revisados en {city}.,to review,{certifiedText} certificat i {checkedText} revisats a {city}.,to review
+"launch_counts [certifiedPlural=*, checkedPlural=one]",{certifiedText} certified and {checkedText} checked in {city}.,{certifiedText} certificados y {checkedText} revisado en {city}.,to review,{certifiedText} certificats i {checkedText} revisat a {city}.,to review
+"launch_counts [certifiedPlural=*, checkedPlural=*]",{certifiedText} certified and {checkedText} checked in {city}.,{certifiedText} certificados y {checkedText} revisados en {city}.,to review,{certifiedText} certificats i {checkedText} revisats a {city}.,to review
+launch_waiting [countPlural=one],{countText} more place is waiting for someone to try it.,Queda {countText} sitio esperando a que alguien lo pruebe.,to review,Queda {countText} lloc esperant que algú el provi.,to review
+launch_waiting [countPlural=*],{countText} more places are waiting for someone to try them.,Quedan {countText} sitios esperando a que alguien los pruebe.,to review,Queden {countText} llocs esperant que algú els provi.,to review
+location_denied,Location is off. You can turn it on in your browser settings.,La ubicación está desactivada. Puedes activarla en los ajustes del navegador.,to review,La ubicació està desactivada. La pots activar a la configuració del navegador.,to review
+location_off_title,Where are you working from?,¿Desde dónde trabajas?,to review,Des d'on treballes?,to review
+location_off_body,"Location is off, so we can't sort places by distance. Turn it on, or pick an area.","La ubicación está desactivada, así que no podemos ordenar los sitios por distancia. Actívala o elige una zona.",to review,"La ubicació està desactivada, així que no podem ordenar els llocs per distància. Activa-la o tria una zona.",to review
+location_areas_in,Areas in {city},Zonas de {city},to review,Zones de {city},to review
+location_all_neighborhoods,All neighborhoods,Todos los barrios,to review,Tots els barris,to review
+location_unavailable,We couldn't find your location. Try again in a moment.,No hemos podido encontrar tu ubicación. Inténtalo de nuevo en un momento.,to review,No hem pogut trobar la teva ubicació. Torna-ho a provar d'aquí a un moment.,to review

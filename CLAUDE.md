@@ -109,6 +109,8 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 - La tabella `contributions` non è leggibile pubblicamente (solo le proprie righe): la scheda usa le viste aggregate `place_scores`, `place_attributes`, `place_laptop_rules`, `place_notes`.
 - Chiavi e segreti solo in `.env` (mai nel repository); tieni aggiornato `.env.example`.
 - Variabili d'ambiente dichiarate in `src/env.ts` (SvelteKit 3) e importate da `$app/env/public`; il client è `createSupabaseClient(fetch)` in `#lib/supabase/client.ts`.
+- Mappa: lo stile sta in `src/lib/map/style.json`, generato da `npm run map:style` (Positron di OpenFreeMap senza POI, colori Latte) e salvato nel repository; MapLibre si importa solo in `src/lib/map/engine.ts`, caricato dopo la pagina.
+- Dati di prova solo nel progetto di sviluppo: `npm run dev:fixtures -- --city <slug>` (e `--remove` per toglierli); serve `DEV_PROJECT_REF` in `.env`, altrimenti lo script si rifiuta.
 - `npm run gen` rigenera i tipi Cloudflare (`worker-configuration.d.ts`): lancialo quando cambia `wrangler.jsonc`.
 - `CLAUDE.md`, `docs/` e `design/` sono esclusi da Prettier (`.prettierignore`): non riformattarli.
 - Dopo ogni feature: `npm run check` e `npm run lint` senza errori; spiega in 3-5 righe come provarla nel browser.
@@ -120,9 +122,12 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 3. Import OSM di Barcellona
 3b. i18n: EN/ES/CA con Paraglide, file di lingua, controllo chiavi, CSV per i revisori
 4. Home mappa con i tre tipi di pin + geolocalizzazione con fallback
-5. Lista bottom sheet (Nearest / Top rated) + filtro Certified
+5. Lista bottom sheet (Nearest / Top rated) + filtro Certified + ricerca (per nome del locale e per barri)
 6. Anteprima al tap e scheda `/{city}/{place}` (SSR)
 7. Flusso di contributo + login + check-in + upload foto
 8. Funzioni SQL: score, Wilson, livelli, certificazione automatica e revoca (pg_cron)
 9. Admin: Reports, New places, certificazione manuale, nuovi certificati automatici
-10. /about, /me (con eliminazione account), /add, "Not in {city} yet", /privacy, /terms, stati vuoti ed errori
+10. /about, /me (con eliminazione account) + pulsante Account → /me, /add, "Not in {city} yet" completo (nome della città, voto, barra), /privacy, /terms, stati vuoti ed errori
+
+## Checklist di lancio
+- Nessun elemento disattivato (`aria-disabled`) né commento `TODO(feature N)` nell'interfaccia: `grep -rn "aria-disabled\|TODO(feature" src/` deve essere vuoto.

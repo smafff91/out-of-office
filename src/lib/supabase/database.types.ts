@@ -70,6 +70,13 @@ export type Database = {
 						isOneToOne: true;
 						referencedRelation: 'cities';
 						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'certification_settings_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: true;
+						referencedRelation: 'city_summaries';
+						referencedColumns: ['id'];
 					}
 				];
 			};
@@ -274,6 +281,20 @@ export type Database = {
 						referencedColumns: ['id'];
 					},
 					{
+						foreignKeyName: 'neighborhoods_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'city_summaries';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'neighborhoods_parent_id_fkey';
+						columns: ['parent_id'];
+						isOneToOne: false;
+						referencedRelation: 'neighborhood_summaries';
+						referencedColumns: ['id'];
+					},
+					{
 						foreignKeyName: 'neighborhoods_parent_id_fkey';
 						columns: ['parent_id'];
 						isOneToOne: false;
@@ -438,6 +459,20 @@ export type Database = {
 						referencedColumns: ['id'];
 					},
 					{
+						foreignKeyName: 'places_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'city_summaries';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'places_neighborhood_id_fkey';
+						columns: ['neighborhood_id'];
+						isOneToOne: false;
+						referencedRelation: 'neighborhood_summaries';
+						referencedColumns: ['id'];
+					},
+					{
 						foreignKeyName: 'places_neighborhood_id_fkey';
 						columns: ['neighborhood_id'];
 						isOneToOne: false;
@@ -540,6 +575,53 @@ export type Database = {
 			};
 		};
 		Views: {
+			city_summaries: {
+				Row: {
+					center_lat: number | null;
+					center_lng: number | null;
+					certified_count: number | null;
+					community_count: number | null;
+					east: number | null;
+					id: string | null;
+					name: string | null;
+					north: number | null;
+					places_count: number | null;
+					slug: string | null;
+					south: number | null;
+					unchecked_count: number | null;
+					west: number | null;
+				};
+				Relationships: [];
+			};
+			neighborhood_summaries: {
+				Row: {
+					certified_count: number | null;
+					city_id: string | null;
+					east: number | null;
+					id: string | null;
+					name: string | null;
+					north: number | null;
+					places_count: number | null;
+					south: number | null;
+					west: number | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'neighborhoods_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'cities';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'neighborhoods_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'city_summaries';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			place_attributes: {
 				Row: {
 					attribute: string | null;
@@ -604,12 +686,14 @@ export type Database = {
 		};
 		Functions: {
 			assign_place_neighborhoods: { Args: { p_city_id: string }; Returns: Json };
+			city_map_places: { Args: { p_city_id: string }; Returns: Json };
 			import_osm_boundaries: {
 				Args: { p_areas: Json; p_city_id: string; p_city_lines: Json };
 				Returns: Json;
 			};
 			is_admin: { Args: never; Returns: boolean };
 			is_api_caller: { Args: never; Returns: boolean };
+			locate_city: { Args: { p_lat: number; p_lng: number }; Returns: string };
 		};
 		Enums: {
 			cert_origin: 'manual' | 'community';

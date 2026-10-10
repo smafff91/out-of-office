@@ -57,14 +57,86 @@
 	"action_add_experience": "Add your experience",
 	"action_report_problem": "Report a problem",
 	"home_work_nearby": "Work nearby",
-	"tokens_title": "Design tokens",
-	"tokens_intro": "Temporary page to check colors, fonts and buttons against the Latte mockups.",
-	"tokens_database": "Database",
-	"tokens_city_from_db": "City from database:",
-	"tokens_db_unavailable": "Could not reach the database.",
-	"tokens_colors": "Colors",
-	"tokens_type": "Type",
-	"tokens_components": "Components",
-	"tokens_formatting": "Formatting",
-	"tokens_body_sample": "Fast Wi‑Fi, plenty of outlets and a quiet corner."
+	"common_tiles_attribution": "OpenFreeMap © OpenMapTiles",
+	"common_places_count": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} place",
+				"countPlural=*": "{countText} places"
+			}
+		}
+	],
+	"common_certified_count": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} certified",
+				"countPlural=*": "{countText} certified"
+			}
+		}
+	],
+	"action_dismiss": "Dismiss",
+	"action_show_my_location": "Show my location",
+	"action_use_my_location": "Use my location",
+	"home_meta_title": "Cafés and bars to work from",
+	"home_meta_description": "Find cafés and bars where you can work on your laptop, with Wi‑Fi, outlets and noise checked by users.",
+	"home_intro": "Cafés and bars where you can work on your laptop, checked by people who work there.",
+	"home_open_cities": "Open cities",
+	"home_locating": "Finding where you are…",
+	"city_meta_title": "Cafés to work from in {city}",
+	"city_meta_description": "Cafés and bars in {city} where you can work on your laptop, with Wi‑Fi, outlets and noise checked by users.",
+	"city_not_in_area": "We're not in your area yet",
+	"city_not_in_area_body": "We open cities one at a time, with places checked by people who work there.",
+	"launch_title": "We're just getting started here",
+	"launch_counts": [
+		{
+			"declarations": [
+				"input certified",
+				"input checked",
+				"input city",
+				"local certifiedPlural = certified: plural",
+				"local checkedPlural = checked: plural",
+				"local certifiedText = certified: number",
+				"local checkedText = checked: number"
+			],
+			"selectors": ["certifiedPlural", "checkedPlural"],
+			"match": {
+				"certifiedPlural=one, checkedPlural=one": "{certifiedText} certified and {checkedText} checked in {city}.",
+				"certifiedPlural=one, checkedPlural=*": "{certifiedText} certified and {checkedText} checked in {city}.",
+				"certifiedPlural=*, checkedPlural=one": "{certifiedText} certified and {checkedText} checked in {city}.",
+				"certifiedPlural=*, checkedPlural=*": "{certifiedText} certified and {checkedText} checked in {city}."
+			}
+		}
+	],
+	"launch_waiting": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} more place is waiting for someone to try it.",
+				"countPlural=*": "{countText} more places are waiting for someone to try them."
+			}
+		}
+	],
+	"location_denied": "Location is off. You can turn it on in your browser settings.",
+	"location_off_title": "Where are you working from?",
+	"location_off_body": "Location is off, so we can't sort places by distance. Turn it on, or pick an area.",
+	"location_areas_in": "Areas in {city}",
+	"location_all_neighborhoods": "All neighborhoods",
+	"location_unavailable": "We couldn't find your location. Try again in a moment."
 }

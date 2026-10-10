@@ -31,3 +31,16 @@ export function formatDate(
 ): string {
 	return new Intl.DateTimeFormat(getLocale(), options).format(new Date(date));
 }
+
+/**
+ * A time of day from "HH:MM" (opening hours): "8:00 PM" in English, "20:00" in Spanish and
+ * Catalan. Built on a fixed UTC date so the device's timezone never shifts it.
+ */
+export function formatTime(hhmm: string): string {
+	const [hours, minutes] = hhmm.split(':').map(Number);
+	return new Intl.DateTimeFormat(getLocale(), {
+		hour: 'numeric',
+		minute: '2-digit',
+		timeZone: 'UTC'
+	}).format(new Date(Date.UTC(2000, 0, 1, hours, minutes)));
+}

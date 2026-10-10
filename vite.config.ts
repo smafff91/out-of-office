@@ -12,6 +12,8 @@ export default defineConfig({
 	define: {
 		__BUILD_TARGET__: JSON.stringify(target)
 	},
+	// MapLibre's worker is an ES module that imports shared code (src/lib/map/engine.ts).
+	worker: { format: 'es' },
 	plugins: [
 		// Compiles messages/*.json into src/lib/paraglide; options in project.inlang/paraglide.config.js.
 		paraglideVitePlugin({ project: './project.inlang' }),

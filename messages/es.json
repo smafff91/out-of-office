@@ -57,14 +57,86 @@
 	"action_add_experience": "Añade tu experiencia",
 	"action_report_problem": "Informa de un problema",
 	"home_work_nearby": "Para trabajar cerca",
-	"tokens_title": "Tokens de diseño",
-	"tokens_intro": "Página temporal para comparar colores, fuentes y botones con los mockups Latte.",
-	"tokens_database": "Base de datos",
-	"tokens_city_from_db": "Ciudad desde la base de datos:",
-	"tokens_db_unavailable": "No se ha podido conectar con la base de datos.",
-	"tokens_colors": "Colores",
-	"tokens_type": "Tipografía",
-	"tokens_components": "Componentes",
-	"tokens_formatting": "Formato",
-	"tokens_body_sample": "Wi‑Fi rápido, muchos enchufes y un rincón tranquilo."
+	"common_tiles_attribution": "OpenFreeMap © OpenMapTiles",
+	"common_places_count": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} sitio",
+				"countPlural=*": "{countText} sitios"
+			}
+		}
+	],
+	"common_certified_count": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} certificado",
+				"countPlural=*": "{countText} certificados"
+			}
+		}
+	],
+	"action_dismiss": "Cerrar",
+	"action_show_my_location": "Mostrar mi ubicación",
+	"action_use_my_location": "Usar mi ubicación",
+	"home_meta_title": "Cafés y bares para trabajar",
+	"home_meta_description": "Encuentra cafés y bares donde trabajar con el portátil, con wifi, enchufes y ruido comprobados por los usuarios.",
+	"home_intro": "Cafés y bares donde trabajar con el portátil, comprobados por quienes trabajan en ellos.",
+	"home_open_cities": "Ciudades abiertas",
+	"home_locating": "Buscando dónde estás…",
+	"city_meta_title": "Cafés para trabajar en {city}",
+	"city_meta_description": "Cafés y bares de {city} donde trabajar con el portátil, con wifi, enchufes y ruido comprobados por los usuarios.",
+	"city_not_in_area": "Todavía no estamos en tu zona",
+	"city_not_in_area_body": "Abrimos las ciudades una a una, con sitios comprobados por quienes trabajan en ellos.",
+	"launch_title": "Acabamos de empezar aquí",
+	"launch_counts": [
+		{
+			"declarations": [
+				"input certified",
+				"input checked",
+				"input city",
+				"local certifiedPlural = certified: plural",
+				"local checkedPlural = checked: plural",
+				"local certifiedText = certified: number",
+				"local checkedText = checked: number"
+			],
+			"selectors": ["certifiedPlural", "checkedPlural"],
+			"match": {
+				"certifiedPlural=one, checkedPlural=one": "{certifiedText} certificado y {checkedText} revisado en {city}.",
+				"certifiedPlural=one, checkedPlural=*": "{certifiedText} certificado y {checkedText} revisados en {city}.",
+				"certifiedPlural=*, checkedPlural=one": "{certifiedText} certificados y {checkedText} revisado en {city}.",
+				"certifiedPlural=*, checkedPlural=*": "{certifiedText} certificados y {checkedText} revisados en {city}."
+			}
+		}
+	],
+	"launch_waiting": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Queda {countText} sitio esperando a que alguien lo pruebe.",
+				"countPlural=*": "Quedan {countText} sitios esperando a que alguien los pruebe."
+			}
+		}
+	],
+	"location_denied": "La ubicación está desactivada. Puedes activarla en los ajustes del navegador.",
+	"location_off_title": "¿Desde dónde trabajas?",
+	"location_off_body": "La ubicación está desactivada, así que no podemos ordenar los sitios por distancia. Actívala o elige una zona.",
+	"location_areas_in": "Zonas de {city}",
+	"location_all_neighborhoods": "Todos los barrios",
+	"location_unavailable": "No hemos podido encontrar tu ubicación. Inténtalo de nuevo en un momento."
 }

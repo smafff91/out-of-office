@@ -45,3 +45,43 @@ button {
 	height: max(100%, var(--tap));
 	transform: translate(-50%, -50%);
 }
+
+/* Line icons from the mockups: 24px viewBox, drawn at 20px with a 1.8 stroke. */
+.icon {
+	width: 20px;
+	height: 20px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.8;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	flex-shrink: 0;
+}
+
+/* Crema seal with a check: marks certified places (the only use of crema). */
+.seal {
+	width: 18px;
+	height: 18px;
+	border-radius: 9px;
+	background: var(--accent);
+	color: var(--ink);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.seal .icon {
+	width: 11px;
+	height: 11px;
+	stroke-width: 3;
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}

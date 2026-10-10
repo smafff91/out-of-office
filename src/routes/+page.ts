@@ -1,14 +1,14 @@
 import { createSupabaseClient } from '#lib/supabase/client.ts';
+import { fetchActiveCities, type CitySummary } from '#lib/supabase/cities.ts';
 import type { PageLoad } from './$types';
 
-// Temporary check that the database is reachable: read the active cities.
+// Open cities, for the server-rendered page (links) and to pick the city after locating.
 export const load: PageLoad = async ({ fetch }) => {
-	const supabase = createSupabaseClient(fetch);
-	const { data, error } = await supabase
-		.from('cities')
-		.select('slug, name')
-		.eq('is_active', true)
-		.order('name');
-
-	return { cities: data ?? [], dbError: error !== null };
+	let cities: CitySummary[] = [];
+	try {
+		cities = await fetchActiveCities(createSupabaseClient(fetch));
+	} catch (err) {
+		console.error('Could not load the open cities', err);
+	}
+	return { cities };
 };

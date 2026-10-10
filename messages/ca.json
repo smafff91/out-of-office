@@ -57,14 +57,86 @@
 	"action_add_experience": "Afegeix la teva experiència",
 	"action_report_problem": "Informa d'un problema",
 	"home_work_nearby": "Per treballar a prop",
-	"tokens_title": "Tokens de disseny",
-	"tokens_intro": "Pàgina temporal per comparar colors, fonts i botons amb els mockups Latte.",
-	"tokens_database": "Base de dades",
-	"tokens_city_from_db": "Ciutat des de la base de dades:",
-	"tokens_db_unavailable": "No s'ha pogut connectar amb la base de dades.",
-	"tokens_colors": "Colors",
-	"tokens_type": "Tipografia",
-	"tokens_components": "Components",
-	"tokens_formatting": "Format",
-	"tokens_body_sample": "Wi‑Fi ràpida, molts endolls i un racó tranquil."
+	"common_tiles_attribution": "OpenFreeMap © OpenMapTiles",
+	"common_places_count": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} lloc",
+				"countPlural=*": "{countText} llocs"
+			}
+		}
+	],
+	"common_certified_count": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} certificat",
+				"countPlural=*": "{countText} certificats"
+			}
+		}
+	],
+	"action_dismiss": "Tanca",
+	"action_show_my_location": "Mostra la meva ubicació",
+	"action_use_my_location": "Fes servir la meva ubicació",
+	"home_meta_title": "Cafès i bars per treballar",
+	"home_meta_description": "Troba cafès i bars on treballar amb el portàtil, amb wifi, endolls i soroll comprovats pels usuaris.",
+	"home_intro": "Cafès i bars on treballar amb el portàtil, comprovats per qui hi treballa.",
+	"home_open_cities": "Ciutats obertes",
+	"home_locating": "Buscant on ets…",
+	"city_meta_title": "Cafès per treballar a {city}",
+	"city_meta_description": "Cafès i bars de {city} on treballar amb el portàtil, amb wifi, endolls i soroll comprovats pels usuaris.",
+	"city_not_in_area": "Encara no som a la teva zona",
+	"city_not_in_area_body": "Obrim les ciutats una a una, amb llocs comprovats per qui hi treballa.",
+	"launch_title": "Tot just hem començat aquí",
+	"launch_counts": [
+		{
+			"declarations": [
+				"input certified",
+				"input checked",
+				"input city",
+				"local certifiedPlural = certified: plural",
+				"local checkedPlural = checked: plural",
+				"local certifiedText = certified: number",
+				"local checkedText = checked: number"
+			],
+			"selectors": ["certifiedPlural", "checkedPlural"],
+			"match": {
+				"certifiedPlural=one, checkedPlural=one": "{certifiedText} certificat i {checkedText} revisat a {city}.",
+				"certifiedPlural=one, checkedPlural=*": "{certifiedText} certificat i {checkedText} revisats a {city}.",
+				"certifiedPlural=*, checkedPlural=one": "{certifiedText} certificats i {checkedText} revisat a {city}.",
+				"certifiedPlural=*, checkedPlural=*": "{certifiedText} certificats i {checkedText} revisats a {city}."
+			}
+		}
+	],
+	"launch_waiting": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Queda {countText} lloc esperant que algú el provi.",
+				"countPlural=*": "Queden {countText} llocs esperant que algú els provi."
+			}
+		}
+	],
+	"location_denied": "La ubicació està desactivada. La pots activar a la configuració del navegador.",
+	"location_off_title": "Des d'on treballes?",
+	"location_off_body": "La ubicació està desactivada, així que no podem ordenar els llocs per distància. Activa-la o tria una zona.",
+	"location_areas_in": "Zones de {city}",
+	"location_all_neighborhoods": "Tots els barris",
+	"location_unavailable": "No hem pogut trobar la teva ubicació. Torna-ho a provar d'aquí a un moment."
 }
