@@ -122,7 +122,7 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 3. Import OSM di Barcellona
 3b. i18n: EN/ES/CA con Paraglide, file di lingua, controllo chiavi, CSV per i revisori
 4. Home mappa con i tre tipi di pin + geolocalizzazione con fallback
-5. Lista bottom sheet (Nearest / Top rated) + filtro Certified + ricerca (per nome del locale e per barri)
+5. Lista bottom sheet (Nearest / Top rated) + filtro Certified + ricerca (per nome del locale e per barri) + layout desktop come LatteDesktop: barra in alto completa, lista a sinistra, mappa a destra
 6. Anteprima al tap e scheda `/{city}/{place}` (SSR)
 7. Flusso di contributo + login + check-in + upload foto
 8. Funzioni SQL: score, Wilson, livelli, certificazione automatica e revoca (pg_cron)
