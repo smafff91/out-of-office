@@ -14,8 +14,8 @@ setWorkerUrl(workerUrl);
 
 const PLACES = 'places';
 const USER = 'user';
-/** Zoom below which "not checked yet" dots are hidden, and from which they are fully opaque. */
-const UNCHECKED_HIDDEN_BELOW = 12.5;
+/** Zoom below which "not checked yet" dots are tiny faint specks, and from which they are full. */
+const UNCHECKED_TINY_BELOW = 12.5;
 const UNCHECKED_FULL_FROM = 14;
 const EMPTY: PlaceCollection = { type: 'FeatureCollection', features: [] };
 
@@ -66,32 +66,28 @@ export function createMap(
 		map.addSource(USER, { type: 'geojson', data: userData(pendingUser) });
 
 		// Not checked yet: small grey-rimmed dots. Thousands of them would cover the whole city
-		// when zoomed out, so they fade in from UNCHECKED_HIDDEN_BELOW to UNCHECKED_FULL_FROM;
-		// community and certified pins stay visible at every zoom.
-		const uncheckedOpacity = [
-			'interpolate',
-			['linear'],
-			['zoom'],
-			UNCHECKED_HIDDEN_BELOW,
-			0,
-			13,
-			0.45,
-			UNCHECKED_FULL_FROM,
-			1
-		] as ExpressionSpecification;
+		// when zoomed out, so below UNCHECKED_TINY_BELOW they shrink to faint borderless specks
+		// (the city never looks empty), fade in up to UNCHECKED_FULL_FROM and then get their
+		// border. Community and certified pins stay fully visible at every zoom.
+		// Zoom must be the input of a top-level interpolate (MapLibre rule), so every property
+		// is one curve: below UNCHECKED_TINY_BELOW the values are clamped to the first stop.
+		const byZoom = (...stops: (number | string)[]) =>
+			['interpolate', ['linear'], ['zoom'], ...stops] as ExpressionSpecification;
 		map.addLayer({
 			id: 'places-unchecked',
 			type: 'circle',
 			source: PLACES,
-			minzoom: UNCHECKED_HIDDEN_BELOW,
 			filter: ['==', ['get', 'level'], 'osm_only'],
 			paint: {
-				'circle-color': palette.dotbg,
+				// Specks are filled grey (a white dot without its border would vanish), turning
+				// white with a grey border by zoom 13.
+				'circle-color': byZoom(UNCHECKED_TINY_BELOW, palette.dot, 13, palette.dotbg),
 				'circle-stroke-color': palette.dot,
-				'circle-radius': ['interpolate', ['linear'], ['zoom'], 13, 2.5, 15, 4],
-				'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 13, 1.5, 15, 2],
-				'circle-opacity': uncheckedOpacity,
-				'circle-stroke-opacity': uncheckedOpacity
+				// ~3.5 px wide when tiny, 5 px at zoom 13, 8 px at zoom 15.
+				'circle-radius': byZoom(UNCHECKED_TINY_BELOW, 1.75, 13, 2.5, 15, 4),
+				'circle-stroke-width': byZoom(UNCHECKED_TINY_BELOW, 0, 13, 1.5, 15, 2),
+				'circle-opacity': byZoom(UNCHECKED_TINY_BELOW, 0.35, 13, 0.45, UNCHECKED_FULL_FROM, 1),
+				'circle-stroke-opacity': byZoom(UNCHECKED_TINY_BELOW, 0, 13, 0.45, UNCHECKED_FULL_FROM, 1)
 			}
 		});
 
