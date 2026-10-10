@@ -4,7 +4,7 @@
  */
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { GeoJSONSource, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
-import type { StyleSpecification } from 'maplibre-gl';
+import type { ExpressionSpecification, StyleSpecification } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { certifiedPin, communityPin, PIXEL_RATIO, readPalette } from './pins.ts';
 import style from './style.json';
@@ -14,6 +14,9 @@ setWorkerUrl(workerUrl);
 
 const PLACES = 'places';
 const USER = 'user';
+/** Zoom below which "not checked yet" dots are hidden, and from which they are fully opaque. */
+const UNCHECKED_HIDDEN_BELOW = 12.5;
+const UNCHECKED_FULL_FROM = 14;
 const EMPTY: PlaceCollection = { type: 'FeatureCollection', features: [] };
 
 /** Padding kept free around fitted areas: the top bar and the bottom sheet cover the map. */
@@ -62,21 +65,38 @@ export function createMap(
 		map.addSource(PLACES, { type: 'geojson', data: pendingPlaces ?? EMPTY });
 		map.addSource(USER, { type: 'geojson', data: userData(pendingUser) });
 
-		// Not checked yet: small grey-rimmed dots, smaller when zoomed out.
+		// Not checked yet: small grey-rimmed dots. Thousands of them would cover the whole city
+		// when zoomed out, so they fade in from UNCHECKED_HIDDEN_BELOW to UNCHECKED_FULL_FROM;
+		// community and certified pins stay visible at every zoom.
+		const uncheckedOpacity = [
+			'interpolate',
+			['linear'],
+			['zoom'],
+			UNCHECKED_HIDDEN_BELOW,
+			0,
+			13,
+			0.45,
+			UNCHECKED_FULL_FROM,
+			1
+		] as ExpressionSpecification;
 		map.addLayer({
 			id: 'places-unchecked',
 			type: 'circle',
 			source: PLACES,
+			minzoom: UNCHECKED_HIDDEN_BELOW,
 			filter: ['==', ['get', 'level'], 'osm_only'],
 			paint: {
 				'circle-color': palette.dotbg,
 				'circle-stroke-color': palette.dot,
-				'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 1.5, 13, 3, 15, 4],
-				'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11, 1, 15, 2]
+				'circle-radius': ['interpolate', ['linear'], ['zoom'], 13, 2.5, 15, 4],
+				'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 13, 1.5, 15, 2],
+				'circle-opacity': uncheckedOpacity,
+				'circle-stroke-opacity': uncheckedOpacity
 			}
 		});
 
-		// Community info, then certified on top (the only level that uses crema).
+		// Layer order sets what wins when pins overlap: dots < community < certified (the only
+		// level that uses crema) < the user's position. No clustering for now.
 		for (const level of ['community', 'certified'] as const) {
 			map.addLayer({
 				id: `places-${level}`,
