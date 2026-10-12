@@ -255,10 +255,10 @@
 		white-space: nowrap;
 	}
 
-	/* Laptop rules stand out with an espresso outline: crema is for certified places only. */
+	/* Laptop rules stand out with a Roast outline: crema is for certified places only. */
 	.pill.rule {
 		background: transparent;
-		border: 1.5px solid var(--ink);
+		border: 1.5px solid var(--muted);
 		padding: 2.5px 6.5px;
 	}
 
