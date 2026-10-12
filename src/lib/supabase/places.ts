@@ -18,6 +18,8 @@ export type ListItem = {
 	slug: string;
 	name: string;
 	level: PlaceLevel;
+	/** From OSM: a cup for cafés, a glass for bars; null when unknown. */
+	amenity: 'cafe' | 'bar' | null;
 	point: LngLat;
 	neighborhood: string | null;
 	openingHours: string | null;
@@ -41,7 +43,7 @@ export type RankedPlace = {
 };
 
 const ITEM_COLUMNS =
-	'slug, name, level, lng, lat, neighborhood, opening_hours, timezone, votes, yes_votes, score_pct, has_score, wifi, outlets, noise, laptop_rules';
+	'slug, name, level, amenity, lng, lat, neighborhood, opening_hours, timezone, votes, yes_votes, score_pct, has_score, wifi, outlets, noise, laptop_rules';
 /** Rows per request: one page of the list. */
 export const PAGE_SIZE = 20;
 
@@ -50,6 +52,7 @@ export function toListItem(row: Omit<ItemRow, 'city_id'>): ListItem {
 		slug: row.slug ?? '',
 		name: row.name ?? '',
 		level: row.level ?? 'osm_only',
+		amenity: row.amenity,
 		point: [row.lng ?? 0, row.lat ?? 0],
 		neighborhood: row.neighborhood,
 		openingHours: row.opening_hours,

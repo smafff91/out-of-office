@@ -98,7 +98,20 @@
 	data-slug={entry.slug}
 	{onclick}
 >
-	<div class={unchecked ? 'ghost' : 'photo'} aria-hidden="true"></div>
+	<!-- Photo placeholder (photos come with feature 7): a cup for cafés, a glass for bars. -->
+	<div class={unchecked ? 'ghost' : 'photo'} aria-hidden="true">
+		{#if item?.amenity === 'cafe'}
+			<svg class="icon kind" viewBox="0 0 24 24"
+				><path
+					d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3v3M12 3v3"
+				></path></svg
+			>
+		{:else if item?.amenity === 'bar'}
+			<svg class="icon kind" viewBox="0 0 24 24"
+				><path d="M6 3h12l-6 9zM12 12v8M8 21h8M8.2 6h7.6"></path></svg
+			>
+		{/if}
+	</div>
 	<div class="text">
 		<div class="name-row">
 			<span class="name" class:muted={unchecked}>{entry.name}</span>
@@ -173,6 +186,19 @@
 		height: 64px;
 		border-radius: var(--radius);
 		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.kind {
+		width: 24px;
+		height: 24px;
+		color: var(--icon);
+	}
+
+	.ghost .kind {
+		color: var(--dot);
 	}
 
 	.photo {

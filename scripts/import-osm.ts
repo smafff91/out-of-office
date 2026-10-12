@@ -75,6 +75,7 @@ type PlaceRow = Pick<
 	| 'instagram'
 	| 'internet_access_osm'
 	| 'osm_missing_since'
+	| 'amenity'
 >;
 
 type OsmPlace = {
@@ -354,7 +355,7 @@ async function loadCityPlaces(cityId: string): Promise<PlaceRow[]> {
 		const { data, error } = await supabase
 			.from('places')
 			.select(
-				'id, osm_type, osm_id, slug, name, lat, lng, address, opening_hours, phone, website, instagram, internet_access_osm, osm_missing_since'
+				'id, osm_type, osm_id, slug, name, lat, lng, address, opening_hours, phone, website, instagram, internet_access_osm, osm_missing_since, amenity'
 			)
 			.eq('city_id', cityId)
 			.order('id')
@@ -384,7 +385,8 @@ function osmDataChanged(row: PlaceRow, place: OsmPlace): boolean {
 		row.phone !== place.phone ||
 		row.website !== place.website ||
 		row.instagram !== place.instagram ||
-		row.internet_access_osm !== place.internet_access_osm
+		row.internet_access_osm !== place.internet_access_osm ||
+		row.amenity !== place.amenity
 	);
 }
 
@@ -505,6 +507,7 @@ async function main() {
 		website: place.website,
 		instagram: place.instagram,
 		internet_access_osm: place.internet_access_osm,
+		amenity: place.amenity,
 		osm_missing_since: null
 	});
 

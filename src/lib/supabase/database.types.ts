@@ -372,6 +372,7 @@ export type Database = {
 				Row: {
 					added_by: string | null;
 					address: string | null;
+					amenity: Database['public']['Enums']['place_amenity'] | null;
 					cert_origin: Database['public']['Enums']['cert_origin'] | null;
 					certified_at: string | null;
 					city_id: string;
@@ -399,6 +400,7 @@ export type Database = {
 				Insert: {
 					added_by?: string | null;
 					address?: string | null;
+					amenity?: Database['public']['Enums']['place_amenity'] | null;
 					cert_origin?: Database['public']['Enums']['cert_origin'] | null;
 					certified_at?: string | null;
 					city_id: string;
@@ -426,6 +428,7 @@ export type Database = {
 				Update: {
 					added_by?: string | null;
 					address?: string | null;
+					amenity?: Database['public']['Enums']['place_amenity'] | null;
 					cert_origin?: Database['public']['Enums']['cert_origin'] | null;
 					certified_at?: string | null;
 					city_id?: string;
@@ -693,6 +696,7 @@ export type Database = {
 			};
 			place_list_items: {
 				Row: {
+					amenity: Database['public']['Enums']['place_amenity'] | null;
 					city_id: string | null;
 					has_score: boolean | null;
 					laptop_rules: string[] | null;
@@ -768,6 +772,7 @@ export type Database = {
 			city_center_places: {
 				Args: { p_city_id: string; p_limit?: number };
 				Returns: {
+					amenity: Database['public']['Enums']['place_amenity'] | null;
 					city_id: string | null;
 					has_score: boolean | null;
 					laptop_rules: string[] | null;
@@ -816,6 +821,7 @@ export type Database = {
 			osm_type: 'node' | 'way' | 'relation';
 			outlets_level: 'none' | 'a_few' | 'plenty';
 			photo_status: 'visible' | 'hidden';
+			place_amenity: 'cafe' | 'bar';
 			place_extra: 'air_conditioning' | 'toilet' | 'large_tables' | 'minimum_spend';
 			place_level: 'osm_only' | 'community' | 'certified';
 			report_reason:
@@ -958,6 +964,7 @@ export const Constants = {
 			osm_type: ['node', 'way', 'relation'],
 			outlets_level: ['none', 'a_few', 'plenty'],
 			photo_status: ['visible', 'hidden'],
+			place_amenity: ['cafe', 'bar'],
 			place_extra: ['air_conditioning', 'toilet', 'large_tables', 'minimum_spend'],
 			place_level: ['osm_only', 'community', 'certified'],
 			report_reason: [
