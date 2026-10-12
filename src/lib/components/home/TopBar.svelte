@@ -1,13 +1,30 @@
 <script lang="ts">
-	// Search bar, account button and Certified filter, as in LatteHome. Drawn now so the layout
-	// is final; they stay inactive (aria-disabled, no action) until their features land.
+	// Phone top bar (LatteHome): search, account, Certified filter. Hidden from 1024px wide,
+	// where DesktopBar takes over.
 	import * as m from '#lib/paraglide/messages.js';
+	import CertifiedChip from './CertifiedChip.svelte';
+
+	type Props = {
+		certifiedOnly: boolean;
+		/** The list covers the whole screen: the bar gets a solid background (LatteList). */
+		solid: boolean;
+		height?: number;
+		onsearch: () => void;
+		ontogglecertified: () => void;
+	};
+
+	let {
+		certifiedOnly,
+		solid,
+		height = $bindable(0),
+		onsearch,
+		ontogglecertified
+	}: Props = $props();
 </script>
 
-<header class="top">
+<header class="top" class:solid bind:clientHeight={height}>
 	<div class="row">
-		<!-- TODO(feature 5): search by place name and neighborhood. -->
-		<button class="search" type="button" aria-disabled="true">
+		<button class="search" type="button" onclick={onsearch}>
 			<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
 				<circle cx="11" cy="11" r="7"></circle>
 				<path d="M20 20l-4-4"></path>
@@ -23,34 +40,31 @@
 		</button>
 	</div>
 	<div>
-		<!-- TODO(feature 5): toggles the Certified filter, together with the list. -->
-		<button class="chip" type="button" aria-pressed="false" aria-disabled="true">
-			<span class="seal" aria-hidden="true">
-				<svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg>
-			</span>
-			{m.common_certified()}
-		</button>
+		<CertifiedChip on={certifiedOnly} ontoggle={ontogglecertified} />
 	</div>
 </header>
 
 <style>
 	.top {
 		position: absolute;
-		top: 16px;
-		left: var(--gutter);
-		right: var(--gutter);
+		top: 0;
+		left: 0;
+		right: 0;
+		padding: 16px var(--gutter) 12px;
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
 		pointer-events: none;
+		z-index: 6;
+	}
+
+	.top.solid {
+		background: var(--surface);
+		pointer-events: auto;
 	}
 
 	.top button {
 		pointer-events: auto;
-		border: 0;
-		background: var(--surface);
-		color: var(--ink);
-		cursor: default;
 	}
 
 	.row {
@@ -61,10 +75,19 @@
 	.search,
 	.square {
 		height: 54px;
+		border: 0;
 		border-radius: var(--radius);
+		background: var(--surface);
+		color: var(--ink);
 		box-shadow: 0 4px 16px var(--sh-4);
 		display: flex;
 		align-items: center;
+	}
+
+	.solid .search,
+	.solid .square {
+		background: var(--pill);
+		box-shadow: none;
 	}
 
 	.search {
@@ -76,6 +99,7 @@
 		font-weight: 600;
 		letter-spacing: var(--tracking-tight);
 		text-align: left;
+		cursor: text;
 	}
 
 	.search span {
@@ -88,24 +112,12 @@
 		width: 54px;
 		flex-shrink: 0;
 		justify-content: center;
+		cursor: default;
 	}
 
-	.chip {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		height: 38px;
-		padding: 0 14px 0 10px;
-		border-radius: 19px;
-		box-shadow: 0 2px 8px var(--sh-4);
-		font-size: 14px;
-		font-weight: 600;
-	}
-
-	@media (min-width: 768px) {
+	@media (min-width: 1024px) {
 		.top {
-			right: auto;
-			width: 480px;
+			display: none;
 		}
 	}
 </style>

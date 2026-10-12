@@ -138,5 +138,52 @@
 	"location_off_body": "Location is off, so we can't sort places by distance. Turn it on, or pick an area.",
 	"location_areas_in": "Areas in {city}",
 	"location_all_neighborhoods": "All neighborhoods",
-	"location_unavailable": "We couldn't find your location. Try again in a moment."
+	"location_unavailable": "We couldn't find your location. Try again in a moment.",
+	"sort_label": "Sort by",
+	"sort_nearest": "Nearest",
+	"sort_top_rated": "Top rated",
+	"list_not_enough_votes": "Not enough votes yet",
+	"action_show_more": "Show more",
+	"action_search_area": "Search this area",
+	"place_opens_at": "Opens {time}",
+	"place_closed_today": "Closed today",
+	"place_open_24h": "Open 24 hours",
+	"attribute_wifi_none": "No Wi‑Fi",
+	"attribute_wifi_slow": "Slow Wi‑Fi",
+	"attribute_outlets_none": "No outlets",
+	"attribute_outlets_a_few": "A few outlets",
+	"attribute_noise_noisy": "Noisy",
+	"laptop_rule_no_laptops_lunch": "No laptops at lunch",
+	"laptop_rule_no_laptops_weekends": "No laptops on weekends",
+	"laptop_rule_time_limit": "Time limit for laptops",
+	"sheet_collapsed": "List: collapsed. Tap to expand to half screen",
+	"sheet_half": "List: half screen. Tap to expand to full screen",
+	"sheet_full": "List: full screen. Tap to collapse",
+	"certified_none_title": "No certified places around here yet",
+	"certified_none_body": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "There is {countText} place nearby nobody has checked. Show it and help others find out if it's good for work.",
+				"countPlural=*": "There are {countText} places nearby nobody has checked. Show them all and help others find out if they're good for work."
+			}
+		}
+	],
+	"action_show_all": "Show all places",
+	"action_zoom_out_certified": "Zoom out to find certified places",
+	"search_label": "Search places and neighborhoods",
+	"search_neighborhoods": "Neighborhoods",
+	"search_places": "Places",
+	"search_no_results": "No places or neighborhoods match “{query}”",
+	"action_back": "Back",
+	"action_clear_search": "Clear search",
+	"action_add_place": "Add a place",
+	"action_sign_in": "Sign in",
+	"map_zoom_in": "Zoom in",
+	"map_zoom_out": "Zoom out"
 }

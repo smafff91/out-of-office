@@ -105,15 +105,17 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 - Ogni modifica allo schema = nuova migrazione in `supabase/migrations/` (mai modificare quelle già applicate) + seed aggiornato, applicata al progetto di sviluppo con `npx supabase db push --include-seed` (chiede la password del database: lo lancia il fondatore nel suo terminale). Mai modifiche allo schema a mano dalla dashboard.
 - Dopo ogni migrazione: `npm run db:types` rigenera `src/lib/supabase/database.types.ts`. Per query di verifica sul progetto di sviluppo: `npx supabase db query --linked` (niente password).
 - `npx supabase db query --linked` solo per letture o per test dentro transazioni annullate; ogni modifica a schema, permessi o dati di configurazione passa da una migrazione. Mai collegare questa cartella al progetto di produzione.
+  - Unica eccezione: i file in `supabase/dev/` (permessi solo per i dati di prova, mai in produzione), applicati solo con `npm run dev:grants`, che si rifiuta di partire se il progetto collegato non è `DEV_PROJECT_REF`.
 - L'esposizione automatica delle tabelle è disattivata: ogni migrazione concede i permessi (`grant`) ad `anon` e `authenticated` in modo esplicito, e attiva la RLS.
 - La tabella `contributions` non è leggibile pubblicamente (solo le proprie righe): la scheda usa le viste aggregate `place_scores`, `place_attributes`, `place_laptop_rules`, `place_notes`.
 - Chiavi e segreti solo in `.env` (mai nel repository); tieni aggiornato `.env.example`.
 - Variabili d'ambiente dichiarate in `src/env.ts` (SvelteKit 3) e importate da `$app/env/public`; il client è `createSupabaseClient(fetch)` in `#lib/supabase/client.ts`.
 - Mappa: lo stile sta in `src/lib/map/style.json`, generato da `npm run map:style` (Positron di OpenFreeMap senza POI, colori Latte) e salvato nel repository; MapLibre si importa solo in `src/lib/map/engine.ts`, caricato dopo la pagina.
-- Dati di prova solo nel progetto di sviluppo: `npm run dev:fixtures -- --city <slug>` (e `--remove` per toglierli); serve `DEV_PROJECT_REF` in `.env`, altrimenti lo script si rifiuta.
+- Dati di prova solo nel progetto di sviluppo: prima `npm run dev:grants`, poi `npm run dev:fixtures -- --city <slug>` (locali community/certificati e contributi anonimi; `--remove` toglie tutto); serve `DEV_PROJECT_REF` in `.env`, altrimenti gli script si rifiutano.
+- Test: `npm test` (vitest) per la logica pura in `src/lib/` (orari, ricerca, distanze, ordinamento).
 - `npm run gen` rigenera i tipi Cloudflare (`worker-configuration.d.ts`): lancialo quando cambia `wrangler.jsonc`.
 - `CLAUDE.md`, `docs/` e `design/` sono esclusi da Prettier (`.prettierignore`): non riformattarli.
-- Dopo ogni feature: `npm run check` e `npm run lint` senza errori; spiega in 3-5 righe come provarla nel browser.
+- Dopo ogni feature: `npm test`, `npm run check` e `npm run lint` senza errori; spiega in 3-5 righe come provarla nel browser.
 - Se una decisione di prodotto non è in questi documenti, chiedi invece di inventarla.
 
 ## Ordine delle feature

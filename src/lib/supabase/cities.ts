@@ -28,6 +28,9 @@ export type AreaSummary = {
 	bounds: Bounds;
 	certified: number;
 	places: number;
+	/** The district the neighborhood belongs to (from the OSM boundaries). */
+	districtId: string | null;
+	districtName: string | null;
 };
 
 const CITY_COLUMNS =
@@ -60,7 +63,9 @@ function toArea(row: Omit<NeighborhoodRow, 'city_id'>): AreaSummary {
 		name: row.name ?? '',
 		bounds: bounds(row),
 		certified: row.certified_count ?? 0,
-		places: row.places_count ?? 0
+		places: row.places_count ?? 0,
+		districtId: row.district_id,
+		districtName: row.district_name
 	};
 }
 
@@ -86,7 +91,9 @@ export async function fetchCity(supabase: Client, slug: string): Promise<CitySum
 export async function fetchAreas(supabase: Client, cityId: string): Promise<AreaSummary[]> {
 	const { data, error } = await supabase
 		.from('neighborhood_summaries')
-		.select('id, name, west, south, east, north, certified_count, places_count')
+		.select(
+			'id, name, west, south, east, north, certified_count, places_count, district_id, district_name'
+		)
 		.eq('city_id', cityId);
 	if (error) throw new Error(error.message);
 	return data.map(toArea);

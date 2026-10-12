@@ -44,3 +44,12 @@ export function formatTime(hhmm: string): string {
 		timeZone: 'UTC'
 	}).format(new Date(Date.UTC(2000, 0, 1, hours, minutes)));
 }
+
+/** A distance in kilometers: "2.4 km" (en), "2,4 km" (es, ca). */
+export function formatKilometers(km: number): string {
+	return new Intl.NumberFormat(getLocale(), {
+		style: 'unit',
+		unit: 'kilometer',
+		maximumFractionDigits: 1
+	}).format(km);
+}

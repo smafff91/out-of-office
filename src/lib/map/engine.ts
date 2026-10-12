@@ -6,14 +6,19 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { GeoJSONSource, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
 import type { ExpressionSpecification, StyleSpecification } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
-import { certifiedPin, communityPin, PIXEL_RATIO, readPalette } from './pins.ts';
+import { certifiedPin, communityPin, PIXEL_RATIO, readPalette, uncheckedPin } from './pins.ts';
 import style from './style.json';
-import type { Bounds, LngLat, PlaceCollection } from './types.ts';
+import type { Bounds, LngLat, PlaceCollection, PlaceFeature } from './types.ts';
 
 setWorkerUrl(workerUrl);
 
 const PLACES = 'places';
 const USER = 'user';
+const SELECTED = 'selected';
+const PLACE_LAYERS = ['places-certified', 'places-community', 'places-unchecked'];
+/** Extra room around a tap, so small pins are easy to hit with a finger. */
+const TAP_TOLERANCE = 12;
+const LEVEL_RANK: Record<string, number> = { certified: 0, community: 1, osm_only: 2 };
 /** Zoom below which "not checked yet" dots are tiny faint specks, and from which they are full. */
 const UNCHECKED_TINY_BELOW = 12.5;
 const UNCHECKED_FULL_FROM = 14;
@@ -22,18 +27,37 @@ const EMPTY: PlaceCollection = { type: 'FeatureCollection', features: [] };
 /** Padding kept free around fitted areas: the top bar and the bottom sheet cover the map. */
 export type Insets = { top: number; bottom: number; left: number; right: number };
 
+/** What the map shows after each move; byUser is false for moves made in code. */
+export type MapView = { center: LngLat; bounds: Bounds; byUser: boolean };
+
 export type MapController = {
 	setPlaces(places: PlaceCollection): void;
 	setUser(position: LngLat | undefined): void;
+	/** Only certified pins (the "Certified for remote work" filter). */
+	setCertifiedOnly(on: boolean): void;
+	/** Highlights one place: bigger pin with its name. */
+	setSelected(place: PlaceFeature | undefined): void;
+	setInsets(insets: Insets): void;
 	flyTo(center: LngLat, zoom?: number): void;
 	fitBounds(bounds: Bounds): void;
+	zoomIn(): void;
+	zoomOut(): void;
 	destroy(): void;
 };
 
 export function createMap(
 	container: HTMLElement,
-	options: { center: LngLat; zoom: number; bounds?: Bounds; insets: Insets; label: string }
+	options: {
+		center: LngLat;
+		zoom: number;
+		bounds?: Bounds;
+		insets: Insets;
+		label: string;
+		onPlaceClick?: (slug: string) => void;
+		onMove?: (view: MapView) => void;
+	}
 ): MapController {
+	let insets = options.insets;
 	const palette = readPalette();
 	const map = new MapLibreMap({
 		container,
@@ -56,14 +80,18 @@ export function createMap(
 
 	let pendingPlaces: PlaceCollection | undefined;
 	let pendingUser: LngLat | undefined;
+	let pendingSelected: PlaceFeature | undefined;
+	let certifiedOnly = false;
 	let ready = false;
 
 	map.on('load', () => {
 		map.addImage('pin-community', communityPin(palette), { pixelRatio: PIXEL_RATIO });
 		map.addImage('pin-certified', certifiedPin(palette), { pixelRatio: PIXEL_RATIO });
+		map.addImage('pin-unchecked', uncheckedPin(palette), { pixelRatio: PIXEL_RATIO });
 
 		map.addSource(PLACES, { type: 'geojson', data: pendingPlaces ?? EMPTY });
 		map.addSource(USER, { type: 'geojson', data: userData(pendingUser) });
+		map.addSource(SELECTED, { type: 'geojson', data: selectedData(pendingSelected) });
 
 		// Not checked yet: small grey-rimmed dots. Thousands of them would cover the whole city
 		// when zoomed out, so below UNCHECKED_TINY_BELOW they shrink to faint borderless specks
@@ -108,6 +136,39 @@ export function createMap(
 			});
 		}
 
+		// The selected place: its pin, bigger, with the name beside it (LatteHome).
+		map.addLayer({
+			id: 'selected-pin',
+			type: 'symbol',
+			source: SELECTED,
+			layout: {
+				'icon-image': [
+					'match',
+					['get', 'level'],
+					'certified',
+					'pin-certified',
+					'community',
+					'pin-community',
+					'pin-unchecked'
+				],
+				'icon-size': 1.25,
+				'icon-allow-overlap': true,
+				'icon-ignore-placement': true,
+				'text-field': ['get', 'name'],
+				'text-font': ['Noto Sans Bold'],
+				'text-size': 13,
+				'text-anchor': 'left',
+				'text-offset': [1.9, 0],
+				'text-optional': true,
+				'text-allow-overlap': true
+			},
+			paint: {
+				'text-color': palette.ink,
+				'text-halo-color': palette.surface,
+				'text-halo-width': 2
+			}
+		});
+
 		// The user's position: espresso ring on white, with a crema halo.
 		map.addLayer({
 			id: 'user-halo',
@@ -128,7 +189,50 @@ export function createMap(
 		});
 
 		ready = true;
+		applyCertifiedOnly();
+		report(false);
 	});
+
+	// Taps: the highest-level pin near the finger wins (certified, then community, then dots).
+	map.on('click', (event) => {
+		if (!ready || !options.onPlaceClick) return;
+		const { x, y } = event.point;
+		const layers = certifiedOnly ? ['places-certified'] : PLACE_LAYERS;
+		const hits = map.queryRenderedFeatures(
+			[
+				[x - TAP_TOLERANCE, y - TAP_TOLERANCE],
+				[x + TAP_TOLERANCE, y + TAP_TOLERANCE]
+			],
+			{ layers }
+		);
+		const best = hits.toSorted(
+			(a, b) => LEVEL_RANK[a.properties.level] - LEVEL_RANK[b.properties.level]
+		)[0];
+		if (best) options.onPlaceClick(String(best.properties.slug));
+	});
+	for (const layer of PLACE_LAYERS) {
+		map.on('mouseenter', layer, () => (map.getCanvas().style.cursor = 'pointer'));
+		map.on('mouseleave', layer, () => (map.getCanvas().style.cursor = ''));
+	}
+
+	// Moves made by the user carry the original browser event; flyTo/fitBounds do not.
+	map.on('moveend', (event) => report('originalEvent' in event && !!event.originalEvent));
+
+	function report(byUser: boolean) {
+		const center = map.getCenter();
+		const b = map.getBounds();
+		options.onMove?.({
+			center: [center.lng, center.lat],
+			bounds: [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()],
+			byUser
+		});
+	}
+
+	function applyCertifiedOnly() {
+		const visibility = certifiedOnly ? 'none' : 'visible';
+		map.setLayoutProperty('places-unchecked', 'visibility', visibility);
+		map.setLayoutProperty('places-community', 'visibility', visibility);
+	}
 
 	function source(id: string) {
 		return map.getSource<GeoJSONSource>(id);
@@ -143,16 +247,42 @@ export function createMap(
 			pendingUser = position;
 			if (ready) source(USER)?.setData(userData(position));
 		},
-		flyTo(center, zoom = 15) {
-			map.flyTo({ center, zoom, padding: options.insets, essential: true });
+		setCertifiedOnly(on) {
+			certifiedOnly = on;
+			if (ready) applyCertifiedOnly();
+		},
+		setSelected(place) {
+			pendingSelected = place;
+			if (ready) source(SELECTED)?.setData(selectedData(place));
+		},
+		setInsets(next) {
+			insets = next;
+		},
+		flyTo(center, zoom) {
+			map.flyTo({
+				center,
+				zoom: zoom ?? Math.max(map.getZoom(), 15),
+				padding: insets,
+				essential: true
+			});
 		},
 		fitBounds(bounds) {
-			map.fitBounds(bounds, { padding: options.insets, essential: true });
+			map.fitBounds(bounds, { padding: insets, essential: true, maxZoom: 16 });
+		},
+		zoomIn() {
+			map.zoomIn();
+		},
+		zoomOut() {
+			map.zoomOut();
 		},
 		destroy() {
 			map.remove();
 		}
 	};
+}
+
+function selectedData(place: PlaceFeature | undefined): PlaceCollection {
+	return { type: 'FeatureCollection', features: place ? [place] : [] };
 }
 
 function userData(position: LngLat | undefined) {

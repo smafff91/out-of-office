@@ -6,8 +6,8 @@
 	 */
 	import { onMount } from 'svelte';
 	import * as m from '#lib/paraglide/messages.js';
-	import type { Insets, MapController } from './engine.ts';
-	import type { Bounds, LngLat, PlaceCollection } from './types.ts';
+	import type { Insets, MapController, MapView } from './engine.ts';
+	import type { Bounds, LngLat, PlaceCollection, PlaceFeature } from './types.ts';
 
 	type Props = {
 		center: LngLat;
@@ -16,7 +16,12 @@
 		bounds?: Bounds;
 		places?: PlaceCollection;
 		user?: LngLat;
+		/** Space covered by the app's own panels, kept free when the map moves to a place. */
 		insets?: Insets;
+		certifiedOnly?: boolean;
+		selected?: PlaceFeature;
+		onplaceclick?: (slug: string) => void;
+		onmove?: (view: MapView) => void;
 	};
 
 	let {
@@ -25,7 +30,11 @@
 		bounds,
 		places,
 		user,
-		insets = { top: 140, bottom: 220, left: 24, right: 24 }
+		insets = { top: 140, bottom: 220, left: 24, right: 24 },
+		certifiedOnly = false,
+		selected,
+		onplaceclick,
+		onmove
 	}: Props = $props();
 
 	let container: HTMLDivElement;
@@ -38,7 +47,15 @@
 		import('./engine.ts')
 			.then(({ createMap }) => {
 				if (destroyed) return;
-				controller = createMap(container, { center, zoom, bounds, insets, label: m.common_map() });
+				controller = createMap(container, {
+					center,
+					zoom,
+					bounds,
+					insets,
+					label: m.common_map(),
+					onPlaceClick: (slug) => onplaceclick?.(slug),
+					onMove: (view) => onmove?.(view)
+				});
 				pendingMove?.(controller);
 				pendingMove = undefined;
 			})
@@ -60,6 +77,18 @@
 		controller?.setUser(user);
 	});
 
+	$effect(() => {
+		controller?.setCertifiedOnly(certifiedOnly);
+	});
+
+	$effect(() => {
+		controller?.setSelected(selected);
+	});
+
+	$effect(() => {
+		controller?.setInsets(insets);
+	});
+
 	function move(action: (map: MapController) => void) {
 		if (controller) action(controller);
 		else pendingMove = action;
@@ -71,6 +100,14 @@
 
 	export function fitBounds(target: Bounds) {
 		move((map) => map.fitBounds(target));
+	}
+
+	export function zoomIn() {
+		controller?.zoomIn();
+	}
+
+	export function zoomOut() {
+		controller?.zoomOut();
 	}
 </script>
 

@@ -54,3 +54,38 @@ location_off_body,"Location is off, so we can't sort places by distance. Turn it
 location_areas_in,Areas in {city},Zonas de {city},to review,Zones de {city},to review
 location_all_neighborhoods,All neighborhoods,Todos los barrios,to review,Tots els barris,to review
 location_unavailable,We couldn't find your location. Try again in a moment.,No hemos podido encontrar tu ubicación. Inténtalo de nuevo en un momento.,to review,No hem pogut trobar la teva ubicació. Torna-ho a provar d'aquí a un moment.,to review
+sort_label,Sort by,Ordenar por,to review,Ordena per,to review
+sort_nearest,Nearest,Más cerca,to review,Més a prop,to review
+sort_top_rated,Top rated,Mejor valorados,to review,Més ben valorats,to review
+list_not_enough_votes,Not enough votes yet,Aún no hay suficientes votos,to review,Encara no hi ha prou vots,to review
+action_show_more,Show more,Ver más,to review,Mostra'n més,to review
+action_search_area,Search this area,Buscar en esta zona,to review,Cerca en aquesta zona,to review
+place_opens_at,Opens {time},Abre a las {time},to review,Obre a les {time},to review
+place_closed_today,Closed today,Cerrado hoy,to review,Tancat avui,to review
+place_open_24h,Open 24 hours,Abierto 24 horas,to review,Obert 24 hores,to review
+attribute_wifi_none,No Wi‑Fi,Sin wifi,to review,Sense wifi,to review
+attribute_wifi_slow,Slow Wi‑Fi,Wifi lento,to review,Wifi lenta,to review
+attribute_outlets_none,No outlets,Sin enchufes,to review,Sense endolls,to review
+attribute_outlets_a_few,A few outlets,Pocos enchufes,to review,Pocs endolls,to review
+attribute_noise_noisy,Noisy,Ruidoso,to review,Sorollós,to review
+laptop_rule_no_laptops_lunch,No laptops at lunch,Sin portátiles a mediodía,to review,Sense portàtils al migdia,to review
+laptop_rule_no_laptops_weekends,No laptops on weekends,Sin portátiles el fin de semana,to review,Sense portàtils el cap de setmana,to review
+laptop_rule_time_limit,Time limit for laptops,Tiempo limitado con portátil,to review,Temps limitat amb portàtil,to review
+sheet_collapsed,List: collapsed. Tap to expand to half screen,Lista: plegada. Toca para abrirla a media pantalla,to review,Llista: plegada. Toca per obrir-la a mitja pantalla,to review
+sheet_half,List: half screen. Tap to expand to full screen,Lista: media pantalla. Toca para verla a pantalla completa,to review,Llista: mitja pantalla. Toca per veure-la a pantalla completa,to review
+sheet_full,List: full screen. Tap to collapse,Lista: pantalla completa. Toca para plegarla,to review,Llista: pantalla completa. Toca per plegar-la,to review
+certified_none_title,No certified places around here yet,Todavía no hay sitios certificados por aquí,to review,Encara no hi ha llocs certificats per aquí,to review
+certified_none_body [countPlural=one],There is {countText} place nearby nobody has checked. Show it and help others find out if it's good for work.,Hay {countText} sitio cerca que nadie ha revisado. Muéstralo y ayuda a otros a saber si es bueno para trabajar.,to review,Hi ha {countText} lloc a prop que ningú no ha revisat. Mostra'l i ajuda els altres a saber si és bo per treballar.,to review
+certified_none_body [countPlural=*],There are {countText} places nearby nobody has checked. Show them all and help others find out if they're good for work.,Hay {countText} sitios cerca que nadie ha revisado. Muéstralos todos y ayuda a otros a saber si son buenos para trabajar.,to review,Hi ha {countText} llocs a prop que ningú no ha revisat. Mostra'ls tots i ajuda els altres a saber si són bons per treballar.,to review
+action_show_all,Show all places,Mostrar todos los sitios,to review,Mostra tots els llocs,to review
+action_zoom_out_certified,Zoom out to find certified places,Alejar para encontrar sitios certificados,to review,Allunya per trobar llocs certificats,to review
+search_label,Search places and neighborhoods,Buscar sitios y barrios,to review,Cerca llocs i barris,to review
+search_neighborhoods,Neighborhoods,Barrios,to review,Barris,to review
+search_places,Places,Sitios,to review,Llocs,to review
+search_no_results,No places or neighborhoods match “{query}”,Ningún sitio ni barrio coincide con «{query}»,to review,Cap lloc ni barri no coincideix amb «{query}»,to review
+action_back,Back,Atrás,to review,Enrere,to review
+action_clear_search,Clear search,Borrar búsqueda,to review,Esborra la cerca,to review
+action_add_place,Add a place,Añadir un sitio,to review,Afegeix un lloc,to review
+action_sign_in,Sign in,Iniciar sesión,to review,Inicia la sessió,to review
+map_zoom_in,Zoom in,Acercar,to review,Apropa,to review
+map_zoom_out,Zoom out,Alejar,to review,Allunya,to review

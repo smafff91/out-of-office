@@ -292,6 +292,13 @@ export type Database = {
 						columns: ['parent_id'];
 						isOneToOne: false;
 						referencedRelation: 'neighborhood_summaries';
+						referencedColumns: ['district_id'];
+					},
+					{
+						foreignKeyName: 'neighborhoods_parent_id_fkey';
+						columns: ['parent_id'];
+						isOneToOne: false;
+						referencedRelation: 'neighborhood_summaries';
 						referencedColumns: ['id'];
 					},
 					{
@@ -470,6 +477,13 @@ export type Database = {
 						columns: ['neighborhood_id'];
 						isOneToOne: false;
 						referencedRelation: 'neighborhood_summaries';
+						referencedColumns: ['district_id'];
+					},
+					{
+						foreignKeyName: 'places_neighborhood_id_fkey';
+						columns: ['neighborhood_id'];
+						isOneToOne: false;
+						referencedRelation: 'neighborhood_summaries';
 						referencedColumns: ['id'];
 					},
 					{
@@ -575,6 +589,32 @@ export type Database = {
 			};
 		};
 		Views: {
+			city_ranking: {
+				Row: {
+					city_id: string | null;
+					section: string | null;
+					slug: string | null;
+					votes: number | null;
+					wilson: number | null;
+					yes_votes: number | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'places_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'cities';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'places_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'city_summaries';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			city_summaries: {
 				Row: {
 					center_lat: number | null;
@@ -597,6 +637,8 @@ export type Database = {
 				Row: {
 					certified_count: number | null;
 					city_id: string | null;
+					district_id: string | null;
+					district_name: string | null;
 					east: number | null;
 					id: string | null;
 					name: string | null;
@@ -649,6 +691,43 @@ export type Database = {
 					}
 				];
 			};
+			place_list_items: {
+				Row: {
+					city_id: string | null;
+					has_score: boolean | null;
+					laptop_rules: string[] | null;
+					lat: number | null;
+					level: Database['public']['Enums']['place_level'] | null;
+					lng: number | null;
+					name: string | null;
+					neighborhood: string | null;
+					noise: string | null;
+					opening_hours: string | null;
+					outlets: string | null;
+					score_pct: number | null;
+					slug: string | null;
+					timezone: string | null;
+					votes: number | null;
+					wifi: string | null;
+					yes_votes: number | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'places_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'cities';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'places_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'city_summaries';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			place_notes: {
 				Row: {
 					author_name: string | null;
@@ -686,6 +765,34 @@ export type Database = {
 		};
 		Functions: {
 			assign_place_neighborhoods: { Args: { p_city_id: string }; Returns: Json };
+			city_center_places: {
+				Args: { p_city_id: string; p_limit?: number };
+				Returns: {
+					city_id: string | null;
+					has_score: boolean | null;
+					laptop_rules: string[] | null;
+					lat: number | null;
+					level: Database['public']['Enums']['place_level'] | null;
+					lng: number | null;
+					name: string | null;
+					neighborhood: string | null;
+					noise: string | null;
+					opening_hours: string | null;
+					outlets: string | null;
+					score_pct: number | null;
+					slug: string | null;
+					timezone: string | null;
+					votes: number | null;
+					wifi: string | null;
+					yes_votes: number | null;
+				}[];
+				SetofOptions: {
+					from: '*';
+					to: 'place_list_items';
+					isOneToOne: false;
+					isSetofReturn: true;
+				};
+			};
 			city_map_places: { Args: { p_city_id: string }; Returns: Json };
 			import_osm_boundaries: {
 				Args: { p_areas: Json; p_city_id: string; p_city_lines: Json };
@@ -694,6 +801,11 @@ export type Database = {
 			is_admin: { Args: never; Returns: boolean };
 			is_api_caller: { Args: never; Returns: boolean };
 			locate_city: { Args: { p_lat: number; p_lng: number }; Returns: string };
+			score_min_votes: { Args: { p_city_id: string }; Returns: number };
+			wilson_lower_bound: {
+				Args: { p_total: number; p_yes: number };
+				Returns: number;
+			};
 		};
 		Enums: {
 			cert_origin: 'manual' | 'community';

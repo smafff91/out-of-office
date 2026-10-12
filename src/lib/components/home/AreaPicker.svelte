@@ -1,6 +1,7 @@
 <script lang="ts">
 	// Area choice when location is off (LatteLocationOff): the 12 neighborhoods with the most
-	// certified places (then the most places), and "All neighborhoods" in alphabetical order.
+	// certified places (then the most places). "All neighborhoods" groups every neighborhood by
+	// district; districts and neighborhoods in alphabetical order of their full names.
 	import { getLocale } from '#lib/i18n/locale.ts';
 	import * as m from '#lib/paraglide/messages.js';
 	import type { AreaSummary } from '#lib/supabase/cities.ts';
@@ -13,21 +14,30 @@
 
 	let showAll = $state(false);
 
-	const shown = $derived.by(() => {
-		if (showAll) {
-			const collator = new Intl.Collator(getLocale(), { sensitivity: 'base' });
-			return areas.toSorted((a, b) => collator.compare(a.name, b.name));
+	const top = $derived(
+		areas.toSorted((a, b) => b.certified - a.certified || b.places - a.places).slice(0, TOP_AREAS)
+	);
+
+	const districts = $derived.by(() => {
+		const collator = new Intl.Collator(getLocale(), { sensitivity: 'base' });
+		const groups: Record<string, { id: string; name: string; areas: AreaSummary[] }> = {};
+		for (const area of areas) {
+			const id = area.districtId ?? '';
+			groups[id] ??= { id, name: area.districtName ?? '', areas: [] };
+			groups[id].areas.push(area);
 		}
-		return areas
-			.toSorted((a, b) => b.certified - a.certified || b.places - a.places)
-			.slice(0, TOP_AREAS);
+		return Object.values(groups)
+			.map((group) => ({
+				...group,
+				areas: group.areas.toSorted((a, b) => collator.compare(a.name, b.name))
+			}))
+			.toSorted((a, b) => collator.compare(a.name, b.name));
 	});
 </script>
 
-<div class="areas">
-	<h2>{m.location_areas_in({ city })}</h2>
+{#snippet chips(list: AreaSummary[])}
 	<ul>
-		{#each shown as area (area.id)}
+		{#each list as area (area.id)}
 			<li>
 				<button type="button" onclick={() => onpick(area)}>
 					{area.name}
@@ -40,6 +50,20 @@
 			</li>
 		{/each}
 	</ul>
+{/snippet}
+
+<div class="areas">
+	<h2>{m.location_areas_in({ city })}</h2>
+	{#if showAll}
+		{#each districts as district (district.id)}
+			{#if district.name}
+				<h3>{district.name}</h3>
+			{/if}
+			{@render chips(district.areas)}
+		{/each}
+	{:else}
+		{@render chips(top)}
+	{/if}
 	{#if !showAll && areas.length > TOP_AREAS}
 		<button class="all" type="button" onclick={() => (showAll = true)}>
 			{m.location_all_neighborhoods()}
@@ -61,6 +85,12 @@
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: var(--muted);
+	}
+
+	h3 {
+		margin: 8px 0 0;
+		font-size: 15px;
+		font-weight: 700;
 	}
 
 	ul {

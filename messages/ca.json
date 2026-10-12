@@ -138,5 +138,52 @@
 	"location_off_body": "La ubicació està desactivada, així que no podem ordenar els llocs per distància. Activa-la o tria una zona.",
 	"location_areas_in": "Zones de {city}",
 	"location_all_neighborhoods": "Tots els barris",
-	"location_unavailable": "No hem pogut trobar la teva ubicació. Torna-ho a provar d'aquí a un moment."
+	"location_unavailable": "No hem pogut trobar la teva ubicació. Torna-ho a provar d'aquí a un moment.",
+	"sort_label": "Ordena per",
+	"sort_nearest": "Més a prop",
+	"sort_top_rated": "Més ben valorats",
+	"list_not_enough_votes": "Encara no hi ha prou vots",
+	"action_show_more": "Mostra'n més",
+	"action_search_area": "Cerca en aquesta zona",
+	"place_opens_at": "Obre a les {time}",
+	"place_closed_today": "Tancat avui",
+	"place_open_24h": "Obert 24 hores",
+	"attribute_wifi_none": "Sense wifi",
+	"attribute_wifi_slow": "Wifi lenta",
+	"attribute_outlets_none": "Sense endolls",
+	"attribute_outlets_a_few": "Pocs endolls",
+	"attribute_noise_noisy": "Sorollós",
+	"laptop_rule_no_laptops_lunch": "Sense portàtils al migdia",
+	"laptop_rule_no_laptops_weekends": "Sense portàtils el cap de setmana",
+	"laptop_rule_time_limit": "Temps limitat amb portàtil",
+	"sheet_collapsed": "Llista: plegada. Toca per obrir-la a mitja pantalla",
+	"sheet_half": "Llista: mitja pantalla. Toca per veure-la a pantalla completa",
+	"sheet_full": "Llista: pantalla completa. Toca per plegar-la",
+	"certified_none_title": "Encara no hi ha llocs certificats per aquí",
+	"certified_none_body": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Hi ha {countText} lloc a prop que ningú no ha revisat. Mostra'l i ajuda els altres a saber si és bo per treballar.",
+				"countPlural=*": "Hi ha {countText} llocs a prop que ningú no ha revisat. Mostra'ls tots i ajuda els altres a saber si són bons per treballar."
+			}
+		}
+	],
+	"action_show_all": "Mostra tots els llocs",
+	"action_zoom_out_certified": "Allunya per trobar llocs certificats",
+	"search_label": "Cerca llocs i barris",
+	"search_neighborhoods": "Barris",
+	"search_places": "Llocs",
+	"search_no_results": "Cap lloc ni barri no coincideix amb «{query}»",
+	"action_back": "Enrere",
+	"action_clear_search": "Esborra la cerca",
+	"action_add_place": "Afegeix un lloc",
+	"action_sign_in": "Inicia la sessió",
+	"map_zoom_in": "Apropa",
+	"map_zoom_out": "Allunya"
 }

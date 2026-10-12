@@ -119,3 +119,21 @@ export function certifiedPin(palette: Palette): PinImage {
 		ctx.stroke();
 	});
 }
+
+/** White 14px dot with a grey rim: only used for a selected "not checked yet" place. */
+export function uncheckedPin(palette: Palette): PinImage {
+	const size = 14;
+	return drawPin(size, (ctx, x, y) => {
+		ctx.shadowColor = palette.shadow;
+		ctx.shadowBlur = 6;
+		ctx.shadowOffsetY = 2;
+		ctx.beginPath();
+		ctx.arc(x + size / 2, y + size / 2, size / 2 - 1, 0, Math.PI * 2);
+		ctx.fillStyle = palette.dotbg;
+		ctx.fill();
+		ctx.shadowColor = 'transparent';
+		ctx.lineWidth = 2.5;
+		ctx.strokeStyle = palette.dot;
+		ctx.stroke();
+	});
+}

@@ -138,5 +138,52 @@
 	"location_off_body": "La ubicación está desactivada, así que no podemos ordenar los sitios por distancia. Actívala o elige una zona.",
 	"location_areas_in": "Zonas de {city}",
 	"location_all_neighborhoods": "Todos los barrios",
-	"location_unavailable": "No hemos podido encontrar tu ubicación. Inténtalo de nuevo en un momento."
+	"location_unavailable": "No hemos podido encontrar tu ubicación. Inténtalo de nuevo en un momento.",
+	"sort_label": "Ordenar por",
+	"sort_nearest": "Más cerca",
+	"sort_top_rated": "Mejor valorados",
+	"list_not_enough_votes": "Aún no hay suficientes votos",
+	"action_show_more": "Ver más",
+	"action_search_area": "Buscar en esta zona",
+	"place_opens_at": "Abre a las {time}",
+	"place_closed_today": "Cerrado hoy",
+	"place_open_24h": "Abierto 24 horas",
+	"attribute_wifi_none": "Sin wifi",
+	"attribute_wifi_slow": "Wifi lento",
+	"attribute_outlets_none": "Sin enchufes",
+	"attribute_outlets_a_few": "Pocos enchufes",
+	"attribute_noise_noisy": "Ruidoso",
+	"laptop_rule_no_laptops_lunch": "Sin portátiles a mediodía",
+	"laptop_rule_no_laptops_weekends": "Sin portátiles el fin de semana",
+	"laptop_rule_time_limit": "Tiempo limitado con portátil",
+	"sheet_collapsed": "Lista: plegada. Toca para abrirla a media pantalla",
+	"sheet_half": "Lista: media pantalla. Toca para verla a pantalla completa",
+	"sheet_full": "Lista: pantalla completa. Toca para plegarla",
+	"certified_none_title": "Todavía no hay sitios certificados por aquí",
+	"certified_none_body": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Hay {countText} sitio cerca que nadie ha revisado. Muéstralo y ayuda a otros a saber si es bueno para trabajar.",
+				"countPlural=*": "Hay {countText} sitios cerca que nadie ha revisado. Muéstralos todos y ayuda a otros a saber si son buenos para trabajar."
+			}
+		}
+	],
+	"action_show_all": "Mostrar todos los sitios",
+	"action_zoom_out_certified": "Alejar para encontrar sitios certificados",
+	"search_label": "Buscar sitios y barrios",
+	"search_neighborhoods": "Barrios",
+	"search_places": "Sitios",
+	"search_no_results": "Ningún sitio ni barrio coincide con «{query}»",
+	"action_back": "Atrás",
+	"action_clear_search": "Borrar búsqueda",
+	"action_add_place": "Añadir un sitio",
+	"action_sign_in": "Iniciar sesión",
+	"map_zoom_in": "Acercar",
+	"map_zoom_out": "Alejar"
 }
