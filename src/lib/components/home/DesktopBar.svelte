@@ -19,7 +19,7 @@
 
 <header class="bar">
 	<span class="app">{APP_NAME}</span>
-	<!-- One open city for now: a label. A city switcher comes with the second city. -->
+	<!-- One open city for now: plain text, not a control. A city switcher comes with the second city. -->
 	<span class="city">{city}</span>
 	{@render search()}
 	<CertifiedChip on={certifiedOnly} ontoggle={ontogglecertified} variant="flat" />
@@ -59,12 +59,7 @@
 	}
 
 	.city {
-		height: 48px;
-		padding: 0 16px;
-		border-radius: 14px;
-		background: var(--pill);
-		display: flex;
-		align-items: center;
+		flex-shrink: 0;
 		font-size: 15px;
 		font-weight: 700;
 	}
