@@ -185,5 +185,108 @@
 	"action_add_place": "Add a place",
 	"action_sign_in": "Sign in",
 	"map_zoom_in": "Zoom in",
-	"map_zoom_out": "Zoom out"
+	"map_zoom_out": "Zoom out",
+	"place_meta_title": "{name}, {area}: Wi‑Fi, outlets and noise",
+	"place_meta_description_certified": "{name} in {area} is certified for remote work. See Wi‑Fi, outlets, noise and laptop rules confirmed by users.",
+	"place_meta_description_community": "Wi‑Fi, outlets, noise and laptop rules at {name} in {area}, shared by users who worked there.",
+	"place_meta_description_unchecked": "{name} in {area}: nobody has shared work info yet. Been there? Tell others if you can work there on a laptop.",
+	"place_kind_cafe": "Café",
+	"place_kind_bar": "Bar",
+	"place_level_community": "Community info · Not certified yet",
+	"place_level_unchecked": "Not checked for work yet",
+	"place_cert_manual": "Visited by our team · certified {month}",
+	"place_score_few_long": "{yes} of {total} would work here again",
+	"place_attribute_wifi": "Wi‑Fi",
+	"place_attribute_outlets": "Outlets",
+	"place_attribute_noise": "Noise",
+	"place_attribute_long_stays": "Long stays",
+	"attribute_short_wifi_fast": "Fast",
+	"attribute_short_wifi_slow": "Slow",
+	"attribute_short_wifi_none": "None",
+	"attribute_short_outlets_plenty": "Plenty",
+	"attribute_short_outlets_a_few": "A few",
+	"attribute_short_outlets_none": "None",
+	"attribute_short_noise_quiet": "Quiet",
+	"attribute_short_noise_noisy": "Noisy",
+	"attribute_short_long_stays_welcome": "Welcome",
+	"attribute_short_long_stays_not_really": "Not really",
+	"attribute_long_stays_welcome": "Long stays welcome",
+	"attribute_long_stays_not_really": "Short stays only",
+	"place_not_known": "Not known",
+	"place_confirmations": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} confirmation",
+				"countPlural=*": "{countText} confirmations"
+			}
+		}
+	],
+	"place_laptop_policy": "Laptop policy",
+	"preview_confirmed_last": [
+		{
+			"declarations": [
+				"input count",
+				"input ago",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Confirmed by {countText} user · last {ago}",
+				"countPlural=*": "Confirmed by {countText} users · last {ago}"
+			}
+		}
+	],
+	"place_to_go": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} to go",
+				"countPlural=*": "{countText} to go"
+			}
+		}
+	],
+	"place_check_in_hint": "Check in to help it get certified.",
+	"place_unchecked_title": "Can you work here?",
+	"place_unchecked_body": "Nobody has shared work info for this place yet. Been here? It takes about a minute.",
+	"preview_be_first": "Be the first to check it",
+	"preview_be_first_body": "Answer four quick questions about Wi‑Fi, outlets, noise and long stays, and this place shows up for everyone looking for somewhere to work.",
+	"action_add_work_info_here": "I'm here · add work info",
+	"place_osm_wifi_yes": "OpenStreetMap lists Wi‑Fi",
+	"place_osm_wifi_no": "OpenStreetMap lists no Wi‑Fi",
+	"place_unconfirmed": "unconfirmed",
+	"place_may_have_closed": "This place may have closed",
+	"place_may_have_closed_body": "It's no longer on OpenStreetMap. Check before you go.",
+	"place_hours": "Opening hours",
+	"place_closed": "Closed",
+	"place_address": "Address",
+	"place_osm_data": "Place data © OpenStreetMap contributors",
+	"place_photo_credit": "Photo: {author} ({source}) · {license}",
+	"place_preview": "Place preview",
+	"place_how_certification_works": "How certification works",
+	"action_see_details": "See details",
+	"action_see_place": "See place",
+	"action_back_to_list": "Back to list",
+	"action_back_to_map": "Back to map",
+	"action_share": "Share",
+	"action_directions": "Directions",
+	"action_close": "Close",
+	"action_go_home": "Go to the home page",
+	"share_copied": "Link copied",
+	"share_failed": "Couldn't share the link",
+	"error_not_found_title": "This page isn't here",
+	"error_not_found_body": "The place may have been removed, or the link may be wrong.",
+	"error_generic_title": "Something went wrong",
+	"error_generic_body": "Try again in a moment."
 }

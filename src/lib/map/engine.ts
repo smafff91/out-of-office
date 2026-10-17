@@ -53,6 +53,8 @@ export function createMap(
 		bounds?: Bounds;
 		insets: Insets;
 		label: string;
+		/** False for the small map on place pages: no panning, zooming or taps. */
+		interactive?: boolean;
 		onPlaceClick?: (slug: string) => void;
 		onMove?: (view: MapView) => void;
 	}
@@ -64,6 +66,7 @@ export function createMap(
 		style: style as StyleSpecification,
 		center: options.center,
 		zoom: options.zoom,
+		interactive: options.interactive ?? true,
 		minZoom: 3,
 		maxZoom: 19,
 		// Our own attribution line is always visible (CityMap.svelte); MapLibre's folds away.

@@ -185,5 +185,108 @@
 	"action_add_place": "Afegeix un lloc",
 	"action_sign_in": "Inicia la sessió",
 	"map_zoom_in": "Apropa",
-	"map_zoom_out": "Allunya"
+	"map_zoom_out": "Allunya",
+	"place_meta_title": "{name}, {area}: wifi, endolls i soroll",
+	"place_meta_description_certified": "{name}, a {area}, està certificat per treballar en remot. Mira el wifi, els endolls, el soroll i les normes per a portàtils que confirmen els usuaris.",
+	"place_meta_description_community": "Wifi, endolls, soroll i normes per a portàtils a {name}, a {area}, compartits per usuaris que hi han treballat.",
+	"place_meta_description_unchecked": "{name}, a {area}: encara ningú no ha compartit informació per treballar. Hi has estat? Explica si s'hi pot treballar amb portàtil.",
+	"place_kind_cafe": "Cafeteria",
+	"place_kind_bar": "Bar",
+	"place_level_community": "Info de la comunitat · Encara sense certificar",
+	"place_level_unchecked": "Encara sense revisar per treballar",
+	"place_cert_manual": "Visitat pel nostre equip · certificat el {month}",
+	"place_score_few_long": "{yes} de {total} hi tornarien a treballar",
+	"place_attribute_wifi": "Wifi",
+	"place_attribute_outlets": "Endolls",
+	"place_attribute_noise": "Soroll",
+	"place_attribute_long_stays": "Estades llargues",
+	"attribute_short_wifi_fast": "Ràpid",
+	"attribute_short_wifi_slow": "Lent",
+	"attribute_short_wifi_none": "No n'hi ha",
+	"attribute_short_outlets_plenty": "Molts",
+	"attribute_short_outlets_a_few": "Alguns",
+	"attribute_short_outlets_none": "Cap",
+	"attribute_short_noise_quiet": "Tranquil",
+	"attribute_short_noise_noisy": "Sorollós",
+	"attribute_short_long_stays_welcome": "Benvingudes",
+	"attribute_short_long_stays_not_really": "No gaire",
+	"attribute_long_stays_welcome": "Estades llargues benvingudes",
+	"attribute_long_stays_not_really": "Només estades curtes",
+	"place_not_known": "Sense dades",
+	"place_confirmations": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} confirmació",
+				"countPlural=*": "{countText} confirmacions"
+			}
+		}
+	],
+	"place_laptop_policy": "Normes per a portàtils",
+	"preview_confirmed_last": [
+		{
+			"declarations": [
+				"input count",
+				"input ago",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Confirmat per {countText} usuari · l'últim, {ago}",
+				"countPlural=*": "Confirmat per {countText} usuaris · l'últim, {ago}"
+			}
+		}
+	],
+	"place_to_go": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "En falta {countText}",
+				"countPlural=*": "En falten {countText}"
+			}
+		}
+	],
+	"place_check_in_hint": "Fes check-in per ajudar a certificar-lo.",
+	"place_unchecked_title": "S'hi pot treballar?",
+	"place_unchecked_body": "Encara ningú no ha compartit informació per treballar en aquest lloc. Hi has estat? Només cal un minut.",
+	"preview_be_first": "Sigues el primer a revisar-lo",
+	"preview_be_first_body": "Respon quatre preguntes ràpides sobre wifi, endolls, soroll i estades llargues, i aquest lloc apareixerà per a tothom que busca on treballar.",
+	"action_add_work_info_here": "Soc aquí · afegir info",
+	"place_osm_wifi_yes": "OpenStreetMap indica wifi",
+	"place_osm_wifi_no": "OpenStreetMap indica que no hi ha wifi",
+	"place_unconfirmed": "sense confirmar",
+	"place_may_have_closed": "Potser aquest lloc ha tancat",
+	"place_may_have_closed_body": "Ja no surt a OpenStreetMap. Comprova-ho abans d'anar-hi.",
+	"place_hours": "Horari",
+	"place_closed": "Tancat",
+	"place_address": "Adreça",
+	"place_osm_data": "Dades del lloc © col·laboradors d'OpenStreetMap",
+	"place_photo_credit": "Foto: {author} ({source}) · {license}",
+	"place_preview": "Vista prèvia del lloc",
+	"place_how_certification_works": "Com funciona la certificació",
+	"action_see_details": "Veure detalls",
+	"action_see_place": "Veure lloc",
+	"action_back_to_list": "Tornar a la llista",
+	"action_back_to_map": "Tornar al mapa",
+	"action_share": "Compartir",
+	"action_directions": "Com arribar-hi",
+	"action_close": "Tancar",
+	"action_go_home": "Anar a la pàgina d'inici",
+	"share_copied": "Enllaç copiat",
+	"share_failed": "No s'ha pogut compartir l'enllaç",
+	"error_not_found_title": "Aquesta pàgina no existeix",
+	"error_not_found_body": "Potser el lloc s'ha eliminat o l'enllaç no és correcte.",
+	"error_generic_title": "Alguna cosa ha fallat",
+	"error_generic_body": "Torna-ho a provar d'aquí a un moment."
 }

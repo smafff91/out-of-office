@@ -53,3 +53,11 @@ export function formatKilometers(km: number): string {
 		maximumFractionDigits: 1
 	}).format(km);
 }
+
+/** Short weekday name, Monday = 0: "Mon" (en), "lun" (es), "dl." (ca). */
+export function formatWeekday(day: number): string {
+	// 2024-01-01 was a Monday; UTC so the device timezone never shifts the day.
+	return new Intl.DateTimeFormat(getLocale(), { weekday: 'short', timeZone: 'UTC' }).format(
+		new Date(Date.UTC(2024, 0, 1 + day))
+	);
+}

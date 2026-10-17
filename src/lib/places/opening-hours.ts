@@ -138,3 +138,34 @@ export function openingStatus(
 	const next = today.filter(([start]) => start > minute).sort((a, b) => a[0] - b[0])[0];
 	return next ? { state: 'opens', at: hhmm(next[0]) } : { state: 'closed_today' };
 }
+
+export type DayHours = {
+	/** Monday = 0 … Sunday = 6. */
+	day: number;
+	/** Open the whole day (00:00-24:00). */
+	allDay: boolean;
+	/** "HH:MM" pairs; a close earlier than the open is after midnight. Empty when closed. */
+	intervals: [open: string, close: string][];
+};
+
+/**
+ * The week, Monday first, for the place page. Undefined when the hours are missing or not
+ * readable with certainty (then no hours are shown at all).
+ */
+export function weekSchedule(text: string | null | undefined): DayHours[] | undefined {
+	if (!text) return undefined;
+	const week = parseOpeningHours(text);
+	if (!week) return undefined;
+	return week.map((intervals, day) => ({
+		day,
+		allDay: intervals.length === 1 && intervals[0][0] === 0 && intervals[0][1] >= 1440,
+		intervals: intervals
+			.toSorted((a, b) => a[0] - b[0])
+			.map(([start, end]): [string, string] => [hhmm(start), hhmm(end)])
+	}));
+}
+
+/** Today's weekday (Monday = 0) in the given timezone. */
+export function weekdayIn(timeZone: string, now: Date = new Date()): number {
+	return localNow(now, timeZone).day;
+}

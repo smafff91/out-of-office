@@ -53,7 +53,7 @@
 			return;
 		}
 		// The position stays in memory (platform/geolocation.ts): the city map shows it at once.
-		if (slug) await goto(localizeHref(`/${slug}`), { replaceState: true });
+		if (slug) await goto(localizeHref(`/${slug}`), { replace: true });
 		else phase = 'outside';
 	}
 

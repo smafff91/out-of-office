@@ -20,6 +20,8 @@
 		insets?: Insets;
 		certifiedOnly?: boolean;
 		selected?: PlaceFeature;
+		/** False for the small map on place pages: a picture of the spot, not a control. */
+		interactive?: boolean;
 		onplaceclick?: (slug: string) => void;
 		onmove?: (view: MapView) => void;
 	};
@@ -33,6 +35,7 @@
 		insets = { top: 140, bottom: 220, left: 24, right: 24 },
 		certifiedOnly = false,
 		selected,
+		interactive = true,
 		onplaceclick,
 		onmove
 	}: Props = $props();
@@ -53,6 +56,7 @@
 					bounds,
 					insets,
 					label: m.common_map(),
+					interactive,
 					onPlaceClick: (slug) => onplaceclick?.(slug),
 					onMove: (view) => onmove?.(view)
 				});

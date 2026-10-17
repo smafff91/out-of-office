@@ -185,5 +185,108 @@
 	"action_add_place": "Añadir un sitio",
 	"action_sign_in": "Iniciar sesión",
 	"map_zoom_in": "Acercar",
-	"map_zoom_out": "Alejar"
+	"map_zoom_out": "Alejar",
+	"place_meta_title": "{name}, {area}: wifi, enchufes y ruido",
+	"place_meta_description_certified": "{name}, en {area}, está certificado para trabajar en remoto. Mira el wifi, los enchufes, el ruido y las normas para portátiles que confirman los usuarios.",
+	"place_meta_description_community": "Wifi, enchufes, ruido y normas para portátiles en {name}, en {area}, compartidos por usuarios que han trabajado allí.",
+	"place_meta_description_unchecked": "{name}, en {area}: nadie ha compartido aún información para trabajar. ¿Has estado? Cuenta si se puede trabajar con portátil.",
+	"place_kind_cafe": "Cafetería",
+	"place_kind_bar": "Bar",
+	"place_level_community": "Info de la comunidad · Aún sin certificar",
+	"place_level_unchecked": "Aún sin revisar para trabajar",
+	"place_cert_manual": "Visitado por nuestro equipo · certificado en {month}",
+	"place_score_few_long": "{yes} de {total} volverían a trabajar aquí",
+	"place_attribute_wifi": "Wifi",
+	"place_attribute_outlets": "Enchufes",
+	"place_attribute_noise": "Ruido",
+	"place_attribute_long_stays": "Estancias largas",
+	"attribute_short_wifi_fast": "Rápido",
+	"attribute_short_wifi_slow": "Lento",
+	"attribute_short_wifi_none": "No hay",
+	"attribute_short_outlets_plenty": "Muchos",
+	"attribute_short_outlets_a_few": "Algunos",
+	"attribute_short_outlets_none": "Ninguno",
+	"attribute_short_noise_quiet": "Tranquilo",
+	"attribute_short_noise_noisy": "Ruidoso",
+	"attribute_short_long_stays_welcome": "Bienvenidas",
+	"attribute_short_long_stays_not_really": "No mucho",
+	"attribute_long_stays_welcome": "Estancias largas bienvenidas",
+	"attribute_long_stays_not_really": "Solo estancias cortas",
+	"place_not_known": "Sin datos",
+	"place_confirmations": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} confirmación",
+				"countPlural=*": "{countText} confirmaciones"
+			}
+		}
+	],
+	"place_laptop_policy": "Normas para portátiles",
+	"preview_confirmed_last": [
+		{
+			"declarations": [
+				"input count",
+				"input ago",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Confirmado por {countText} usuario · el último, {ago}",
+				"countPlural=*": "Confirmado por {countText} usuarios · el último, {ago}"
+			}
+		}
+	],
+	"place_to_go": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Falta {countText}",
+				"countPlural=*": "Faltan {countText}"
+			}
+		}
+	],
+	"place_check_in_hint": "Haz check-in para ayudar a certificarlo.",
+	"place_unchecked_title": "¿Se puede trabajar aquí?",
+	"place_unchecked_body": "Nadie ha compartido aún información para trabajar en este sitio. ¿Has estado? Se tarda un minuto.",
+	"preview_be_first": "Sé el primero en revisarlo",
+	"preview_be_first_body": "Responde cuatro preguntas rápidas sobre wifi, enchufes, ruido y estancias largas, y este sitio aparecerá para todos los que buscan dónde trabajar.",
+	"action_add_work_info_here": "Estoy aquí · añadir info",
+	"place_osm_wifi_yes": "OpenStreetMap indica wifi",
+	"place_osm_wifi_no": "OpenStreetMap indica que no hay wifi",
+	"place_unconfirmed": "sin confirmar",
+	"place_may_have_closed": "Puede que este sitio haya cerrado",
+	"place_may_have_closed_body": "Ya no aparece en OpenStreetMap. Compruébalo antes de ir.",
+	"place_hours": "Horario",
+	"place_closed": "Cerrado",
+	"place_address": "Dirección",
+	"place_osm_data": "Datos del sitio © colaboradores de OpenStreetMap",
+	"place_photo_credit": "Foto: {author} ({source}) · {license}",
+	"place_preview": "Vista previa del sitio",
+	"place_how_certification_works": "Cómo funciona la certificación",
+	"action_see_details": "Ver detalles",
+	"action_see_place": "Ver sitio",
+	"action_back_to_list": "Volver a la lista",
+	"action_back_to_map": "Volver al mapa",
+	"action_share": "Compartir",
+	"action_directions": "Cómo llegar",
+	"action_close": "Cerrar",
+	"action_go_home": "Ir a la página de inicio",
+	"share_copied": "Enlace copiado",
+	"share_failed": "No se ha podido compartir el enlace",
+	"error_not_found_title": "Esta página no existe",
+	"error_not_found_body": "Puede que el sitio se haya eliminado o que el enlace esté mal.",
+	"error_generic_title": "Algo ha fallado",
+	"error_generic_body": "Vuelve a intentarlo en un momento."
 }

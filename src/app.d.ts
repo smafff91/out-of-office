@@ -18,6 +18,8 @@ declare global {
 		interface PageState {
 			/** Area picked on the Home ([west, south, east, north]): the city map opens on it. */
 			area?: [number, number, number, number];
+			/** Place shown in the tap preview over the map (phones); Back closes it. */
+			preview?: string;
 		}
 	}
 }

@@ -89,3 +89,69 @@ action_add_place,Add a place,Añadir un sitio,to review,Afegeix un lloc,to revie
 action_sign_in,Sign in,Iniciar sesión,to review,Inicia la sessió,to review
 map_zoom_in,Zoom in,Acercar,to review,Apropa,to review
 map_zoom_out,Zoom out,Alejar,to review,Allunya,to review
+place_meta_title,"{name}, {area}: Wi‑Fi, outlets and noise","{name}, {area}: wifi, enchufes y ruido",to review,"{name}, {area}: wifi, endolls i soroll",to review
+place_meta_description_certified,"{name} in {area} is certified for remote work. See Wi‑Fi, outlets, noise and laptop rules confirmed by users.","{name}, en {area}, está certificado para trabajar en remoto. Mira el wifi, los enchufes, el ruido y las normas para portátiles que confirman los usuarios.",to review,"{name}, a {area}, està certificat per treballar en remot. Mira el wifi, els endolls, el soroll i les normes per a portàtils que confirmen els usuaris.",to review
+place_meta_description_community,"Wi‑Fi, outlets, noise and laptop rules at {name} in {area}, shared by users who worked there.","Wifi, enchufes, ruido y normas para portátiles en {name}, en {area}, compartidos por usuarios que han trabajado allí.",to review,"Wifi, endolls, soroll i normes per a portàtils a {name}, a {area}, compartits per usuaris que hi han treballat.",to review
+place_meta_description_unchecked,{name} in {area}: nobody has shared work info yet. Been there? Tell others if you can work there on a laptop.,"{name}, en {area}: nadie ha compartido aún información para trabajar. ¿Has estado? Cuenta si se puede trabajar con portátil.",to review,"{name}, a {area}: encara ningú no ha compartit informació per treballar. Hi has estat? Explica si s'hi pot treballar amb portàtil.",to review
+place_kind_cafe,Café,Cafetería,to review,Cafeteria,to review
+place_kind_bar,Bar,Bar,to review,Bar,to review
+place_level_community,Community info · Not certified yet,Info de la comunidad · Aún sin certificar,to review,Info de la comunitat · Encara sense certificar,to review
+place_level_unchecked,Not checked for work yet,Aún sin revisar para trabajar,to review,Encara sense revisar per treballar,to review
+place_cert_manual,Visited by our team · certified {month},Visitado por nuestro equipo · certificado en {month},to review,Visitat pel nostre equip · certificat el {month},to review
+place_score_few_long,{yes} of {total} would work here again,{yes} de {total} volverían a trabajar aquí,to review,{yes} de {total} hi tornarien a treballar,to review
+place_attribute_wifi,Wi‑Fi,Wifi,to review,Wifi,to review
+place_attribute_outlets,Outlets,Enchufes,to review,Endolls,to review
+place_attribute_noise,Noise,Ruido,to review,Soroll,to review
+place_attribute_long_stays,Long stays,Estancias largas,to review,Estades llargues,to review
+attribute_short_wifi_fast,Fast,Rápido,to review,Ràpid,to review
+attribute_short_wifi_slow,Slow,Lento,to review,Lent,to review
+attribute_short_wifi_none,None,No hay,to review,No n'hi ha,to review
+attribute_short_outlets_plenty,Plenty,Muchos,to review,Molts,to review
+attribute_short_outlets_a_few,A few,Algunos,to review,Alguns,to review
+attribute_short_outlets_none,None,Ninguno,to review,Cap,to review
+attribute_short_noise_quiet,Quiet,Tranquilo,to review,Tranquil,to review
+attribute_short_noise_noisy,Noisy,Ruidoso,to review,Sorollós,to review
+attribute_short_long_stays_welcome,Welcome,Bienvenidas,to review,Benvingudes,to review
+attribute_short_long_stays_not_really,Not really,No mucho,to review,No gaire,to review
+attribute_long_stays_welcome,Long stays welcome,Estancias largas bienvenidas,to review,Estades llargues benvingudes,to review
+attribute_long_stays_not_really,Short stays only,Solo estancias cortas,to review,Només estades curtes,to review
+place_not_known,Not known,Sin datos,to review,Sense dades,to review
+place_confirmations [countPlural=one],{countText} confirmation,{countText} confirmación,to review,{countText} confirmació,to review
+place_confirmations [countPlural=*],{countText} confirmations,{countText} confirmaciones,to review,{countText} confirmacions,to review
+place_laptop_policy,Laptop policy,Normas para portátiles,to review,Normes per a portàtils,to review
+preview_confirmed_last [countPlural=one],Confirmed by {countText} user · last {ago},"Confirmado por {countText} usuario · el último, {ago}",to review,"Confirmat per {countText} usuari · l'últim, {ago}",to review
+preview_confirmed_last [countPlural=*],Confirmed by {countText} users · last {ago},"Confirmado por {countText} usuarios · el último, {ago}",to review,"Confirmat per {countText} usuaris · l'últim, {ago}",to review
+place_to_go [countPlural=one],{countText} to go,Falta {countText},to review,En falta {countText},to review
+place_to_go [countPlural=*],{countText} to go,Faltan {countText},to review,En falten {countText},to review
+place_check_in_hint,Check in to help it get certified.,Haz check-in para ayudar a certificarlo.,to review,Fes check-in per ajudar a certificar-lo.,to review
+place_unchecked_title,Can you work here?,¿Se puede trabajar aquí?,to review,S'hi pot treballar?,to review
+place_unchecked_body,Nobody has shared work info for this place yet. Been here? It takes about a minute.,Nadie ha compartido aún información para trabajar en este sitio. ¿Has estado? Se tarda un minuto.,to review,Encara ningú no ha compartit informació per treballar en aquest lloc. Hi has estat? Només cal un minut.,to review
+preview_be_first,Be the first to check it,Sé el primero en revisarlo,to review,Sigues el primer a revisar-lo,to review
+preview_be_first_body,"Answer four quick questions about Wi‑Fi, outlets, noise and long stays, and this place shows up for everyone looking for somewhere to work.","Responde cuatro preguntas rápidas sobre wifi, enchufes, ruido y estancias largas, y este sitio aparecerá para todos los que buscan dónde trabajar.",to review,"Respon quatre preguntes ràpides sobre wifi, endolls, soroll i estades llargues, i aquest lloc apareixerà per a tothom que busca on treballar.",to review
+action_add_work_info_here,I'm here · add work info,Estoy aquí · añadir info,to review,Soc aquí · afegir info,to review
+place_osm_wifi_yes,OpenStreetMap lists Wi‑Fi,OpenStreetMap indica wifi,to review,OpenStreetMap indica wifi,to review
+place_osm_wifi_no,OpenStreetMap lists no Wi‑Fi,OpenStreetMap indica que no hay wifi,to review,OpenStreetMap indica que no hi ha wifi,to review
+place_unconfirmed,unconfirmed,sin confirmar,to review,sense confirmar,to review
+place_may_have_closed,This place may have closed,Puede que este sitio haya cerrado,to review,Potser aquest lloc ha tancat,to review
+place_may_have_closed_body,It's no longer on OpenStreetMap. Check before you go.,Ya no aparece en OpenStreetMap. Compruébalo antes de ir.,to review,Ja no surt a OpenStreetMap. Comprova-ho abans d'anar-hi.,to review
+place_hours,Opening hours,Horario,to review,Horari,to review
+place_closed,Closed,Cerrado,to review,Tancat,to review
+place_address,Address,Dirección,to review,Adreça,to review
+place_osm_data,Place data © OpenStreetMap contributors,Datos del sitio © colaboradores de OpenStreetMap,to review,Dades del lloc © col·laboradors d'OpenStreetMap,to review
+place_photo_credit,Photo: {author} ({source}) · {license},Foto: {author} ({source}) · {license},to review,Foto: {author} ({source}) · {license},to review
+place_preview,Place preview,Vista previa del sitio,to review,Vista prèvia del lloc,to review
+place_how_certification_works,How certification works,Cómo funciona la certificación,to review,Com funciona la certificació,to review
+action_see_details,See details,Ver detalles,to review,Veure detalls,to review
+action_see_place,See place,Ver sitio,to review,Veure lloc,to review
+action_back_to_list,Back to list,Volver a la lista,to review,Tornar a la llista,to review
+action_back_to_map,Back to map,Volver al mapa,to review,Tornar al mapa,to review
+action_share,Share,Compartir,to review,Compartir,to review
+action_directions,Directions,Cómo llegar,to review,Com arribar-hi,to review
+action_close,Close,Cerrar,to review,Tancar,to review
+action_go_home,Go to the home page,Ir a la página de inicio,to review,Anar a la pàgina d'inici,to review
+share_copied,Link copied,Enlace copiado,to review,Enllaç copiat,to review
+share_failed,Couldn't share the link,No se ha podido compartir el enlace,to review,No s'ha pogut compartir l'enllaç,to review
+error_not_found_title,This page isn't here,Esta página no existe,to review,Aquesta pàgina no existeix,to review
+error_not_found_body,"The place may have been removed, or the link may be wrong.",Puede que el sitio se haya eliminado o que el enlace esté mal.,to review,Potser el lloc s'ha eliminat o l'enllaç no és correcte.,to review
+error_generic_title,Something went wrong,Algo ha fallado,to review,Alguna cosa ha fallat,to review
+error_generic_body,Try again in a moment.,Vuelve a intentarlo en un momento.,to review,Torna-ho a provar d'aquí a un moment.,to review

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import realValues from './opening-hours.fixtures.json' with { type: 'json' };
-import { openingStatus, parseOpeningHours } from './opening-hours.ts';
+import { openingStatus, parseOpeningHours, weekdayIn, weekSchedule } from './opening-hours.ts';
 
 const TZ = 'Europe/Madrid';
 /** A moment in Barcelona: 2026-10-12 is a Monday (CEST, UTC+2). */
@@ -90,5 +90,41 @@ describe('real OpenStreetMap values', () => {
 		}
 		// Most cafés use the simple shapes; the rest are left blank on purpose.
 		expect(read / values.length).toBeGreaterThan(0.8);
+	});
+});
+
+describe('weekSchedule', () => {
+	it('lists the week from Monday, with closed days and hours past midnight', () => {
+		const week = weekSchedule('Mo-Fr 08:00-20:00; Sa 18:00-02:30; Su off');
+		expect(week?.map((d) => d.intervals)).toEqual([
+			[['08:00', '20:00']],
+			[['08:00', '20:00']],
+			[['08:00', '20:00']],
+			[['08:00', '20:00']],
+			[['08:00', '20:00']],
+			[['18:00', '02:30']],
+			[]
+		]);
+		expect(week?.some((d) => d.allDay)).toBe(false);
+	});
+
+	it('sorts split hours and marks whole days', () => {
+		expect(weekSchedule('Mo 16:00-20:00, 08:00-12:00')?.[0].intervals).toEqual([
+			['08:00', '12:00'],
+			['16:00', '20:00']
+		]);
+		expect(weekSchedule('24/7')?.every((d) => d.allDay)).toBe(true);
+	});
+
+	it('gives nothing for hours it cannot read with certainty', () => {
+		expect(weekSchedule('Mo-Fr 08:00-20:00; PH off')).toBeUndefined();
+		expect(weekSchedule(null)).toBeUndefined();
+	});
+});
+
+describe('weekdayIn', () => {
+	it('uses the city timezone', () => {
+		// Sunday 23:30 UTC is already Monday in Barcelona.
+		expect(weekdayIn(TZ, new Date('2026-10-11T23:30:00Z'))).toBe(0);
 	});
 });

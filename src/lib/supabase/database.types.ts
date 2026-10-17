@@ -677,6 +677,52 @@ export type Database = {
 				};
 				Relationships: [];
 			};
+			place_details: {
+				Row: {
+					address: string | null;
+					amenity: Database['public']['Enums']['place_amenity'] | null;
+					attributes: Json | null;
+					cert_origin: Database['public']['Enums']['cert_origin'] | null;
+					certified_on: string | null;
+					city_id: string | null;
+					contributors: number | null;
+					district: string | null;
+					has_score: boolean | null;
+					internet_access_osm: string | null;
+					laptop_rules: Json | null;
+					lat: number | null;
+					level: Database['public']['Enums']['place_level'] | null;
+					lng: number | null;
+					may_have_closed: boolean | null;
+					min_users: number | null;
+					name: string | null;
+					neighborhood: string | null;
+					opening_hours: string | null;
+					osm_id: number | null;
+					osm_type: Database['public']['Enums']['osm_type'] | null;
+					score_pct: number | null;
+					slug: string | null;
+					timezone: string | null;
+					votes: number | null;
+					yes_votes: number | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'places_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'cities';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'places_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'city_summaries';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			place_laptop_rules: {
 				Row: {
 					confirmations: number | null;

@@ -1,13 +1,18 @@
 <script lang="ts">
 	// One list row (LatteList). A real link to the place page for search engines and new tabs;
-	// a plain tap is intercepted and selects the place on the map (the page comes in feature 6).
-	import { formatKilometers, formatPercent, formatTime } from '#lib/i18n/format.ts';
+	// a plain tap is intercepted: the preview on phones, the place page in the panel on desktop.
+	import AmenityIcon from '#lib/components/place/AmenityIcon.svelte';
+	import {
+		ATTRIBUTE_PILLS,
+		LAPTOP_RULES,
+		distanceLabel,
+		openingLabel
+	} from '#lib/components/place/labels.ts';
+	import { formatPercent } from '#lib/i18n/format.ts';
 	import { localizeHref } from '#lib/i18n/locale.ts';
 	import * as m from '#lib/paraglide/messages.js';
-	import { walkingEstimate } from '#lib/places/distance.ts';
 	import type { ListEntry, Sort } from '#lib/places/list.ts';
-	import { openingStatus } from '#lib/places/opening-hours.ts';
-	import type { LaptopRule, ListItem, Noise, Outlets, Wifi } from '#lib/supabase/places.ts';
+	import type { ListItem } from '#lib/supabase/places.ts';
 
 	type Props = {
 		entry: ListEntry;
@@ -23,44 +28,10 @@
 
 	let { entry, item, citySlug, sort, showDistance, selected, onselect }: Props = $props();
 
-	const WIFI: Record<Wifi, () => string> = {
-		none: m.attribute_wifi_none,
-		slow: m.attribute_wifi_slow,
-		fast: m.attribute_wifi_fast
-	};
-	const OUTLETS: Record<Outlets, () => string> = {
-		none: m.attribute_outlets_none,
-		a_few: m.attribute_outlets_a_few,
-		plenty: m.attribute_outlets_plenty
-	};
-	const NOISE: Record<Noise, () => string> = {
-		quiet: m.attribute_noise_quiet,
-		noisy: m.attribute_noise_noisy
-	};
-	const LAPTOP: Record<LaptopRule, () => string> = {
-		no_laptops_lunch: m.laptop_rule_no_laptops_lunch,
-		no_laptops_weekends: m.laptop_rule_no_laptops_weekends,
-		time_limit: m.laptop_rule_time_limit
-	};
-
 	const unchecked = $derived(entry.level === 'osm_only');
 
-	const distance = $derived.by(() => {
-		if (!showDistance) return undefined;
-		const estimate = walkingEstimate(entry.distance);
-		return estimate.kind === 'minutes'
-			? m.place_walk_time({ minutes: estimate.minutes })
-			: formatKilometers(estimate.km);
-	});
-
-	const hours = $derived.by(() => {
-		const status = item && openingStatus(item.openingHours, item.timezone);
-		if (!status) return undefined;
-		if (status.state === 'open') return m.place_open_until({ time: formatTime(status.until) });
-		if (status.state === 'opens') return m.place_opens_at({ time: formatTime(status.at) });
-		if (status.state === 'open_24h') return m.place_open_24h();
-		return m.place_closed_today();
-	});
+	const distance = $derived(showDistance ? distanceLabel(entry.distance) : undefined);
+	const hours = $derived(item ? openingLabel(item.openingHours, item.timezone) : undefined);
 
 	const meta = $derived(
 		[
@@ -73,9 +44,9 @@
 	const pills = $derived(
 		item && sort === 'nearest'
 			? [
-					item.wifi && WIFI[item.wifi](),
-					item.outlets && OUTLETS[item.outlets](),
-					item.noise && NOISE[item.noise]()
+					item.wifi && ATTRIBUTE_PILLS.wifi[item.wifi](),
+					item.outlets && ATTRIBUTE_PILLS.outlets[item.outlets](),
+					item.noise && ATTRIBUTE_PILLS.noise[item.noise]()
 				].filter((pill): pill is string => !!pill)
 			: []
 	);
@@ -98,19 +69,9 @@
 	data-slug={entry.slug}
 	{onclick}
 >
-	<!-- Photo placeholder (photos come with feature 7): a cup for cafés, a glass for bars. -->
+	<!-- Photo placeholder (no photo source yet): a cup for cafés, a glass for bars. -->
 	<div class={unchecked ? 'ghost' : 'photo'} aria-hidden="true">
-		{#if item?.amenity === 'cafe'}
-			<svg class="icon kind" viewBox="0 0 24 24"
-				><path
-					d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3v3M12 3v3"
-				></path></svg
-			>
-		{:else if item?.amenity === 'bar'}
-			<svg class="icon kind" viewBox="0 0 24 24"
-				><path d="M6 3h12l-6 9zM12 12v8M8 21h8M8.2 6h7.6"></path></svg
-			>
-		{/if}
+		<AmenityIcon amenity={item?.amenity ?? null} />
 	</div>
 	<div class="text">
 		<div class="name-row">
@@ -152,7 +113,7 @@
 					{/each}
 					{#if sort === 'nearest'}
 						{#each item?.laptopRules ?? [] as rule (rule)}
-							<span class="pill rule">{LAPTOP[rule]()}</span>
+							<span class="pill rule">{LAPTOP_RULES[rule]()}</span>
 						{/each}
 					{/if}
 				</div>
@@ -191,22 +152,20 @@
 		justify-content: center;
 	}
 
-	.kind {
+	.photo :global(.icon),
+	.ghost :global(.icon) {
 		width: 24px;
 		height: 24px;
-		color: var(--icon);
-	}
-
-	.ghost .kind {
-		color: var(--dot);
 	}
 
 	.photo {
 		background: var(--photo);
+		color: var(--icon);
 	}
 
 	.ghost {
 		border: 1.5px dashed var(--line);
+		color: var(--dot);
 	}
 
 	.text {

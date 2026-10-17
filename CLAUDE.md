@@ -131,5 +131,14 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 9. Admin: Reports, New places, certificazione manuale, nuovi certificati automatici
 10. /about, /me (con eliminazione account) + pulsante Account → /me, /add, "Not in {city} yet" completo (nome della città, voto, barra), /privacy, /terms, stati vuoti ed errori
 
+## Feature completate
+- [x] 1. Scheletro SvelteKit, doppia build web/app, token, font self-hosted, layout base
+- [x] 2. Supabase: schema, RLS su ogni tabella, viste aggregate, seed di Barcellona
+- [x] 3. Import OSM (`npm run import:osm`), quartieri e distretti, categoria cafe/bar (`places.amenity`)
+- [x] 3b. i18n EN/ES/CA con Paraglide, `check:i18n`, approvazioni in `messages/review.json`, CSV per i revisori
+- [x] 4. Home mappa: tre tipi di pin, geolocalizzazione con ripiego (scelta dell'area), "Not in your area"
+- [x] 5. Lista bottom sheet (Nearest / Top rated), filtro Certified, ricerca per locale e barri, layout desktop
+- [x] 6. Anteprima al tap (telefono) e scheda `/{city}/{place}` con SSR, canonical, JSON-LD, 404 curata; vista `place_details` (solo aggregati); su desktop la scheda sta nel pannello di sinistra (layout `src/routes/[city]/+layout.svelte` condiviso da lista e scheda); galleria foto senza fonte collegata (`src/lib/places/photos.ts`); Directions e Share in `src/lib/platform/`. Disattivati con TODO: "Add your experience" (7), "Report a problem" (9), sigillo → /about (10)
+
 ## Checklist di lancio
 - Nessun elemento disattivato (`aria-disabled`) né commento `TODO(feature N)` nell'interfaccia: `grep -rn "aria-disabled\|TODO(feature" src/` deve essere vuoto.
