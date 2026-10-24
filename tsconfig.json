@@ -4,6 +4,14 @@
 		"strict": true,
 		"types": ["$app/types", "node", "./worker-configuration.d.ts"]
 	},
-	"include": ["src", "scripts", "tests", "vite.config.ts", "vitest.db.config.ts"],
-	"exclude": ["node_modules", "src/lib/paraglide/**/*.js"]
+	"include": [
+		"src",
+		"scripts",
+		"tests",
+		"supabase/functions",
+		"vite.config.ts",
+		"vitest.db.config.ts"
+	],
+	// Edge Function entry points use the Deno global: checked by `supabase functions deploy`.
+	"exclude": ["node_modules", "src/lib/paraglide/**/*.js", "supabase/functions/*/index.ts"]
 }

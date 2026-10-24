@@ -28,9 +28,9 @@ Dettagli di prodotto (leggili quando servono, non tutti a ogni sessione):
 - URL per lingua (`/es/`, `/ca/`, hreflang) più avanti: i link interni passano già da `localizeHref` (`#lib/i18n/locale.ts`).
 - Selettore lingua: le lingue sono dati. L'elenco nasce dalle lingue compilate da Paraglide con `Intl.DisplayNames` (nome nativo + nome nella lingua attuale; ripiego: codice in maiuscolo) in `#lib/i18n/language-list.ts`: fino a 6 lingue elenco unico, oltre "Suggested" (browser + `cities.languages`) e "All languages", oltre 10 ricerca. Telefono: riga Language nell'AccountSheet; desktop: globo nella barra.
 - Il cambio lingua ricarica la stessa pagina e rimette tutto com'era: prima di ricaricare, `onBeforeLeave` salva lo schermo della città (`#lib/places/view-state.ts`: centro e zoom della mappa, pannello, ordinamento, filtro, anteprima, scorrimento) e le bozze; dopo il ricaricamento si ripristinano una volta (scadono dopo 5 minuti). Un componente nuovo con stato da conservare registra il suo `onBeforeLeave`.
-- Lingua del profilo: vince l'ultima scelta esplicita (orario in localStorage e `profiles.locale_chosen_at`, `#lib/i18n/locale-sync.ts`). Limite noto: la prima email di accesso dopo un cambio fatto da disconnessi esce nella lingua del profilo (Supabase usa i metadati salvati).
+- Lingua del profilo: vince l'ultima scelta esplicita (orario in localStorage e `profiles.locale_chosen_at`, `#lib/i18n/locale-sync.ts`).
 - Non si traducono: nomi dei locali, contenuti degli utenti, nomi delle lingue nel selettore, `APP_NAME`.
-- Email di login: **un solo modello** con condizioni sulla lingua (`{{ if eq .Data.locale "es" }}…`), generato da `npm run email:build` dalle chiavi `email_signin_*` dei file di lingua in `supabase/templates/` e negli oggetti in `supabase/config.toml` (versionati; `npm run lint` controlla che siano aggiornati). La lingua sta nei metadati dell'utente: al primo accesso la manda `signInWithOtp` (`data.locale`), poi il trigger `sync_profile_locale` la copia da `profiles.locale`. Si applica con `npx supabase config push` (lo lancia il fondatore).
+- Email di login: le invia la Edge Function `supabase/functions/send-email` (Send Email Hook di Supabase Auth, firma Standard Webhooks) tramite l'API di Resend, **nella lingua della pagina** da cui si chiede il codice: il client la mette in `lang` dell'URL di ritorno (`buildReturnUrl`); ripiego sulla lingua del profilo (metadati dell'utente, copiati da `profiles.locale` dal trigger `sync_profile_locale`), poi inglese. Testi da `npm run email:build` (chiavi `email_signin_*`) in `copy.gen.ts`, con lo stesso layout (`render.ts`) dei modelli Go di ripiego in `supabase/templates/` (usati solo con l'hook spento); `npm run lint` controlla che siano aggiornati. Dopo un cambio dei testi: deploy della funzione (e `config push` per i modelli). Deploy, segreti (`npm run functions:secrets`) e `config push` li lancia il fondatore.
 - Il plugin dei messaggi di inlang è una dipendenza npm a versione fissa, referenziata in locale in `project.inlang/settings.json`: la build non scarica nulla da CDN.
 
 ## Stack
@@ -41,7 +41,7 @@ Dettagli di prodotto (leggili quando servono, non tutti a ogni sessione):
 | App nativa (dopo il lancio) | Capacitor sulla build statica (`@sveltejs/adapter-static`, fallback SPA) |
 | Database, auth, storage, API | Supabase: Postgres + PostGIS, RLS, Storage, pg_cron. Sviluppo su un progetto **Supabase Free online** dedicato (niente Docker sul Mac); CLI via `npx supabase` (non installata globalmente) |
 | Mappa | MapLibre GL JS + OpenFreeMap (stile Positron modificato: niente POI, colori Latte) |
-| Email magic link | Resend come SMTP di Supabase (solo in produzione; in sviluppo bastano le email integrate di Supabase, con i loro limiti) |
+| Email di login | Resend (API) dalla Edge Function del Send Email Hook; Resend SMTP come ripiego. In sviluppo mittente `onboarding@resend.dev`, che consegna solo all'indirizzo dell'account Resend |
 | Stile | CSS semplice con variabili (design token) + stili scoped di Svelte. Niente Tailwind né librerie UI |
 | i18n | Paraglide JS 2 (EN sorgente, ES, CA), compilato da Vite in `src/lib/paraglide/` (generato, escluso da Git) |
 | Font | Geist (titoli 800, tracking stretto) e Geist Mono (numeri, freschezza), **self-hosted** in woff2 (niente Google Fonts: GDPR e funzionamento offline in app) |
@@ -59,7 +59,7 @@ La stessa base di codice produce due build: web (SSR per la SEO) e app (statica,
 - Geolocalizzazione, fotocamera/upload, condivisione e apertura di app esterne passano da adattatori in `src/lib/platform/` (oggi API del browser, domani plugin Capacitor). Nessun componente le chiama direttamente.
 - La mappa è incapsulata in `src/lib/map/`: il resto dell'app non importa MapLibre (piano B futuro: Apple MapKit JS).
 - Login (Google + email con codice a 6 cifre e link) con redirect URL configurabili (`PUBLIC_AUTH_REDIRECT_URL` → `/auth/callback?next=…`), pronti per deep link: note per Capacitor in `src/lib/platform/README.md`. Logica in `src/lib/auth/` (`session.svelte.ts`, `openSignIn()`), bozze salvate prima di Google e del cambio lingua con `onBeforeLeave`/`stash` (`handoff.ts`).
-- Configurazione di Supabase Auth (URL, Google, OTP, modelli email, SMTP) solo in `supabase/config.toml`, applicata con `npx supabase config push` (prima `npx supabase config diff`): mai a mano dalla dashboard. Segreti Google e Resend in `.env`, letti solo dalla CLI.
+- Configurazione di Supabase Auth (URL, Google, OTP, modelli email, SMTP) solo in `supabase/config.toml`, applicata con `npx supabase config push` (prima `npx supabase config diff`): mai a mano dalla dashboard. Segreti Google, Resend e dell'hook in `.env`, letti solo dalla CLI; i segreti della funzione arrivano al progetto con `npm run functions:secrets`, che non stampa mai i valori.
 - URL delle schede stabili, futuri universal link.
 - Niente localStorage per dati importanti; solo preferenze locali, con try/catch.
 
@@ -149,5 +149,6 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 
 ## Checklist di lancio
 - Nessun elemento disattivato (`aria-disabled`) né commento `TODO(feature N)` nell'interfaccia: `grep -rn "aria-disabled\|TODO(feature" src/` deve essere vuoto.
-- Email: **SMTP Resend con SPF e DKIM (e DMARC) sul dominio definitivo** in `[auth.email.smtp]` di `supabase/config.toml` (mittente sul dominio, non `onboarding@resend.dev`); `site_url` e `additional_redirect_urls` sul dominio; `[auth.rate_limit] email_sent` adeguato.
+- Email: dominio verificato su Resend con **SPF, DKIM e DMARC**; `EMAIL_FROM` sul dominio (non `onboarding@resend.dev`) nei segreti della funzione e mittente di `[auth.email.smtp]` (ripiego); nel progetto di produzione una chiave Resend con soli permessi di invio e un segreto dell'hook suoi (`npm run functions:secrets`), deploy di `send-email`; `site_url` e `additional_redirect_urls` sul dominio; `[auth.rate_limit] email_sent` adeguato.
+- Privacy: Resend tra i fornitori che trattano dati personali (indirizzo email) nella pagina /privacy.
 - Google: schermata di consenso pubblicata (non più in modalità test), dominio verificato, URL di redirect di produzione nel client OAuth.

@@ -1,6 +1,7 @@
 /**
  * Fails if a secret ended up in a build output (web or app): the Supabase secret key, the
- * Google sign-in secret, the Resend API key (the last two are for `supabase config push` only).
+ * Google sign-in secret, the Resend API key and the Send Email Hook secret (the last three are
+ * for `supabase config push` and the Edge Function only).
  * Run after `npm run build` / `npm run build:app`: npm run check:secrets
  */
 import { readdir, readFile } from 'node:fs/promises';
@@ -12,7 +13,8 @@ const KEY_PATTERN = /sb_secret_[A-Za-z0-9_-]{16,}/;
 const SECRET_NAMES = [
 	'SUPABASE_SECRET_KEY',
 	'SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET',
-	'RESEND_API_KEY'
+	'RESEND_API_KEY',
+	'SEND_EMAIL_HOOK_SECRET'
 ];
 const secretValues = SECRET_NAMES.map((name) => process.env[name]?.trim()).filter(
 	(value): value is string => !!value

@@ -37,6 +37,13 @@ describe('sending the email', () => {
 		);
 		expect(authErrorKind({ code: 'unexpected_failure', status: 500 }, send)).toBe('send_failed');
 		expect(authErrorKind({ code: 'email_address_invalid', status: 400 }, send)).toBe('send_failed');
+		// The Send Email Hook answers 500 when Resend refuses or does not answer: what Auth sends on.
+		expect(
+			authErrorKind(
+				{ status: 500, message: 'Unexpected status code returned from hook: 500' },
+				send
+			)
+		).toBe('send_failed');
 		// supabase-js marks 502–504 as retryable, but the server did answer.
 		expect(authErrorKind({ name: 'AuthRetryableFetchError', status: 504 }, send)).toBe(
 			'send_failed'

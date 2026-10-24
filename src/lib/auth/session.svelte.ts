@@ -164,7 +164,9 @@ export async function sendEmailCode(email: string, next: string) {
 		email,
 		options: {
 			shouldCreateUser: true,
-			emailRedirectTo: buildReturnUrl(next, PUBLIC_AUTH_REDIRECT_URL),
+			// The email comes in the language of this page, even for a returning user whose
+			// profile has another one (lang); data.locale only sets the profile of a new user.
+			emailRedirectTo: buildReturnUrl(next, PUBLIC_AUTH_REDIRECT_URL, getLocale()),
 			data: { locale: getLocale() }
 		}
 	});

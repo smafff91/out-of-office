@@ -47,6 +47,22 @@ describe('buildReturnUrl', () => {
 		expect(withQuery.hash).toBe('');
 	});
 
+	it('adds the page language for the email, with and without a query in the base', () => {
+		const plain = new URL(buildReturnUrl(next, 'http://localhost:5173/auth/callback', 'ca'));
+		expect(plain.searchParams.get('lang')).toBe('ca');
+		expect(plain.searchParams.get('next')).toBe(encoded);
+
+		const withQuery = new URL(
+			buildReturnUrl(next, 'https://example.com/auth/callback?app=1', 'es')
+		);
+		expect(withQuery.searchParams.get('app')).toBe('1');
+		expect(withQuery.searchParams.get('lang')).toBe('es');
+
+		expect(
+			new URL(buildReturnUrl(next, 'http://localhost:5173/auth/callback')).searchParams.has('lang')
+		).toBe(false);
+	});
+
 	it('never carries an unsafe next', () => {
 		const url = new URL(buildReturnUrl('//evil.com', 'http://localhost:5173/auth/callback'));
 		expect(url.searchParams.get('next')).toBe('/');

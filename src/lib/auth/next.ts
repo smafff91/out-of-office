@@ -27,11 +27,14 @@ export function safeNextPath(raw: string | null | undefined): string {
 /**
  * The URL sign-in returns to: `base` (keeping any query it already has) plus `next`, without a
  * fragment, because the email link appends `#token_hash=…&type=email` to it.
+ * `lang` (email only) is the language of the page: the Send Email Hook writes the email in it
+ * (supabase/functions/send-email). The callback page ignores it.
  */
-export function buildReturnUrl(next: string, base: string): string {
+export function buildReturnUrl(next: string, base: string, lang?: string): string {
 	const url = new URL(base);
 	url.hash = '';
 	url.searchParams.set('next', safeNextPath(next));
+	if (lang) url.searchParams.set('lang', lang);
 	return url.toString();
 }
 

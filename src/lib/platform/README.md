@@ -20,3 +20,5 @@ Today sign-in returns to `PUBLIC_AUTH_REDIRECT_URL` (the `/auth/callback` page).
   `src/lib/platform/auth-browser.ts`.
 - **Email:** the 6-digit code works in the app as is. The link opens the universal link, which
   lands on the callback in the app (or in the browser if the app is not installed).
+  The email language travels as `lang` in the return URL (`buildReturnUrl`): it works the same
+  with the universal link or a custom scheme (the send-email function reads it with `new URL`).

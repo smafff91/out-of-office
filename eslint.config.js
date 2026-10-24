@@ -54,7 +54,7 @@ export default defineConfig(
 				},
 				{
 					selector:
-						'Identifier[name=/^(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET|RESEND_API_KEY)$/], Literal[value=/SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET|RESEND_API_KEY/]',
+						'Identifier[name=/^(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET|RESEND_API_KEY|SEND_EMAIL_HOOK_SECRET)$/], Literal[value=/SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET|RESEND_API_KEY|SEND_EMAIL_HOOK_SECRET/]',
 					message: 'Sign-in secrets are for `supabase config push` only, never for the site.'
 				}
 			]
