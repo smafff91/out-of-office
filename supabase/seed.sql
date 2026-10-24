@@ -12,7 +12,8 @@ insert into public.cities (
 	osm_relation_id,
 	district_admin_level,
 	neighborhood_admin_level,
-	is_active
+	is_active,
+	languages
 )
 values (
 	'barcelona',
@@ -24,7 +25,8 @@ values (
 	347950,
 	9,
 	10,
-	true
+	true,
+	'{ca,es}'
 )
 on conflict (slug) do nothing;
 

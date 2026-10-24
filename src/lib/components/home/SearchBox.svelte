@@ -191,6 +191,9 @@
 		position: relative;
 		width: 440px;
 		max-width: 100%;
+		/* In the desktop bar: gives up width first, so the buttons on the right always fit. */
+		flex: 0 1 440px;
+		min-width: 160px;
 	}
 
 	.field {

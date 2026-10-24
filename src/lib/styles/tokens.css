@@ -37,6 +37,7 @@
 	--sh-2: rgba(31, 23, 18, 0.12);
 	--sh-3: rgba(31, 23, 18, 0.14);
 	--sh-4: rgba(31, 23, 18, 0.16);
+	--scrim: rgba(31, 23, 18, 0.45); /* behind sheets and dialogs (LatteSignIn) */
 
 	/* Type */
 	--font-sans: 'Geist Variable', system-ui, -apple-system, sans-serif;

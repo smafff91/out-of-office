@@ -20,6 +20,8 @@ export type CitySummary = {
 	community: number;
 	unchecked: number;
 	places: number;
+	/** Languages spoken in the city (cities.languages): suggested first in the language picker. */
+	languages: string[];
 };
 
 export type AreaSummary = {
@@ -34,7 +36,7 @@ export type AreaSummary = {
 };
 
 const CITY_COLUMNS =
-	'id, slug, name, center_lng, center_lat, west, south, east, north, certified_count, community_count, unchecked_count, places_count';
+	'id, slug, name, center_lng, center_lat, west, south, east, north, certified_count, community_count, unchecked_count, places_count, languages';
 
 const bounds = (row: {
 	west: number | null;
@@ -53,7 +55,8 @@ function toCity(row: CityRow): CitySummary {
 		certified: row.certified_count ?? 0,
 		community: row.community_count ?? 0,
 		unchecked: row.unchecked_count ?? 0,
-		places: row.places_count ?? 0
+		places: row.places_count ?? 0,
+		languages: row.languages ?? []
 	};
 }
 

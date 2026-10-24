@@ -7,13 +7,20 @@ const isBrowser = typeof window !== 'undefined';
 let authClient: ReturnType<typeof createClient<Database>> | undefined;
 
 /**
- * The one client that owns sign-in in the browser (session storage, token refresh, magic-link
- * callback). Created once: a second one would start a second GoTrueClient on the same storage.
+ * The one client that owns sign-in in the browser (session storage, token refresh). Created
+ * once: a second one would start a second GoTrueClient on the same storage.
+ * PKCE for Google (also what the app build needs); the URL is read only by /auth/callback,
+ * never automatically on other pages.
  */
 export function getAuthClient() {
 	if (!isBrowser) throw new Error('getAuthClient() is browser-only');
 	authClient ??= createClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
-		auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+		auth: {
+			flowType: 'pkce',
+			persistSession: true,
+			autoRefreshToken: true,
+			detectSessionInUrl: false
+		}
 	});
 	return authClient;
 }

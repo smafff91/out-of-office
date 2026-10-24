@@ -11,5 +11,12 @@ export const variables = defineEnvVars({
 		public: true,
 		static: true,
 		description: 'Supabase publishable (anon) key; data is protected by RLS'
+	},
+	PUBLIC_AUTH_REDIRECT_URL: {
+		public: true,
+		static: true,
+		description:
+			'Where sign-in returns (Google and the email link): the /auth/callback page of this build. ' +
+			'Web: https://<site>/auth/callback; app: a universal link. Must be in the Supabase allowlist.'
 	}
 });

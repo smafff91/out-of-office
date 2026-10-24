@@ -14,6 +14,18 @@ export default defineConfig({
 	},
 	// MapLibre's worker is an ES module that imports shared code (src/lib/map/engine.ts).
 	worker: { format: 'es' },
+	// Build outputs live inside the project: a build next to a running dev server must not
+	// trigger reloads (adapter-static writes build/, the Cloudflare adapter .svelte-kit/…).
+	server: {
+		watch: {
+			ignored: [
+				'**/build/**',
+				'**/.svelte-kit/output/**',
+				'**/.svelte-kit/cloudflare/**',
+				'**/.wrangler/**'
+			]
+		}
+	},
 	plugins: [
 		// Compiles messages/*.json into src/lib/paraglide; options in project.inlang/paraglide.config.js.
 		paraglideVitePlugin({ project: './project.inlang' }),

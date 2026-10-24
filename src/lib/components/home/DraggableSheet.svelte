@@ -18,9 +18,19 @@
 		/** Title row: part of the drag area. */
 		header: Snippet;
 		children: Snippet;
+		/** The element that scrolls the content (to save and restore its position). */
+		scroller?: HTMLElement;
 	};
 
-	let { snap = $bindable(), topOffset, onheight, label, header, children }: Props = $props();
+	let {
+		snap = $bindable(),
+		topOffset,
+		onheight,
+		label,
+		header,
+		children,
+		scroller = $bindable()
+	}: Props = $props();
 
 	const DRAG_THRESHOLD = 6;
 	const FLICK_SPEED = 0.5; // px per ms
@@ -129,7 +139,7 @@
 		</button>
 		{@render header()}
 	</div>
-	<div class="content" class:locked={snap === 'closed'}>
+	<div class="content" class:locked={snap === 'closed'} bind:this={scroller}>
 		{@render children()}
 	</div>
 </section>

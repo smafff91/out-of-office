@@ -155,3 +155,55 @@ error_not_found_title,This page isn't here,Esta página no existe,to review,Aque
 error_not_found_body,"The place may have been removed, or the link may be wrong.",Puede que el sitio se haya eliminado o que el enlace esté mal.,to review,Potser el lloc s'ha eliminat o l'enllaç no és correcte.,to review
 error_generic_title,Something went wrong,Algo ha fallado,to review,Alguna cosa ha fallat,to review
 error_generic_body,Try again in a moment.,Vuelve a intentarlo en un momento.,to review,Torna-ho a provar d'aquí a un moment.,to review
+auth_title,Sign in,Inicia sesión,to review,Inicia la sessió,to review
+auth_title_contribution,Sign in to send your update,Inicia sesión para enviar tu actualización,to review,Inicia la sessió per enviar la teva actualització,to review
+auth_body,"No password needed: continue with Google, or we'll email you a code.",No hace falta contraseña: continúa con Google o te enviamos un código por email.,to review,No cal contrasenya: continua amb Google o t'enviem un codi per correu.,to review
+auth_body_contribution,Your answers are saved. Signing in shows others who confirmed them. No password needed.,"Tus respuestas están guardadas. Al iniciar sesión, los demás ven quién las ha confirmado. No hace falta contraseña.",to review,"Les teves respostes estan desades. En iniciar la sessió, els altres veuen qui les ha confirmat. No cal contrasenya.",to review
+auth_google,Continue with Google,Continuar con Google,to review,Continua amb Google,to review
+auth_or,or,o,to review,o,to review
+auth_email_label,Email,Email,to review,Correu electrònic,to review
+auth_email_placeholder,you@example.com,tu@ejemplo.com,to review,tu@exemple.com,to review
+auth_email_send,Email me a sign-in code,Envíame un código por email,to review,Envia'm un codi per correu,to review
+auth_email_invalid,Enter a valid email address.,Escribe un email válido.,to review,Escriu una adreça de correu vàlida.,to review
+auth_code_title,Check your email,Revisa tu email,to review,Revisa el correu,to review
+auth_code_body,"We sent a 6-digit code to {email}. Enter it here, or tap the link in the email.",Hemos enviado un código de 6 cifras a {email}. Escríbelo aquí o toca el enlace del email.,to review,Hem enviat un codi de 6 xifres a {email}. Escriu-lo aquí o toca l'enllaç del correu.,to review
+auth_code_label,6-digit code,Código de 6 cifras,to review,Codi de 6 xifres,to review
+auth_code_submit,Sign in,Entrar,to review,Entra,to review
+auth_code_resend,Send a new code,Enviar un código nuevo,to review,Envia un codi nou,to review
+auth_code_resend_in,New code in {seconds} s,Código nuevo en {seconds} s,to review,Codi nou d'aquí a {seconds} s,to review
+auth_code_sent_again,We sent a new code.,Te hemos enviado un código nuevo.,to review,T'hem enviat un codi nou.,to review
+auth_code_change_email,Use a different email,Usar otro email,to review,Fes servir un altre correu,to review
+auth_sending,Sending…,Enviando…,to review,S'està enviant…,to review
+auth_verifying,Checking…,Comprobando…,to review,S'està comprovant…,to review
+auth_legal,By continuing you agree to the {terms} and {privacy}.,Al continuar aceptas los {terms} y la {privacy}.,to review,En continuar acceptes les {terms} i la {privacy}.,to review
+auth_legal_terms,Terms,Condiciones,to review,Condicions,to review
+auth_legal_privacy,Privacy Policy,Política de privacidad,to review,Política de privadesa,to review
+auth_error_wrong_code,That code isn't right. Check the email and try again.,El código no es correcto. Revisa el email y vuelve a probar.,to review,El codi no és correcte. Revisa el correu i torna-ho a provar.,to review
+auth_error_expired_code,This code has expired. Ask for a new one.,El código ha caducado. Pide uno nuevo.,to review,El codi ha caducat. Demana'n un de nou.,to review
+auth_error_too_many,Too many attempts. Wait a few minutes and try again.,Demasiados intentos. Espera unos minutos y vuelve a probar.,to review,Massa intents. Espera uns minuts i torna-ho a provar.,to review
+auth_error_google_cancelled,"Google sign-in was canceled. Try again, or use your email.",Se ha cancelado el acceso con Google. Vuelve a probar o usa tu email.,to review,S'ha cancel·lat l'accés amb Google. Torna-ho a provar o fes servir el correu.,to review
+auth_error_offline,You're offline. Check your connection and try again.,Estás sin conexión. Revisa la conexión y vuelve a probar.,to review,No tens connexió. Revisa-la i torna-ho a provar.,to review
+auth_error_unknown,Something went wrong. Try again in a moment.,Algo ha fallado. Vuelve a intentarlo en un momento.,to review,Alguna cosa ha fallat. Torna-ho a provar d'aquí a un moment.,to review
+auth_callback_status,Signing you in…,Iniciando sesión…,to review,S'està iniciant la sessió…,to review
+profile_menu,Account and language,Cuenta e idioma,to review,Compte i idioma,to review
+profile_your_account,Your account,Tu cuenta,to review,El teu compte,to review
+profile_sign_out,Sign out,Cerrar sesión,to review,Tanca la sessió,to review
+profile_name_choice_title,Show your name?,¿Mostrar tu nombre?,to review,Vols mostrar el teu nom?,to review
+profile_name_choice_body,Choose whether your first name appears on the places you update. You can change it later.,Elige si tu nombre aparece en los sitios que actualizas. Puedes cambiarlo más adelante.,to review,Tria si el teu nom apareix als llocs que actualitzes. Ho pots canviar més endavant.,to review
+profile_show_name,Show my name on places,Mostrar mi nombre en los sitios,to review,Mostra el meu nom als llocs,to review
+profile_stay_anonymous,Stay anonymous,Seguir en el anonimato,to review,Continua en l'anonimat,to review
+profile_name_label,First name,Nombre,to review,Nom,to review
+profile_name_hint,"First name only, up to 30 characters.","Solo el nombre, hasta 30 caracteres.",to review,"Només el nom, fins a 30 caràcters.",to review
+profile_name_error_empty,"Enter your first name, or choose to stay anonymous.",Escribe tu nombre o elige seguir en el anonimato.,to review,Escriu el teu nom o tria continuar en l'anonimat.,to review
+profile_name_error_too_long,Use 30 characters or fewer.,Usa 30 caracteres como máximo.,to review,Fes servir 30 caràcters com a màxim.,to review
+profile_name_error_invalid,"Use your first name, not an email address.","Usa tu nombre, no un email.",to review,"Fes servir el teu nom, no una adreça de correu.",to review
+profile_name_choice_required,Choose one of the two options.,Elige una de las dos opciones.,to review,Tria una de les dues opcions.,to review
+profile_save,Save,Guardar,to review,Desa,to review
+profile_save_failed,Couldn't save. Try again.,No se ha podido guardar. Vuelve a probar.,to review,No s'ha pogut desar. Torna-ho a provar.,to review
+email_signin_subject,Your sign-in code,Tu código para entrar,to review,El teu codi per entrar,to review
+email_signin_title,Sign in to {app},Entra en {app},to review,Entra a {app},to review
+email_signin_code_intro,Enter this code on the page where you asked to sign in:,Escribe este código en la página donde pediste entrar:,to review,Escriu aquest codi a la pàgina on has demanat entrar:,to review
+email_signin_link_intro,Or sign in with one tap:,O entra con un toque:,to review,O entra amb un toc:,to review
+email_signin_button,Sign in,Entrar,to review,Entra,to review
+email_signin_expiry,The code and the button work once and expire in {minutes} minutes.,El código y el botón sirven una sola vez y caducan en {minutes} minutos.,to review,El codi i el botó serveixen un sol cop i caduquen d'aquí a {minutes} minuts.,to review
+email_signin_ignore,"If you didn't ask to sign in, you can ignore this email.","Si no has pedido entrar, puedes ignorar este email.",to review,"Si no has demanat entrar, pots ignorar aquest correu.",to review

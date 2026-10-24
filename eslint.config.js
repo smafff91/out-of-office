@@ -51,6 +51,11 @@ export default defineConfig(
 				{
 					selector: "Identifier[name='SUPABASE_SECRET_KEY']",
 					message: 'The Supabase secret key is for scripts/ only.'
+				},
+				{
+					selector:
+						'Identifier[name=/^(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET|RESEND_API_KEY)$/], Literal[value=/SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET|RESEND_API_KEY/]',
+					message: 'Sign-in secrets are for `supabase config push` only, never for the site.'
 				}
 			]
 		}

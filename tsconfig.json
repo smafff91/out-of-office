@@ -4,6 +4,6 @@
 		"strict": true,
 		"types": ["$app/types", "node", "./worker-configuration.d.ts"]
 	},
-	"include": ["src", "scripts", "vite.config.ts"],
+	"include": ["src", "scripts", "tests", "vite.config.ts", "vitest.db.config.ts"],
 	"exclude": ["node_modules", "src/lib/paraglide/**/*.js"]
 }

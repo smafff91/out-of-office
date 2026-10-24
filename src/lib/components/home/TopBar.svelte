@@ -1,6 +1,7 @@
 <script lang="ts">
 	// Phone top bar (LatteHome): search, account, Certified filter. Hidden from 1024px wide,
 	// where DesktopBar takes over.
+	import AccountButton from '#lib/components/account/AccountButton.svelte';
 	import * as m from '#lib/paraglide/messages.js';
 	import CertifiedChip from './CertifiedChip.svelte';
 
@@ -31,13 +32,7 @@
 			</svg>
 			<span>{m.common_search_placeholder()}</span>
 		</button>
-		<!-- TODO(feature 10): link to /me. -->
-		<button class="square" type="button" aria-label={m.common_account()} aria-disabled="true">
-			<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-				<circle cx="12" cy="8" r="4"></circle>
-				<path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path>
-			</svg>
-		</button>
+		<AccountButton />
 	</div>
 	<div>
 		<CertifiedChip on={certifiedOnly} ontoggle={ontogglecertified} />
@@ -72,8 +67,7 @@
 		gap: 10px;
 	}
 
-	.search,
-	.square {
+	.search {
 		height: 54px;
 		border: 0;
 		border-radius: var(--radius);
@@ -84,8 +78,7 @@
 		align-items: center;
 	}
 
-	.solid .search,
-	.solid .square {
+	.solid .search {
 		background: var(--pill);
 		box-shadow: none;
 	}
@@ -106,13 +99,6 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-	}
-
-	.square {
-		width: 54px;
-		flex-shrink: 0;
-		justify-content: center;
-		cursor: default;
 	}
 
 	@media (min-width: 1024px) {

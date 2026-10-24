@@ -9,4 +9,6 @@ Open it in Excel, Numbers or Google Sheets.
 - Tone: informal (tú / tu), Spanish from Spain. Never "nómada" / "nòmada"; people who use the app are "usuarios" / "usuaris".
 - Write corrections in a new column (or as comments) and send the file back: they are copied into `messages/es.json` and `messages/ca.json`, then approved.
 
+- `email_signin_*` rows are the sign-in email (subject and body), not screens of the app: same tone, keep `{app}` and `{minutes}`.
+
 Regenerate the file with `npm run i18n:export`.

@@ -1,7 +1,10 @@
 <script lang="ts">
 	// Desktop top bar (LatteDesktop): app name, city, search, Certified filter, add a place,
-	// sign in. Shown from 1024px wide.
+	// language, sign in or the account menu. Shown from 1024px wide.
 	import type { Snippet } from 'svelte';
+	import AccountMenu from '#lib/components/account/AccountMenu.svelte';
+	import LanguageButton from '#lib/components/account/LanguageButton.svelte';
+	import { openSignIn, session } from '#lib/auth/session.svelte.ts';
 	import { APP_NAME } from '#lib/config.ts';
 	import * as m from '#lib/paraglide/messages.js';
 	import CertifiedChip from './CertifiedChip.svelte';
@@ -26,8 +29,14 @@
 	<span class="spacer"></span>
 	<!-- TODO(feature 10): /add. -->
 	<button class="link" type="button" aria-disabled="true">{m.action_add_place()}</button>
-	<!-- TODO(feature 7): sign in. -->
-	<button class="sign-in" type="button" aria-disabled="true">{m.action_sign_in()}</button>
+	<LanguageButton />
+	{#if session.status === 'signed-in'}
+		<AccountMenu />
+	{:else}
+		<button class="sign-in" type="button" onclick={() => openSignIn({ context: 'menu' })}>
+			{m.action_sign_in()}
+		</button>
+	{/if}
 </header>
 
 <style>
@@ -69,6 +78,8 @@
 	}
 
 	.link {
+		flex-shrink: 0;
+		white-space: nowrap;
 		border: 0;
 		background: none;
 		font-size: 15px;
@@ -77,6 +88,8 @@
 	}
 
 	.sign-in {
+		flex-shrink: 0;
+		white-space: nowrap;
 		height: 44px;
 		padding: 0 18px;
 		border: 0;
@@ -85,6 +98,17 @@
 		color: var(--btnfg);
 		font-size: 15px;
 		font-weight: 700;
-		cursor: default;
+		cursor: pointer;
+	}
+
+	/* Narrow desktops (1024–1279px): the full bar must fit in every language. */
+	@media (min-width: 1024px) and (max-width: 1279px) {
+		.bar {
+			gap: 12px;
+		}
+
+		.app {
+			width: auto;
+		}
 	}
 </style>

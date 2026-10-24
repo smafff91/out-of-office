@@ -90,6 +90,7 @@ export type Database = {
 					district_admin_level: number | null;
 					id: string;
 					is_active: boolean;
+					languages: string[];
 					last_osm_import_at: string | null;
 					name: string;
 					neighborhood_admin_level: number | null;
@@ -107,6 +108,7 @@ export type Database = {
 					district_admin_level?: number | null;
 					id?: string;
 					is_active?: boolean;
+					languages?: string[];
 					last_osm_import_at?: string | null;
 					name: string;
 					neighborhood_admin_level?: number | null;
@@ -124,6 +126,7 @@ export type Database = {
 					district_admin_level?: number | null;
 					id?: string;
 					is_active?: boolean;
+					languages?: string[];
 					last_osm_import_at?: string | null;
 					name?: string;
 					neighborhood_admin_level?: number | null;
@@ -504,21 +507,30 @@ export type Database = {
 					display_name: string | null;
 					founding_contributor: boolean;
 					id: string;
+					locale: string | null;
+					locale_chosen_at: string | null;
 					role: Database['public']['Enums']['user_role'];
+					show_name: boolean | null;
 				};
 				Insert: {
 					created_at?: string;
 					display_name?: string | null;
 					founding_contributor?: boolean;
 					id: string;
+					locale?: string | null;
+					locale_chosen_at?: string | null;
 					role?: Database['public']['Enums']['user_role'];
+					show_name?: boolean | null;
 				};
 				Update: {
 					created_at?: string;
 					display_name?: string | null;
 					founding_contributor?: boolean;
 					id?: string;
+					locale?: string | null;
+					locale_chosen_at?: string | null;
 					role?: Database['public']['Enums']['user_role'];
+					show_name?: boolean | null;
 				};
 				Relationships: [];
 			};
@@ -626,6 +638,7 @@ export type Database = {
 					community_count: number | null;
 					east: number | null;
 					id: string | null;
+					languages: string[] | null;
 					name: string | null;
 					north: number | null;
 					places_count: number | null;
@@ -676,6 +689,21 @@ export type Database = {
 					value: string | null;
 				};
 				Relationships: [];
+			};
+			place_contributors: {
+				Row: {
+					display_name: string | null;
+					place_id: string | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'contributions_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'places';
+						referencedColumns: ['id'];
+					}
+				];
 			};
 			place_details: {
 				Row: {
@@ -780,8 +808,7 @@ export type Database = {
 			};
 			place_notes: {
 				Row: {
-					author_name: string | null;
-					created_on: string | null;
+					created_month: string | null;
 					note: string | null;
 					place_id: string | null;
 				};

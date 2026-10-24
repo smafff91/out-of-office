@@ -28,7 +28,7 @@ const EMPTY: PlaceCollection = { type: 'FeatureCollection', features: [] };
 export type Insets = { top: number; bottom: number; left: number; right: number };
 
 /** What the map shows after each move; byUser is false for moves made in code. */
-export type MapView = { center: LngLat; bounds: Bounds; byUser: boolean };
+export type MapView = { center: LngLat; zoom: number; bounds: Bounds; byUser: boolean };
 
 export type MapController = {
 	setPlaces(places: PlaceCollection): void;
@@ -226,6 +226,7 @@ export function createMap(
 		const b = map.getBounds();
 		options.onMove?.({
 			center: [center.lng, center.lat],
+			zoom: map.getZoom(),
 			bounds: [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()],
 			byUser
 		});

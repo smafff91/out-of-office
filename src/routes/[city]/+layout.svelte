@@ -10,7 +10,9 @@
 	//   browser reports the permission as granted, or after "Show my location".
 	// - Nearest starts from the user, else the picked area, else the city center; distances are
 	//   shown only for the user's real position.
-	import { onMount, untrack } from 'svelte';
+	// - A language change reloads the page: the screen is saved just before (map area, panel,
+	//   order, filter, preview, scroll; view-state.ts) and put back as it was after the reload.
+	import { onMount, tick, untrack } from 'svelte';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
@@ -24,6 +26,7 @@
 	import SearchBox from '#lib/components/home/SearchBox.svelte';
 	import SortControl from '#lib/components/home/SortControl.svelte';
 	import TopBar from '#lib/components/home/TopBar.svelte';
+	import { onBeforeLeave, stash, takeStash } from '#lib/auth/handoff.ts';
 	import PlacePreview from '#lib/components/place/PlacePreview.svelte';
 	import { localizeHref } from '#lib/i18n/locale.ts';
 	import {
@@ -46,6 +49,12 @@
 		type Section,
 		type Sort
 	} from '#lib/places/list.ts';
+	import {
+		CITY_VIEW_KEY,
+		parseCityView,
+		serializeCityView,
+		type CityViewState
+	} from '#lib/places/view-state.ts';
 	import { getPositionIfGranted, requestPosition } from '#lib/platform/geolocation.ts';
 	import { fetchAreas, fetchCityPlaces, type AreaSummary } from '#lib/supabase/cities.ts';
 	import { createSupabaseClient } from '#lib/supabase/client.ts';
@@ -98,6 +107,11 @@
 	/** MapLibre loads only once the map is on screen (not under a place page on phones). */
 	let mapWanted = $state(untrack(() => !page.params.place));
 	let panel = $state<HTMLElement>();
+	let listScroller = $state<HTMLElement>();
+	/** Map center and zoom saved before a language reload: the map opens on them. */
+	let restoredCamera = $state<{ center: LngLat; zoom: number }>();
+	/** List scroll to put back once the rows are on screen again. */
+	let pendingListScroll: number | undefined;
 	let locating = $state(false);
 	let notice = $state<string>();
 	let noticeTimer: ReturnType<typeof setTimeout> | undefined;
@@ -238,6 +252,47 @@
 			.catch((error: unknown) => handleError('Could not load the ranking', error));
 	});
 
+	// Rows are back after a reload: scroll the list to where it was, once the pins and the
+	// details of the rows on screen have arrived (placeholder rows have another height).
+	$effect(() => {
+		if (!places || pendingListScroll === undefined || !listScroller) return;
+		if (loading.size > 0 || visibleSlugs.some((slug) => !items.has(slug) && !failed.has(slug))) {
+			return;
+		}
+		const top = pendingListScroll;
+		pendingListScroll = undefined;
+		void tick().then(() =>
+			requestAnimationFrame(() => {
+				if (listScroller) listScroller.scrollTop = top;
+			})
+		);
+	});
+
+	/** The screen as it was before a language reload. Runs after hydration (onMount). */
+	function restoreView(saved: CityViewState) {
+		restoredCamera = saved.camera;
+		snap = saved.snap;
+		sort = saved.sort;
+		certifiedOnly = saved.certifiedOnly;
+		origin = saved.origin;
+		pages = saved.pages;
+		pendingListScroll = saved.listScroll || undefined;
+		if (saved.preview && !placeSlug && !desktop) {
+			// The map is already on the saved area: do not fly to the place again.
+			centeredOn = saved.preview;
+			void goto(page.url.href, {
+				state: { ...page.state, preview: saved.preview },
+				shallow: true,
+				replace: true
+			});
+		}
+		if (saved.panelScroll && placeSlug) {
+			requestAnimationFrame(() => {
+				if (panel) panel.scrollTop = saved.panelScroll;
+			});
+		}
+	}
+
 	onMount(() => {
 		const supabase = createSupabaseClient();
 		fetchCityPlaces(supabase, city.id)
@@ -252,12 +307,35 @@
 		updateLayout();
 		media.addEventListener('change', updateLayout);
 
+		const saved = parseCityView(takeStash(CITY_VIEW_KEY), { city: city.slug });
+		if (saved) restoreView(saved);
+		const stopSaving = onBeforeLeave(() =>
+			stash(
+				CITY_VIEW_KEY,
+				serializeCityView({
+					city: city.slug,
+					savedAt: Date.now(),
+					camera: view ? { center: view.center, zoom: view.zoom } : restoredCamera,
+					snap,
+					sort,
+					certifiedOnly,
+					pages,
+					origin: $state.snapshot(origin),
+					preview: page.state.preview,
+					listScroll: listScroller?.scrollTop ?? 0,
+					panelScroll: panel?.scrollTop ?? 0
+				})
+			)
+		);
+
 		// No prompt here: only a permission the browser reports as granted. Center on the user
 		// only inside the city, never over an area picked on the Home, and never away from the
 		// place on a place page or in the preview (the dot still shows).
 		void getPositionIfGranted().then((position) => {
 			if (!position) return;
 			user = [position.lng, position.lat];
+			// Back from a language reload: the screen stays where the user left it.
+			if (saved) return;
 			if (!page.state.area) {
 				startFrom({ point: user, kind: 'user' });
 				if (isInside(user, city.bounds) && !page.params.place && !page.state.preview) {
@@ -269,6 +347,7 @@
 		return () => {
 			clearTimeout(noticeTimer);
 			media.removeEventListener('change', updateLayout);
+			stopSaving();
 		};
 	});
 
@@ -412,6 +491,7 @@
 	<div class="list" class:away={!!previewSlug || !!placeSlug} inert={!!previewSlug || !!placeSlug}>
 		<DraggableSheet
 			bind:snap
+			bind:scroller={listScroller}
 			onheight={(height) => (sheetHeight = height)}
 			topOffset={topBarHeight}
 			label={m.home_work_nearby()}
@@ -453,8 +533,9 @@
 		{#if mapWanted}
 			<CityMap
 				bind:this={map}
-				center={openPlace?.point ?? city.center}
-				bounds={page.state.area}
+				center={restoredCamera?.center ?? openPlace?.point ?? city.center}
+				zoom={restoredCamera?.zoom}
+				bounds={restoredCamera ? undefined : page.state.area}
 				{places}
 				{user}
 				{insets}

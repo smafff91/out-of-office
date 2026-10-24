@@ -26,8 +26,11 @@ Dettagli di prodotto (leggili quando servono, non tutti a ogni sessione):
 - `npm run check:i18n` (incluso in `npm run lint`) blocca chiavi mancanti o in più, variabili diverse dalla sorgente e "nomad" in ogni lingua. `npm run i18n:export` rigenera `docs/translations/translations.csv` per i revisori.
 - Scelta della lingua, senza prefissi negli URL: scelta salvata (cookie `locale` + localStorage) → lingua del browser → inglese. Server: middleware Paraglide in `src/hooks.server.ts`, che scrive `<html lang>` e manda `Vary: Cookie, Accept-Language` + `Cache-Control: private, no-cache` sulle pagine HTML. Browser e build app: `src/lib/i18n/locale.ts`. Opzioni del compilatore in `project.inlang/paraglide.config.js`.
 - URL per lingua (`/es/`, `/ca/`, hreflang) più avanti: i link interni passano già da `localizeHref` (`#lib/i18n/locale.ts`).
+- Selettore lingua: le lingue sono dati. L'elenco nasce dalle lingue compilate da Paraglide con `Intl.DisplayNames` (nome nativo + nome nella lingua attuale; ripiego: codice in maiuscolo) in `#lib/i18n/language-list.ts`: fino a 6 lingue elenco unico, oltre "Suggested" (browser + `cities.languages`) e "All languages", oltre 10 ricerca. Telefono: riga Language nell'AccountSheet; desktop: globo nella barra.
+- Il cambio lingua ricarica la stessa pagina e rimette tutto com'era: prima di ricaricare, `onBeforeLeave` salva lo schermo della città (`#lib/places/view-state.ts`: centro e zoom della mappa, pannello, ordinamento, filtro, anteprima, scorrimento) e le bozze; dopo il ricaricamento si ripristinano una volta (scadono dopo 5 minuti). Un componente nuovo con stato da conservare registra il suo `onBeforeLeave`.
+- Lingua del profilo: vince l'ultima scelta esplicita (orario in localStorage e `profiles.locale_chosen_at`, `#lib/i18n/locale-sync.ts`). Limite noto: la prima email di accesso dopo un cambio fatto da disconnessi esce nella lingua del profilo (Supabase usa i metadati salvati).
 - Non si traducono: nomi dei locali, contenuti degli utenti, nomi delle lingue nel selettore, `APP_NAME`.
-- Email di login (magic link): vanno tradotte in EN/ES/CA, ma i modelli email di Supabase sono uno per progetto. Da risolvere nella feature 7.
+- Email di login: **un solo modello** con condizioni sulla lingua (`{{ if eq .Data.locale "es" }}…`), generato da `npm run email:build` dalle chiavi `email_signin_*` dei file di lingua in `supabase/templates/` e negli oggetti in `supabase/config.toml` (versionati; `npm run lint` controlla che siano aggiornati). La lingua sta nei metadati dell'utente: al primo accesso la manda `signInWithOtp` (`data.locale`), poi il trigger `sync_profile_locale` la copia da `profiles.locale`. Si applica con `npx supabase config push` (lo lancia il fondatore).
 - Il plugin dei messaggi di inlang è una dipendenza npm a versione fissa, referenziata in locale in `project.inlang/settings.json`: la build non scarica nulla da CDN.
 
 ## Stack
@@ -55,7 +58,8 @@ La stessa base di codice produce due build: web (SSR per la SEO) e app (statica,
 - La logica di dominio (score, Wilson, livello del locale, certificazione, revoca, anti-manipolazione) sta **nel database** come funzioni SQL, viste e job pg_cron, non nel frontend.
 - Geolocalizzazione, fotocamera/upload, condivisione e apertura di app esterne passano da adattatori in `src/lib/platform/` (oggi API del browser, domani plugin Capacitor). Nessun componente le chiama direttamente.
 - La mappa è incapsulata in `src/lib/map/`: il resto dell'app non importa MapLibre (piano B futuro: Apple MapKit JS).
-- Login (Google + magic link) con redirect URL configurabili, pronti per deep link.
+- Login (Google + email con codice a 6 cifre e link) con redirect URL configurabili (`PUBLIC_AUTH_REDIRECT_URL` → `/auth/callback?next=…`), pronti per deep link: note per Capacitor in `src/lib/platform/README.md`. Logica in `src/lib/auth/` (`session.svelte.ts`, `openSignIn()`), bozze salvate prima di Google e del cambio lingua con `onBeforeLeave`/`stash` (`handoff.ts`).
+- Configurazione di Supabase Auth (URL, Google, OTP, modelli email, SMTP) solo in `supabase/config.toml`, applicata con `npx supabase config push` (prima `npx supabase config diff`): mai a mano dalla dashboard. Segreti Google e Resend in `.env`, letti solo dalla CLI.
 - URL delle schede stabili, futuri universal link.
 - Niente localStorage per dati importanti; solo preferenze locali, con try/catch.
 
@@ -108,11 +112,12 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
   - Unica eccezione: i file in `supabase/dev/` (permessi solo per i dati di prova, mai in produzione), applicati solo con `npm run dev:grants`, che si rifiuta di partire se il progetto collegato non è `DEV_PROJECT_REF`.
 - L'esposizione automatica delle tabelle è disattivata: ogni migrazione concede i permessi (`grant`) ad `anon` e `authenticated` in modo esplicito, e attiva la RLS.
 - La tabella `contributions` non è leggibile pubblicamente (solo le proprie righe): la scheda usa le viste aggregate `place_scores`, `place_attributes`, `place_laptop_rules`, `place_notes`.
+- `profiles` è privata (ognuno legge e modifica solo la propria riga; update solo di `display_name`, `show_name`, `locale`). I nomi pubblici passano solo da `place_contributors` (`place_id`, `display_name`, se `show_name` è true): **mai un nome insieme a una data o a un identificativo**; `place_notes` non ha autore e ha solo il mese (`created_month`). `npm run test:db` lo verifica con la chiave pubblica; `supabase/tests/profile_visibility.sql` (transazione annullata) controlla RLS, trigger ed eliminazione.
 - Chiavi e segreti solo in `.env` (mai nel repository); tieni aggiornato `.env.example`.
 - Variabili d'ambiente dichiarate in `src/env.ts` (SvelteKit 3) e importate da `$app/env/public`; il client è `createSupabaseClient(fetch)` in `#lib/supabase/client.ts`.
 - Mappa: lo stile sta in `src/lib/map/style.json`, generato da `npm run map:style` (Positron di OpenFreeMap senza POI, colori Latte) e salvato nel repository; MapLibre si importa solo in `src/lib/map/engine.ts`, caricato dopo la pagina.
 - Dati di prova solo nel progetto di sviluppo: prima `npm run dev:grants`, poi `npm run dev:fixtures -- --city <slug>` (locali community/certificati e contributi anonimi; `--remove` toglie tutto); serve `DEV_PROJECT_REF` in `.env`, altrimenti gli script si rifiutano.
-- Test: `npm test` (vitest) per la logica pura in `src/lib/` (orari, ricerca, distanze, ordinamento).
+- Test: `npm test` (vitest) per la logica pura in `src/lib/` (orari, ricerca, distanze, ordinamento, login). `npm run test:db` (rete, migrazione applicata) per le viste pubbliche con la chiave pubblica.
 - `npm run gen` rigenera i tipi Cloudflare (`worker-configuration.d.ts`): lancialo quando cambia `wrangler.jsonc`.
 - `CLAUDE.md`, `docs/` e `design/` sono esclusi da Prettier (`.prettierignore`): non riformattarli.
 - Dopo ogni feature: `npm test`, `npm run check` e `npm run lint` senza errori; spiega in 3-5 righe come provarla nel browser.
@@ -140,5 +145,9 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 - [x] 5. Lista bottom sheet (Nearest / Top rated), filtro Certified, ricerca per locale e barri, layout desktop
 - [x] 6. Anteprima al tap (telefono) e scheda `/{city}/{place}` con SSR, canonical, JSON-LD, 404 curata; vista `place_details` (solo aggregati); su desktop la scheda sta nel pannello di sinistra (layout `src/routes/[city]/+layout.svelte` condiviso da lista e scheda); galleria foto senza fonte collegata (`src/lib/places/photos.ts`); Directions e Share in `src/lib/platform/`. Disattivati con TODO: "Add your experience" (7), "Report a problem" (9), sigillo → /about (10)
 
+- [x] 7a. Login con Google o email (codice a 6 cifre + link, stessa email in EN/ES/CA), `SignInSheet` riutilizzabile (`openSignIn({ context: 'contribution', onsignedin })` per la 7b) e `SignInForm` dentro l'AccountSheet; guscio modale comune `#lib/components/sheet/Sheet.svelte`; account: AccountSheet sul telefono (Sign in / nome, Language, Sign out), su desktop "Sign in" diretto, globo per la lingua e menu dell'avatar; `NameChoice` + `saveProfile` pronti per la 7b; profili privati e viste `place_contributors`/`place_notes` senza nomi con date; `cities.languages` in `city_summaries`
+
 ## Checklist di lancio
 - Nessun elemento disattivato (`aria-disabled`) né commento `TODO(feature N)` nell'interfaccia: `grep -rn "aria-disabled\|TODO(feature" src/` deve essere vuoto.
+- Email: **SMTP Resend con SPF e DKIM (e DMARC) sul dominio definitivo** in `[auth.email.smtp]` di `supabase/config.toml` (mittente sul dominio, non `onboarding@resend.dev`); `site_url` e `additional_redirect_urls` sul dominio; `[auth.rate_limit] email_sent` adeguato.
+- Google: schermata di consenso pubblicata (non più in modalità test), dominio verificato, URL di redirect di produzione nel client OAuth.
