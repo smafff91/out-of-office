@@ -111,6 +111,13 @@ export async function uploadPhotos(
 	return results;
 }
 
+/** How many visible photos the signed-in user already has in this place (only their own). */
+export async function fetchMyPlacePhotoCount(supabase: Client, placeId: string): Promise<number> {
+	const { data, error } = await supabase.rpc('my_place_photo_count', { p_place_id: placeId });
+	if (error) throw error;
+	return data ?? 0;
+}
+
 export function publicPhotoUrl(variant: PhotoVariant, path: string): string | undefined {
 	return photoUrl(PUBLIC_SUPABASE_URL, variant, path);
 }

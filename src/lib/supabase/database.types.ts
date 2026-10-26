@@ -23,6 +23,7 @@ export type Database = {
 					min_span_days: number;
 					min_users: number;
 					photos_per_contribution: number;
+					photos_per_user_place: number;
 					review_reports_count: number;
 					review_reports_window_days: number;
 					revoke_below_score: number;
@@ -46,6 +47,7 @@ export type Database = {
 					min_span_days: number;
 					min_users: number;
 					photos_per_contribution?: number;
+					photos_per_user_place?: number;
 					review_reports_count: number;
 					review_reports_window_days: number;
 					revoke_below_score: number;
@@ -69,6 +71,7 @@ export type Database = {
 					min_span_days?: number;
 					min_users?: number;
 					photos_per_contribution?: number;
+					photos_per_user_place?: number;
 					review_reports_count?: number;
 					review_reports_window_days?: number;
 					revoke_below_score?: number;
@@ -1268,6 +1271,7 @@ export type Database = {
 					min_span_days: number;
 					min_users: number;
 					photos_per_contribution: number;
+					photos_per_user_place: number;
 					review_reports_count: number;
 					review_reports_window_days: number;
 					revoke_below_score: number;
@@ -1321,6 +1325,7 @@ export type Database = {
 				Args: { p_action: string; p_photo_id: string };
 				Returns: string;
 			};
+			my_place_photo_count: { Args: { p_place_id: string }; Returns: number };
 			my_recent_contribution: {
 				Args: { p_place_id: string };
 				Returns: {

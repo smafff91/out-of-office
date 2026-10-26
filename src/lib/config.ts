@@ -29,6 +29,12 @@ export const TERMS_VERSION = '2026-10-29';
 export const PHOTOS_PER_CONTRIBUTION = 3;
 
 /**
+ * Visible photos per user and place: the same value as certification_settings.photos_per_user_place.
+ * Newer photos replace the user's oldest ones there when they are published.
+ */
+export const PHOTOS_PER_USER_PLACE = 3;
+
+/**
  * The two WebP versions of a photo. The buckets refuse files above 1 MiB and 150 KiB
  * (supabase/migrations/20261029130000_photo_storage.sql): the targets stay below.
  */

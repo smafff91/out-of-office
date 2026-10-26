@@ -421,6 +421,7 @@
 	"contribute_add_photo": "Afegeix una foto",
 	"contribute_photos_hint": "Mostra les taules i els endolls. Evita les cares d'altres persones.",
 	"contribute_photos_terms": "En enviar, confirmes que aquestes fotos són teves i que no hi surten cares reconeixibles, segons les nostres Condicions.",
+	"contribute_photos_replace": "Les teves fotos noves substituiran les més antigues d'aquest lloc.",
 	"contribute_photo_alt": "La teva foto {number}",
 	"contribute_photo_remove": "Treu la foto {number}",
 	"contribute_photo_preparing": "Preparant la foto…",

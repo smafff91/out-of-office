@@ -83,7 +83,12 @@
 		invalidatePlaceDetail,
 		type PlaceDetail
 	} from '#lib/supabase/place-details.ts';
-	import { newUploads, uploadPhotos, type PhotoUpload } from '#lib/supabase/photos.ts';
+	import {
+		fetchMyPlacePhotoCount,
+		newUploads,
+		uploadPhotos,
+		type PhotoUpload
+	} from '#lib/supabase/photos.ts';
 	import { fetchMyProfile } from '#lib/supabase/profile.ts';
 	import Segmented from './Segmented.svelte';
 	import ChipGroup from './ChipGroup.svelte';
@@ -140,6 +145,9 @@
 	/** Photos of a restored draft that the browser could not keep. */
 	let photosNotice = $state<string>();
 	let uploads = $state.raw<PhotoUpload[]>([]);
+	/** The user's visible photos already here: new ones beyond the limit replace them. */
+	let myPhotosHere = $state(0);
+	let photosCounted = false;
 	let uploading = $state(false);
 
 	// Photos count as changes too.
@@ -406,6 +414,20 @@
 			});
 	});
 
+	// Signed in: how many photos of theirs this place already shows (for the replace notice).
+	$effect(() => {
+		if (session.status !== 'signed-in' || photosCounted) return;
+		photosCounted = true;
+		void fetchMyPlacePhotoCount(
+			createSupabaseClient(),
+			untrack(() => place.id)
+		)
+			.then((count) => (myPhotosHere = count))
+			.catch(() => {
+				// No notice: the database applies the limit anyway.
+			});
+	});
+
 	onMount(() => {
 		root?.scrollIntoView({ block: 'start' });
 		const saved = parseDraft(takeStash(draftKey(place.id)), { placeId: place.id });
@@ -617,6 +639,7 @@
 				<PhotoPicker
 					labelledby="{uid}-photos"
 					{photos}
+					{myPhotosHere}
 					notice={photosNotice}
 					onadd={(photo) => setPhotos([...photos, photo])}
 					onremove={(id) => setPhotos(photos.filter((photo) => photo.id !== id))}

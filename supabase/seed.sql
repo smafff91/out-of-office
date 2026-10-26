@@ -50,7 +50,8 @@ insert into public.certification_settings (
 	daily_contribution_limit,
 	founding_limit,
 	photos_per_contribution,
-	daily_photo_limit
+	daily_photo_limit,
+	photos_per_user_place
 )
-values (null, 10, 0.50, 14, 0.75, 0.60, 10, 12, 2, 30, 12, 30, 100, 5, 100, 20, 50, 3, 15)
+values (null, 10, 0.50, 14, 0.75, 0.60, 10, 12, 2, 30, 12, 30, 100, 5, 100, 20, 50, 3, 15, 3)
 on conflict (city_id) do nothing;

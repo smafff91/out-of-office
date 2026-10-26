@@ -1,6 +1,5 @@
 /**
  * Photo rules with real files (feature 7c), against the development project only:
- * - the SQL checks in supabase/tests/photos.sql (rolled-back transaction, nothing stays);
  * - the bucket rules through the Storage API with the public key: only a name the user booked,
  *   only WebP, only under each bucket's cap, no overwrite, nothing for anonymous visitors;
  * - the whole flow (book → upload → publish → public view) and the deletion of the files with
@@ -10,7 +9,6 @@
  * development one, and `npm run dev:grants` applied.
  */
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { drain, supabaseQueue } from '../../supabase/functions/storage-cleanup/drain.ts';
@@ -58,18 +56,6 @@ const ANSWERS = {
 	p_noise: 'quiet',
 	p_long_stays: 'welcome'
 };
-
-describe('supabase/tests/photos.sql', () => {
-	it('passes', () => {
-		const result = spawnSync(
-			'npx',
-			['supabase', 'db', 'query', '--linked', '-f', 'supabase/tests/photos.sql'],
-			{ encoding: 'utf8' }
-		);
-		expect(result.status, result.stderr).toBe(0);
-		expect(result.stdout).toContain('photos: ok');
-	}, 60_000);
-});
 
 describe('photo files', () => {
 	const runId = crypto.randomUUID().slice(0, 8);

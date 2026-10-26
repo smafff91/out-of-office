@@ -421,6 +421,7 @@
 	"contribute_add_photo": "Add photo",
 	"contribute_photos_hint": "Show tables and outlets. Please avoid other people's faces.",
 	"contribute_photos_terms": "By sending, you confirm these photos are yours and show no recognizable faces, as set out in our Terms.",
+	"contribute_photos_replace": "Your new photos will replace your older ones here.",
 	"contribute_photo_alt": "Your photo {number}",
 	"contribute_photo_remove": "Remove photo {number}",
 	"contribute_photo_preparing": "Preparing photo…",

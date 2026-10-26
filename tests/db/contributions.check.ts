@@ -41,17 +41,22 @@ const ANSWERS = {
 	p_long_stays: 'welcome'
 };
 
-describe.each(['contributions.sql', 'profile_visibility.sql'])('supabase/tests/%s', (file) => {
-	it('passes', () => {
-		const result = spawnSync(
-			'npx',
-			['supabase', 'db', 'query', '--linked', '-f', `supabase/tests/${file}`],
-			{ encoding: 'utf8' }
-		);
-		expect(result.status, result.stderr).toBe(0);
-		expect(result.stdout).toContain(`${file.replace('.sql', '')}: ok`);
-	}, 60_000);
-});
+// One file runs every SQL check, one after the other: two `supabase db query --linked` started
+// at the same time (test files run in parallel) can hang on the CLI's login role.
+describe.each(['contributions.sql', 'profile_visibility.sql', 'photos.sql'])(
+	'supabase/tests/%s',
+	(file) => {
+		it('passes', () => {
+			const result = spawnSync(
+				'npx',
+				['supabase', 'db', 'query', '--linked', '-f', `supabase/tests/${file}`],
+				{ encoding: 'utf8' }
+			);
+			expect(result.status, result.stderr).toBe(0);
+			expect(result.stdout).toContain(`${file.replace('.sql', '')}: ok`);
+		}, 60_000);
+	}
+);
 
 describe('with the public key', () => {
 	let placeId: string;

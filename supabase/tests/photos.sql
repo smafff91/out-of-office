@@ -69,6 +69,28 @@ as $$
 	update public.photos set published_at = clock_timestamp() where id = p_photo;
 $$;
 
+-- The two storage rows publish_photo() looks for (no real file: everything is rolled back),
+-- then the real publish_photo() as the given user.
+create function pg_temp.publish_with_files(p_user uuid, p_photo uuid)
+returns void
+language plpgsql
+as $$
+begin
+	insert into storage.objects (bucket_id, name, metadata) values
+		('place-photos', p_photo::text || '.webp', '{"mimetype": "image/webp", "size": 1000}'),
+		('place-photo-thumbs', p_photo::text || '.webp', '{"mimetype": "image/webp", "size": 500}');
+	perform pg_temp.as_user(p_user);
+	perform public.publish_photo(p_photo);
+end;
+$$;
+
+create function pg_temp.exists_photo(p_photo uuid)
+returns boolean
+language sql
+as $$
+	select exists (select 1 from public.photos where id = p_photo);
+$$;
+
 create function pg_temp.queued(p_photo uuid)
 returns integer
 language sql
@@ -86,12 +108,15 @@ declare
 	v_a uuid;
 	u1 uuid := gen_random_uuid();
 	u2 uuid := gen_random_uuid();
+	u3 uuid := gen_random_uuid();
+	u4 uuid := gen_random_uuid();
 	v_unconfirmed uuid := gen_random_uuid();
 	v_result jsonb;
 	v_contribution uuid;
 	v_c2 uuid;
 	v_photo uuid;
 	v_photos uuid[] := '{}';
+	v_cap uuid[];
 	v_count integer;
 	v_text text;
 	v_paths text[];
@@ -112,6 +137,8 @@ begin
 	insert into auth.users (id, email, email_confirmed_at, raw_user_meta_data) values
 		(u1, 'photos-u1@test.invalid', now(), '{}'),
 		(u2, 'photos-u2@test.invalid', now(), '{}'),
+		(u3, 'photos-u3@test.invalid', now(), '{}'),
+		(u4, 'photos-u4@test.invalid', now(), '{}'),
 		(v_unconfirmed, 'photos-unconfirmed@test.invalid', null, '{}');
 	update public.profiles set display_name = 'Ana', show_name = true where id = u1;
 	update public.profiles set display_name = 'Bea', show_name = false where id = u2;
@@ -301,6 +328,71 @@ begin
 	end if;
 	v_text := pg_temp.reserve_error(u1, (v_result ->> 'id')::uuid);
 	if v_text <> 'photo_daily_limit' then raise exception '16th photo: got %', v_text; end if;
+
+	-- ---------------------------------------------------------------------------
+	-- 3 visible photos per user and place: the newest replace the oldest, at publication only
+	-- ---------------------------------------------------------------------------
+
+	v_c2 := (pg_temp.submit(u3, v_places[6]) ->> 'id')::uuid;
+	v_cap := '{}';
+	for i in 1..3 loop
+		v_cap := v_cap || pg_temp.reserve(u3, v_c2);
+		perform pg_temp.publish_with_files(u3, v_cap[i]);
+	end loop;
+	-- Someone else's photo in the same place.
+	v_photo := pg_temp.reserve(u4, (pg_temp.submit(u4, v_places[6]) ->> 'id')::uuid);
+	perform pg_temp.publish_with_files(u4, v_photo);
+
+	perform pg_temp.as_user(u3);
+	if public.my_place_photo_count(v_places[6]) <> 3 then
+		raise exception 'my_place_photo_count: got %', public.my_place_photo_count(v_places[6]);
+	end if;
+	perform pg_temp.as_user(u4);
+	if public.my_place_photo_count(v_places[6]) <> 1 then raise exception 'my_place_photo_count of u4'; end if;
+	perform pg_temp.as_user(null);
+	begin
+		perform public.my_place_photo_count(v_places[6]);
+		raise exception 'my_place_photo_count without a user';
+	exception when others then
+		if sqlerrm <> 'not_signed_in' then raise; end if;
+	end;
+
+	-- A new update; its 4th photo booked but not published: nothing goes.
+	v_c2 := (pg_temp.submit(u3, v_places[6]) ->> 'id')::uuid;
+	v_cap := v_cap || pg_temp.reserve(u3, v_c2);
+	if not pg_temp.exists_photo(v_cap[1]) or pg_temp.queued(v_cap[1]) <> 0 then
+		raise exception 'a booking replaced a photo';
+	end if;
+
+	-- Published: the oldest goes, files queued; the 3 newest and the other user's stay.
+	perform pg_temp.publish_with_files(u3, v_cap[4]);
+	if pg_temp.exists_photo(v_cap[1]) then raise exception '4th photo: the oldest is still there'; end if;
+	if pg_temp.queued(v_cap[1]) <> 2 then raise exception '4th photo: files of the oldest not queued'; end if;
+	if not (pg_temp.exists_photo(v_cap[2]) and pg_temp.exists_photo(v_cap[3]) and pg_temp.exists_photo(v_cap[4])) then
+		raise exception '4th photo: a newer photo went';
+	end if;
+	if not pg_temp.exists_photo(v_photo) then raise exception 'another user''s photo was replaced'; end if;
+	-- Publishing again changes nothing.
+	perform pg_temp.as_user(u3);
+	perform public.publish_photo(v_cap[4]);
+	select count(*) into v_count from public.photos where user_id = u3 and place_id = v_places[6];
+	if v_count <> 3 then raise exception 'publishing twice: % photos', v_count; end if;
+
+	-- Hidden photos neither count nor go.
+	perform public.moderate_photo(v_cap[2], 'hide');
+	v_cap := v_cap || pg_temp.reserve(u3, v_c2);
+	perform pg_temp.publish_with_files(u3, v_cap[5]);
+	select count(*) into v_count from public.photos where user_id = u3 and place_id = v_places[6];
+	if v_count <> 4 then raise exception 'with a hidden photo: % photos, expected 4', v_count; end if;
+	v_cap := v_cap || pg_temp.reserve(u3, v_c2);
+	perform pg_temp.publish_with_files(u3, v_cap[6]);
+	if not pg_temp.exists_photo(v_cap[2]) or pg_temp.queued(v_cap[2]) <> 0 then
+		raise exception 'the hidden photo was replaced';
+	end if;
+	if pg_temp.exists_photo(v_cap[3]) then raise exception 'oldest visible photo kept beside a hidden one'; end if;
+	perform pg_temp.as_user(u3);
+	if public.my_place_photo_count(v_places[6]) <> 3 then raise exception 'hidden photo counted'; end if;
+	if not pg_temp.exists_photo(v_photo) then raise exception 'another user''s photo was replaced'; end if;
 
 	-- ---------------------------------------------------------------------------
 	-- Deletion: own photos only, files queued

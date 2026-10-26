@@ -421,6 +421,7 @@
 	"contribute_add_photo": "Añadir foto",
 	"contribute_photos_hint": "Muestra las mesas y los enchufes. Evita las caras de otras personas.",
 	"contribute_photos_terms": "Al enviar, confirmas que estas fotos son tuyas y que no muestran caras reconocibles, según nuestros Términos.",
+	"contribute_photos_replace": "Tus fotos nuevas sustituirán a las más antiguas de este sitio.",
 	"contribute_photo_alt": "Tu foto {number}",
 	"contribute_photo_remove": "Quitar la foto {number}",
 	"contribute_photo_preparing": "Preparando la foto…",

@@ -4,7 +4,7 @@
 	// files without metadata, src/lib/photos/compress.ts); the form keeps them and uploads them
 	// after the contribution is saved. Under the grid: the hint and what sending confirms.
 	import { onDestroy } from 'svelte';
-	import { PHOTOS_PER_CONTRIBUTION } from '#lib/config.ts';
+	import { PHOTOS_PER_CONTRIBUTION, PHOTOS_PER_USER_PLACE } from '#lib/config.ts';
 	import Icon from '#lib/components/place/Icon.svelte';
 	import { formatNumber } from '#lib/i18n/format.ts';
 	import * as m from '#lib/paraglide/messages.js';
@@ -21,17 +21,23 @@
 		photos: CompressedPhoto[];
 		onadd: (photo: CompressedPhoto) => void;
 		onremove: (id: string) => void;
+		/** The user's visible photos already in this place (0 when signed out). */
+		myPhotosHere?: number;
 		/** A message from the form (e.g. photos that could not be kept across a reload). */
 		notice?: string;
 	};
 
-	let { labelledby, photos, onadd, onremove, notice }: Props = $props();
+	let { labelledby, photos, onadd, onremove, myPhotosHere = 0, notice }: Props = $props();
 
 	const uid = $props.id();
 	let preparing = $state(0);
 	let error = $state<'unreadable' | 'too_many' | 'failed'>();
 
 	const free = $derived(PHOTOS_PER_CONTRIBUTION - photos.length - preparing);
+	/** Only when something will really go: older photos here plus these beyond the limit. */
+	const replacesOlder = $derived(
+		myPhotosHere > 0 && myPhotosHere + photos.length > PHOTOS_PER_USER_PLACE
+	);
 	/** Empty tiles after "Add photo", so the grid always shows three places. */
 	const placeholders = $derived(Math.max(0, free - 1));
 
@@ -130,6 +136,9 @@
 
 {#if error || notice}
 	<p class="error" role="alert">{error ? ERRORS[error]() : notice}</p>
+{/if}
+{#if replacesOlder}
+	<p class="hint">{m.contribute_photos_replace()}</p>
 {/if}
 <p class="hint">{m.contribute_photos_hint()}</p>
 <p class="hint">{m.contribute_photos_terms()}</p>
