@@ -272,7 +272,7 @@
 	"place_closed": "Cerrado",
 	"place_address": "Dirección",
 	"place_osm_data": "Datos del sitio © colaboradores de OpenStreetMap",
-	"place_photo_credit": "Foto: {author} ({source}) · {license}",
+	"place_photo_by": "Foto de {name}",
 	"place_preview": "Vista previa del sitio",
 	"place_how_certification_works": "Cómo funciona la certificación",
 	"action_see_details": "Ver detalles",
@@ -417,6 +417,29 @@
 	"contribute_note": "Nota breve",
 	"contribute_note_placeholder": "p. ej. Las mejores mesas con enchufes están arriba",
 	"contribute_note_count": "{count} / {max}",
+	"contribute_photos": "Fotos",
+	"contribute_add_photo": "Añadir foto",
+	"contribute_photos_hint": "Muestra las mesas y los enchufes. Evita las caras de otras personas.",
+	"contribute_photos_terms": "Al enviar, confirmas que estas fotos son tuyas y que no muestran caras reconocibles, según nuestros Términos.",
+	"contribute_photo_alt": "Tu foto {number}",
+	"contribute_photo_remove": "Quitar la foto {number}",
+	"contribute_photo_preparing": "Preparando la foto…",
+	"contribute_photo_unreadable": "No hemos podido abrir esta foto. Prueba con otra.",
+	"contribute_photos_readd": "Vuelve a añadir tus fotos.",
+	"contribute_photos_too_many": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Puedes añadir hasta {countText} foto.",
+				"countPlural=*": "Puedes añadir hasta {countText} fotos."
+			}
+		}
+	],
 	"action_send_update": "Enviar actualización",
 	"contribute_sending": "Enviando…",
 	"contribute_name_shown": "Tu nombre aparecerá en este sitio",
@@ -442,6 +465,22 @@
 	"thanks_founding_title": "Miembro fundador",
 	"thanks_founding_body": "Eres uno de los primeros {count} usuarios que mapean cafés para trabajar en {city}. La insignia se queda en tu nombre.",
 	"thanks_replaced": "Sustituye tu actualización anterior de este sitio.",
+	"thanks_photos_uploading": "Subiendo las fotos…",
+	"thanks_photos_failed": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} foto no se ha podido subir",
+				"countPlural=*": "{countText} fotos no se han podido subir"
+			}
+		}
+	],
+	"thanks_photos_limit": "Has llegado al límite de fotos de hoy. El resto de tu actualización se ha guardado.",
 	"action_find_another_place": "Buscar otro sitio",
 	"action_back_to_place": "Volver a {place}"
 }

@@ -1,11 +1,13 @@
 /**
  * The contribution form as data (LatteContribute): the answers, how they are prefilled, the
  * laptop rules and details chips, what is still missing, and the draft kept across the Google
- * sign-in and the language reload (stash() in handoff.ts, this tab only).
+ * sign-in and the language reload (stash() in handoff.ts, this tab only). The photos themselves
+ * are kept in IndexedDB (src/lib/photos/stored-photos.ts): the draft only lists their ids.
  * Pure: the database decides everything that counts (submit_contribution).
  */
 import type { LongStays, PlaceDetail } from '#lib/supabase/place-details.ts';
 import type { LaptopRule, Noise, Outlets, Wifi } from '#lib/supabase/places.ts';
+import { PHOTOS_PER_CONTRIBUTION } from '#lib/config.ts';
 
 /** A laptop rule chip: the three rules, or "No rules" on its own. */
 export type RuleChoice = LaptopRule | 'none';
@@ -194,6 +196,8 @@ export type StashedDraft = {
 	pendingSubmit: boolean;
 	/** The user asked for their position (check-in or "I'm here now"). */
 	wantsLocation: boolean;
+	/** Local ids of the chosen photos, in order (the files are in IndexedDB). */
+	photoIds: string[];
 };
 
 const oneOf = <T>(values: readonly T[], value: unknown): T | undefined =>
@@ -245,6 +249,28 @@ export function parseDraft(
 		initial,
 		source,
 		pendingSubmit: value.pendingSubmit === true,
-		wantsLocation: value.wantsLocation === true
+		wantsLocation: value.wantsLocation === true,
+		photoIds: Array.isArray(value.photoIds)
+			? value.photoIds
+					.filter((id): id is string => typeof id === 'string' && PHOTO_ID.test(id))
+					.slice(0, PHOTOS_PER_CONTRIBUTION)
+			: []
 	};
+}
+
+/** crypto.randomUUID(), the local id of a chosen photo. */
+const PHOTO_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+
+/**
+ * The photos of a restored draft: those found in the browser storage, in the draft's order, and
+ * how many are missing (storage unavailable or cleared: the form asks to add them again).
+ */
+export function matchStoredPhotos<T extends { id: string }>(
+	ids: readonly string[],
+	stored: readonly T[]
+): { photos: T[]; missing: number } {
+	const photos = ids
+		.map((id) => stored.find((photo) => photo.id === id))
+		.filter((photo): photo is T => photo !== undefined);
+	return { photos, missing: ids.length - photos.length };
 }

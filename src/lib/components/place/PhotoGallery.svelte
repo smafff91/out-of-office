@@ -1,8 +1,9 @@
 <script lang="ts">
-	// Place photos, whatever their source: each one is credited under it (author, source,
-	// license or permission). With no photos, a placeholder with the kind of place.
-	// No links out to other apps or sites to see more photos.
+	// Place photos, whatever their source: "Photo by {name}" when the author chose to show their
+	// name, nothing otherwise (never a date). With no photos, a placeholder with the kind of
+	// place. The strip uses the 400 px versions. No links out to other apps or sites.
 	import * as m from '#lib/paraglide/messages.js';
+	import { formatNumber } from '#lib/i18n/format.ts';
 	import type { PlacePhoto } from '#lib/places/photos.ts';
 	import AmenityIcon from './AmenityIcon.svelte';
 
@@ -12,11 +13,13 @@
 		name: string;
 		/** 'hero': top of the place page; 'strip': three tiles in the preview. */
 		variant: 'hero' | 'strip';
+		/** How many photos the place has (the strip gets only three): "+N" on the third tile. */
+		total?: number;
 		/** Not checked yet: a dashed placeholder (like the list rows). */
 		muted?: boolean;
 	};
 
-	let { photos, amenity, name, variant, muted = false }: Props = $props();
+	let { photos, amenity, name, variant, muted = false, total = photos.length }: Props = $props();
 
 	let index = $state(0);
 	let scroller = $state<HTMLElement>();
@@ -35,9 +38,9 @@
 	<div class="strip">
 		{#each photos.slice(0, 3) as photo, i (photo.url)}
 			<figure>
-				<img src={photo.url} alt={name} loading="lazy" width={photo.width} height={photo.height} />
-				{#if i === 2 && photos.length > 3}
-					<span class="more">+{photos.length - 3}</span>
+				<img src={photo.thumbUrl} alt={name} loading="lazy" />
+				{#if i === 2 && total > 3}
+					<span class="more">+{formatNumber(total - 3)}</span>
 				{/if}
 			</figure>
 		{/each}
@@ -54,23 +57,9 @@
 						width={photo.width}
 						height={photo.height}
 					/>
-					<figcaption>
-						{#if photo.licenseUrl}
-							<a href={photo.licenseUrl} target="_blank" rel="noopener"
-								>{m.place_photo_credit({
-									author: photo.author,
-									source: photo.source,
-									license: photo.license
-								})}</a
-							>
-						{:else}
-							{m.place_photo_credit({
-								author: photo.author,
-								source: photo.source,
-								license: photo.license
-							})}
-						{/if}
-					</figcaption>
+					{#if photo.author}
+						<figcaption>{m.place_photo_by({ name: photo.author })}</figcaption>
+					{/if}
 				</figure>
 			{/each}
 		</div>
@@ -183,10 +172,6 @@
 		color: var(--bg);
 		font-size: 11px;
 		line-height: 1.4;
-	}
-
-	figcaption a {
-		color: inherit;
 	}
 
 	.count {

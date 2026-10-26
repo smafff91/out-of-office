@@ -6,6 +6,7 @@ import {
 	confirmAll,
 	emptyDraft,
 	firstMissing,
+	matchStoredPhotos,
 	noteLength,
 	parseDraft,
 	prefill,
@@ -55,6 +56,8 @@ function place(overrides: Partial<PlaceDetail> = {}): PlaceDetail {
 		],
 		extras: [],
 		checkin: { radiusM: 100, maxAccuracyM: 100 },
+		photoPaths: [],
+		photoCount: 0,
 		...overrides
 	};
 }
@@ -189,6 +192,10 @@ describe('sameDraft', () => {
 	});
 });
 
+const PHOTO_1 = '0b6c2f8e-4a1d-4c3b-9e2f-1a2b3c4d5e6f';
+const PHOTO_2 = '7f3e9d1c-2b4a-4f6e-8d0c-6e5d4c3b2a19';
+const PHOTO_3 = 'c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f';
+
 describe('parseDraft', () => {
 	const now = Date.UTC(2026, 9, 24, 12);
 	const saved: StashedDraft = {
@@ -199,7 +206,8 @@ describe('parseDraft', () => {
 		initial: prefill(place()).draft,
 		source: 'community',
 		pendingSubmit: true,
-		wantsLocation: true
+		wantsLocation: true,
+		photoIds: [PHOTO_1, PHOTO_2]
 	};
 	const roundTrip = (value: unknown) => JSON.parse(JSON.stringify(value)) as unknown;
 
@@ -239,5 +247,46 @@ describe('parseDraft', () => {
 			extras: [],
 			note: 'a'.repeat(140)
 		});
+	});
+
+	it('keeps the photo ids, at most 3, and drops anything else', () => {
+		const tampered = {
+			...saved,
+			photoIds: [PHOTO_1, 'x', 42, PHOTO_2, '../../etc', PHOTO_3, PHOTO_1]
+		};
+		expect(parseDraft(tampered, { placeId: 'p1', now })?.photoIds).toEqual([
+			PHOTO_1,
+			PHOTO_2,
+			PHOTO_3
+		]);
+	});
+
+	it('a draft saved before photos existed has none', () => {
+		const old: Partial<StashedDraft> = { ...saved };
+		delete old.photoIds;
+		expect(parseDraft(roundTrip(old), { placeId: 'p1', now })?.photoIds).toEqual([]);
+	});
+});
+
+describe('matchStoredPhotos', () => {
+	const stored = [{ id: PHOTO_2 }, { id: PHOTO_1 }, { id: PHOTO_3 }];
+
+	it("gives back the draft's photos in the draft's order", () => {
+		expect(matchStoredPhotos([PHOTO_1, PHOTO_2], stored)).toEqual({
+			photos: [{ id: PHOTO_1 }, { id: PHOTO_2 }],
+			missing: 0
+		});
+	});
+
+	it('counts the photos the browser could not keep', () => {
+		expect(matchStoredPhotos([PHOTO_1, PHOTO_2], [])).toEqual({ photos: [], missing: 2 });
+		expect(matchStoredPhotos([PHOTO_1, PHOTO_2], [{ id: PHOTO_2 }])).toEqual({
+			photos: [{ id: PHOTO_2 }],
+			missing: 1
+		});
+	});
+
+	it('ignores stored photos the draft no longer lists (removed with ×)', () => {
+		expect(matchStoredPhotos([PHOTO_3], stored)).toEqual({ photos: [{ id: PHOTO_3 }], missing: 0 });
 	});
 });

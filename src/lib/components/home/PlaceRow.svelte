@@ -13,6 +13,7 @@
 	import * as m from '#lib/paraglide/messages.js';
 	import type { ListEntry, Sort } from '#lib/places/list.ts';
 	import type { ListItem } from '#lib/supabase/places.ts';
+	import { publicPhotoUrl } from '#lib/supabase/photos.ts';
 
 	type Props = {
 		entry: ListEntry;
@@ -29,6 +30,7 @@
 	let { entry, item, citySlug, sort, showDistance, selected, onselect }: Props = $props();
 
 	const unchecked = $derived(entry.level === 'osm_only');
+	const cover = $derived(item?.coverPath ? publicPhotoUrl('thumb', item.coverPath) : undefined);
 
 	const distance = $derived(showDistance ? distanceLabel(entry.distance) : undefined);
 	const hours = $derived(item ? openingLabel(item.openingHours, item.timezone) : undefined);
@@ -69,9 +71,13 @@
 	data-slug={entry.slug}
 	{onclick}
 >
-	<!-- Photo placeholder (no photo source yet): a cup for cafés, a glass for bars. -->
+	<!-- The latest photo's thumbnail; without photos a cup for cafés, a glass for bars. -->
 	<div class={unchecked ? 'ghost' : 'photo'} aria-hidden="true">
-		<AmenityIcon amenity={item?.amenity ?? null} />
+		{#if cover}
+			<img src={cover} alt="" loading="lazy" />
+		{:else}
+			<AmenityIcon amenity={item?.amenity ?? null} />
+		{/if}
 	</div>
 	<div class="text">
 		<div class="name-row">
@@ -161,6 +167,14 @@
 	.photo {
 		background: var(--photo);
 		color: var(--icon);
+		overflow: hidden;
+	}
+
+	.photo img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
 	}
 
 	.ghost {

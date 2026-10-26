@@ -272,7 +272,7 @@
 	"place_closed": "Tancat",
 	"place_address": "Adreça",
 	"place_osm_data": "Dades del lloc © col·laboradors d'OpenStreetMap",
-	"place_photo_credit": "Foto: {author} ({source}) · {license}",
+	"place_photo_by": "Foto de {name}",
 	"place_preview": "Vista prèvia del lloc",
 	"place_how_certification_works": "Com funciona la certificació",
 	"action_see_details": "Veure detalls",
@@ -417,6 +417,29 @@
 	"contribute_note": "Nota breu",
 	"contribute_note_placeholder": "p. ex. Les millors taules amb endolls són a dalt",
 	"contribute_note_count": "{count} / {max}",
+	"contribute_photos": "Fotos",
+	"contribute_add_photo": "Afegeix una foto",
+	"contribute_photos_hint": "Mostra les taules i els endolls. Evita les cares d'altres persones.",
+	"contribute_photos_terms": "En enviar, confirmes que aquestes fotos són teves i que no hi surten cares reconeixibles, segons les nostres Condicions.",
+	"contribute_photo_alt": "La teva foto {number}",
+	"contribute_photo_remove": "Treu la foto {number}",
+	"contribute_photo_preparing": "Preparant la foto…",
+	"contribute_photo_unreadable": "No hem pogut obrir aquesta foto. Prova'n una altra.",
+	"contribute_photos_readd": "Torna a afegir les fotos.",
+	"contribute_photos_too_many": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Pots afegir fins a {countText} foto.",
+				"countPlural=*": "Pots afegir fins a {countText} fotos."
+			}
+		}
+	],
 	"action_send_update": "Envia l'actualització",
 	"contribute_sending": "Enviant…",
 	"contribute_name_shown": "El teu nom apareixerà en aquest lloc",
@@ -442,6 +465,22 @@
 	"thanks_founding_title": "Membre fundador",
 	"thanks_founding_body": "Ets un dels primers {count} usuaris que mapen cafès per treballar a {city}. La insígnia es queda al teu nom.",
 	"thanks_replaced": "Substitueix la teva actualització anterior d'aquest lloc.",
+	"thanks_photos_uploading": "Pujant les fotos…",
+	"thanks_photos_failed": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} foto no s'ha pogut pujar",
+				"countPlural=*": "{countText} fotos no s'han pogut pujar"
+			}
+		}
+	],
+	"thanks_photos_limit": "Has arribat al límit de fotos d'avui. La resta de l'actualització s'ha desat.",
 	"action_find_another_place": "Busca un altre lloc",
 	"action_back_to_place": "Torna a {place}"
 }

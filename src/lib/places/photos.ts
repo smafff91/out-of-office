@@ -1,19 +1,15 @@
 /**
- * A place photo, whatever its source (our users, our team, an openly licensed archive…).
- * Every photo carries who took it and under which license or permission, shown under it.
- * No source is connected yet: place pages pass an empty list and show the placeholder.
- * Never photos from Google or scraped from other sites.
+ * A place photo, whatever its source. Today: the app's users (src/lib/supabase/photos.ts),
+ * credited only when they chose to show their name. Later sources (our team, feature 9) use the
+ * same shape. Never photos from Google or scraped from other sites.
  */
 export type PlacePhoto = {
+	/** The 1200 px version. */
 	url: string;
+	/** The 400 px version, for tiles and list rows. */
+	thumbUrl: string;
 	width?: number;
 	height?: number;
-	/** Public name of the author, as they agreed to be credited. */
-	author: string;
-	/** Where the photo comes from, e.g. the app's users or an archive name. */
-	source: string;
-	/** License or permission, e.g. "CC BY-SA 4.0" or the terms the uploader accepted. */
-	license: string;
-	/** Page of the license or of the original photo, when there is one. */
-	licenseUrl?: string;
+	/** Public name of the author, only when they chose to show it ("Photo by …"). */
+	author?: string;
 };

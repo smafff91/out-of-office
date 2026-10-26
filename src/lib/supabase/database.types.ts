@@ -14,6 +14,7 @@ export type Database = {
 					checkin_radius_m: number;
 					city_id: string | null;
 					daily_contribution_limit: number;
+					daily_photo_limit: number;
 					founding_limit: number;
 					id: string;
 					manual_recheck_months: number;
@@ -21,6 +22,7 @@ export type Database = {
 					min_score: number;
 					min_span_days: number;
 					min_users: number;
+					photos_per_contribution: number;
 					review_reports_count: number;
 					review_reports_window_days: number;
 					revoke_below_score: number;
@@ -35,6 +37,7 @@ export type Database = {
 					checkin_radius_m: number;
 					city_id?: string | null;
 					daily_contribution_limit?: number;
+					daily_photo_limit?: number;
 					founding_limit?: number;
 					id?: string;
 					manual_recheck_months: number;
@@ -42,6 +45,7 @@ export type Database = {
 					min_score: number;
 					min_span_days: number;
 					min_users: number;
+					photos_per_contribution?: number;
 					review_reports_count: number;
 					review_reports_window_days: number;
 					revoke_below_score: number;
@@ -56,6 +60,7 @@ export type Database = {
 					checkin_radius_m?: number;
 					city_id?: string | null;
 					daily_contribution_limit?: number;
+					daily_photo_limit?: number;
 					founding_limit?: number;
 					id?: string;
 					manual_recheck_months?: number;
@@ -63,6 +68,7 @@ export type Database = {
 					min_score?: number;
 					min_span_days?: number;
 					min_users?: number;
+					photos_per_contribution?: number;
 					review_reports_count?: number;
 					review_reports_window_days?: number;
 					revoke_below_score?: number;
@@ -416,8 +422,10 @@ export type Database = {
 					height: number | null;
 					id: string;
 					place_id: string;
+					published_at: string | null;
 					status: Database['public']['Enums']['photo_status'];
 					storage_path: string;
+					terms_version: string;
 					user_id: string;
 					width: number | null;
 				};
@@ -427,9 +435,11 @@ export type Database = {
 					height?: number | null;
 					id?: string;
 					place_id: string;
+					published_at?: string | null;
 					status?: Database['public']['Enums']['photo_status'];
 					storage_path: string;
-					user_id?: string;
+					terms_version: string;
+					user_id: string;
 					width?: number | null;
 				};
 				Update: {
@@ -438,8 +448,10 @@ export type Database = {
 					height?: number | null;
 					id?: string;
 					place_id?: string;
+					published_at?: string | null;
 					status?: Database['public']['Enums']['photo_status'];
 					storage_path?: string;
+					terms_version?: string;
 					user_id?: string;
 					width?: number | null;
 				};
@@ -701,6 +713,13 @@ export type Database = {
 						referencedColumns: ['id'];
 					},
 					{
+						foreignKeyName: 'reports_photo_id_fkey';
+						columns: ['photo_id'];
+						isOneToOne: false;
+						referencedRelation: 'visible_photos';
+						referencedColumns: ['id'];
+					},
+					{
 						foreignKeyName: 'reports_place_id_fkey';
 						columns: ['place_id'];
 						isOneToOne: false;
@@ -722,6 +741,33 @@ export type Database = {
 						referencedColumns: ['id'];
 					}
 				];
+			};
+			storage_deletions: {
+				Row: {
+					attempts: number;
+					bucket_id: string;
+					claimed_at: string | null;
+					id: number;
+					name: string;
+					queued_at: string;
+				};
+				Insert: {
+					attempts?: number;
+					bucket_id: string;
+					claimed_at?: string | null;
+					id?: never;
+					name: string;
+					queued_at?: string;
+				};
+				Update: {
+					attempts?: number;
+					bucket_id?: string;
+					claimed_at?: string | null;
+					id?: never;
+					name?: string;
+					queued_at?: string;
+				};
+				Relationships: [];
 			};
 		};
 		Views: {
@@ -973,6 +1019,8 @@ export type Database = {
 					opening_hours: string | null;
 					osm_id: number | null;
 					osm_type: Database['public']['Enums']['osm_type'] | null;
+					photo_count: number | null;
+					photo_paths: string[] | null;
 					score_pct: number | null;
 					slug: string | null;
 					timezone: string | null;
@@ -1024,6 +1072,7 @@ export type Database = {
 				Row: {
 					amenity: Database['public']['Enums']['place_amenity'] | null;
 					city_id: string | null;
+					cover_path: string | null;
 					has_score: boolean | null;
 					laptop_rules: string[] | null;
 					lat: number | null;
@@ -1081,6 +1130,32 @@ export type Database = {
 					}
 				];
 			};
+			place_photos: {
+				Row: {
+					credit: string | null;
+					height: number | null;
+					path: string | null;
+					place_id: string | null;
+					sort_order: number | null;
+					width: number | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'photos_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'place_details';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'photos_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'places';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			place_scores: {
 				Row: {
 					place_id: string | null;
@@ -1105,14 +1180,53 @@ export type Database = {
 					}
 				];
 			};
+			visible_photos: {
+				Row: {
+					height: number | null;
+					id: string | null;
+					place_id: string | null;
+					published_at: string | null;
+					storage_path: string | null;
+					user_id: string | null;
+					width: number | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'photos_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'place_details';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'photos_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'places';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'photos_user_id_fkey';
+						columns: ['user_id'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 		};
 		Functions: {
 			assign_place_neighborhoods: { Args: { p_city_id: string }; Returns: Json };
+			can_upload_photo: {
+				Args: { p_bucket: string; p_name: string };
+				Returns: boolean;
+			};
 			city_center_places: {
 				Args: { p_city_id: string; p_limit?: number };
 				Returns: {
 					amenity: Database['public']['Enums']['place_amenity'] | null;
 					city_id: string | null;
+					cover_path: string | null;
 					has_score: boolean | null;
 					laptop_rules: string[] | null;
 					lat: number | null;
@@ -1145,6 +1259,7 @@ export type Database = {
 					checkin_radius_m: number;
 					city_id: string | null;
 					daily_contribution_limit: number;
+					daily_photo_limit: number;
 					founding_limit: number;
 					id: string;
 					manual_recheck_months: number;
@@ -1152,6 +1267,7 @@ export type Database = {
 					min_score: number;
 					min_span_days: number;
 					min_users: number;
+					photos_per_contribution: number;
 					review_reports_count: number;
 					review_reports_window_days: number;
 					revoke_below_score: number;
@@ -1168,13 +1284,43 @@ export type Database = {
 					isSetofReturn: false;
 				};
 			};
+			claim_storage_deletions: {
+				Args: { p_limit?: number };
+				Returns: {
+					bucket_id: string;
+					id: number;
+					name: string;
+				}[];
+			};
+			cleanup_pending_photos: { Args: never; Returns: number };
+			configure_storage_cleanup: {
+				Args: { p_secret: string; p_url: string };
+				Returns: undefined;
+			};
+			delete_my_photo: { Args: { p_photo_id: string }; Returns: boolean };
+			finish_storage_deletions: { Args: { p_ids: number[] }; Returns: number };
 			import_osm_boundaries: {
 				Args: { p_areas: Json; p_city_id: string; p_city_lines: Json };
 				Returns: Json;
 			};
 			is_admin: { Args: never; Returns: boolean };
 			is_api_caller: { Args: never; Returns: boolean };
+			list_place_photos: {
+				Args: { p_city_slug: string; p_place_slug: string };
+				Returns: {
+					created_at: string;
+					display_name: string;
+					id: string;
+					published: boolean;
+					status: Database['public']['Enums']['photo_status'];
+					storage_path: string;
+				}[];
+			};
 			locate_city: { Args: { p_lat: number; p_lng: number }; Returns: string };
+			moderate_photo: {
+				Args: { p_action: string; p_photo_id: string };
+				Returns: string;
+			};
 			my_recent_contribution: {
 				Args: { p_place_id: string };
 				Returns: {
@@ -1188,6 +1334,16 @@ export type Database = {
 					wifi: Database['public']['Enums']['wifi_level'];
 					would_work_again: boolean;
 				}[];
+			};
+			publish_photo: { Args: { p_photo_id: string }; Returns: boolean };
+			reserve_photo: {
+				Args: {
+					p_contribution_id: string;
+					p_height: number;
+					p_terms_version: string;
+					p_width: number;
+				};
+				Returns: Json;
 			};
 			reset_founding_contributors: {
 				Args: { p_city_id: string };

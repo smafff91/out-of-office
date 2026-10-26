@@ -138,7 +138,7 @@ place_hours,Opening hours,Horario,to review,Horari,to review
 place_closed,Closed,Cerrado,to review,Tancat,to review
 place_address,Address,Dirección,to review,Adreça,to review
 place_osm_data,Place data © OpenStreetMap contributors,Datos del sitio © colaboradores de OpenStreetMap,to review,Dades del lloc © col·laboradors d'OpenStreetMap,to review
-place_photo_credit,Photo: {author} ({source}) · {license},Foto: {author} ({source}) · {license},to review,Foto: {author} ({source}) · {license},to review
+place_photo_by,Photo by {name},Foto de {name},to review,Foto de {name},to review
 place_preview,Place preview,Vista previa del sitio,to review,Vista prèvia del lloc,to review
 place_how_certification_works,How certification works,Cómo funciona la certificación,to review,Com funciona la certificació,to review
 action_see_details,See details,Ver detalles,to review,Veure detalls,to review
@@ -259,6 +259,17 @@ contribute_time_limit_label,How long?,¿Cuánto tiempo?,to review,Quant de temps
 contribute_note,Short note,Nota breve,to review,Nota breu,to review
 contribute_note_placeholder,e.g. Best tables with outlets are upstairs,p. ej. Las mejores mesas con enchufes están arriba,to review,p. ex. Les millors taules amb endolls són a dalt,to review
 contribute_note_count,{count} / {max},{count} / {max},to review,{count} / {max},to review
+contribute_photos,Photos,Fotos,to review,Fotos,to review
+contribute_add_photo,Add photo,Añadir foto,to review,Afegeix una foto,to review
+contribute_photos_hint,Show tables and outlets. Please avoid other people's faces.,Muestra las mesas y los enchufes. Evita las caras de otras personas.,to review,Mostra les taules i els endolls. Evita les cares d'altres persones.,to review
+contribute_photos_terms,"By sending, you confirm these photos are yours and show no recognizable faces, as set out in our Terms.","Al enviar, confirmas que estas fotos son tuyas y que no muestran caras reconocibles, según nuestros Términos.",to review,"En enviar, confirmes que aquestes fotos són teves i que no hi surten cares reconeixibles, segons les nostres Condicions.",to review
+contribute_photo_alt,Your photo {number},Tu foto {number},to review,La teva foto {number},to review
+contribute_photo_remove,Remove photo {number},Quitar la foto {number},to review,Treu la foto {number},to review
+contribute_photo_preparing,Preparing photo…,Preparando la foto…,to review,Preparant la foto…,to review
+contribute_photo_unreadable,We couldn't open this photo. Try another one.,No hemos podido abrir esta foto. Prueba con otra.,to review,No hem pogut obrir aquesta foto. Prova'n una altra.,to review
+contribute_photos_readd,Please add your photos again.,Vuelve a añadir tus fotos.,to review,Torna a afegir les fotos.,to review
+contribute_photos_too_many [countPlural=one],You can add up to {countText} photo.,Puedes añadir hasta {countText} foto.,to review,Pots afegir fins a {countText} foto.,to review
+contribute_photos_too_many [countPlural=*],You can add up to {countText} photos.,Puedes añadir hasta {countText} fotos.,to review,Pots afegir fins a {countText} fotos.,to review
 action_send_update,Send update,Enviar actualización,to review,Envia l'actualització,to review
 contribute_sending,Sending…,Enviando…,to review,Enviant…,to review
 contribute_name_shown,Your first name will appear on this place,Tu nombre aparecerá en este sitio,to review,El teu nom apareixerà en aquest lloc,to review
@@ -284,5 +295,9 @@ thanks_just_now,just now,ahora mismo,to review,ara mateix,to review
 thanks_founding_title,Founding contributor,Miembro fundador,to review,Membre fundador,to review
 thanks_founding_body,You're one of the first {count} users mapping work-friendly cafés in {city}. The badge stays on your name.,Eres uno de los primeros {count} usuarios que mapean cafés para trabajar en {city}. La insignia se queda en tu nombre.,to review,Ets un dels primers {count} usuaris que mapen cafès per treballar a {city}. La insígnia es queda al teu nom.,to review
 thanks_replaced,This replaces your previous update for this place.,Sustituye tu actualización anterior de este sitio.,to review,Substitueix la teva actualització anterior d'aquest lloc.,to review
+thanks_photos_uploading,Uploading photos…,Subiendo las fotos…,to review,Pujant les fotos…,to review
+thanks_photos_failed [countPlural=one],{countText} photo couldn't be uploaded,{countText} foto no se ha podido subir,to review,{countText} foto no s'ha pogut pujar,to review
+thanks_photos_failed [countPlural=*],{countText} photos couldn't be uploaded,{countText} fotos no se han podido subir,to review,{countText} fotos no s'han pogut pujar,to review
+thanks_photos_limit,You've reached today's photo limit. The rest of your update was saved.,Has llegado al límite de fotos de hoy. El resto de tu actualización se ha guardado.,to review,Has arribat al límit de fotos d'avui. La resta de l'actualització s'ha desat.,to review
 action_find_another_place,Find another place,Buscar otro sitio,to review,Busca un altre lloc,to review
 action_back_to_place,Back to {place},Volver a {place},to review,Torna a {place},to review

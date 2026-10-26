@@ -7,6 +7,9 @@
 	//   a language change (stash), and the sending carries on once signed in.
 	// - The position is asked when the form opens for a check-in or on "I'm here now", and read
 	//   again, fresh, when sending. The database alone decides whether the check-in counts.
+	// - Photos are compressed when chosen and kept in IndexedDB (stored-photos.ts) so they also
+	//   survive the reloads; they are uploaded once the contribution is saved, and a failed
+	//   upload never loses it (the thanks screen offers to try again).
 	import { onMount, tick, untrack } from 'svelte';
 	import { beforeNavigate, goto, invalidate } from '$app/navigation';
 	import { page } from '$app/state';
@@ -26,6 +29,7 @@
 		confirmAll,
 		draftKey,
 		firstMissing,
+		matchStoredPhotos,
 		noteLength,
 		parseDraft,
 		prefill,
@@ -41,6 +45,14 @@
 	} from '#lib/contribute/draft.ts';
 	import { contributeErrorKind, type ContributeErrorKind } from '#lib/contribute/errors.ts';
 	import { notifyPlaceUpdated } from '#lib/contribute/updates.ts';
+	import { PHOTOS_PER_CONTRIBUTION } from '#lib/config.ts';
+	import type { CompressedPhoto } from '#lib/photos/compress.ts';
+	import {
+		clearPhotos,
+		loadPhotos,
+		pruneStoredPhotos,
+		savePhotos
+	} from '#lib/photos/stored-photos.ts';
 	import NameChoice from '#lib/components/auth/NameChoice.svelte';
 	import Icon from '#lib/components/place/Icon.svelte';
 	import {
@@ -71,10 +83,12 @@
 		invalidatePlaceDetail,
 		type PlaceDetail
 	} from '#lib/supabase/place-details.ts';
+	import { newUploads, uploadPhotos, type PhotoUpload } from '#lib/supabase/photos.ts';
 	import { fetchMyProfile } from '#lib/supabase/profile.ts';
 	import Segmented from './Segmented.svelte';
 	import ChipGroup from './ChipGroup.svelte';
 	import LocationBox from './LocationBox.svelte';
+	import PhotoPicker from './PhotoPicker.svelte';
 	import ThanksView from './ThanksView.svelte';
 
 	type Props = {
@@ -121,8 +135,15 @@
 	let ownChecked = false;
 	let root = $state<HTMLElement>();
 	let bottom = $state<HTMLElement>();
+	/** Raw: Blobs inside, nothing to track deeply. */
+	let photos = $state.raw<CompressedPhoto[]>([]);
+	/** Photos of a restored draft that the browser could not keep. */
+	let photosNotice = $state<string>();
+	let uploads = $state.raw<PhotoUpload[]>([]);
+	let uploading = $state(false);
 
-	const dirty = $derived(!sameDraft(draft, initial));
+	// Photos count as changes too.
+	const dirty = $derived(!sameDraft(draft, initial) || photos.length > 0);
 	const showConfirmAll = $derived(source !== 'none' && canConfirmAll(initial));
 	const nameLine = $derived(
 		session.profile?.showName === true
@@ -221,6 +242,27 @@
 		draft = { ...draft, note: input.value };
 	}
 
+	/** Saves one after the other, so a quick add then remove cannot land in the wrong order. */
+	let saving = Promise.resolve();
+	function setPhotos(next: CompressedPhoto[]) {
+		photos = next;
+		photosNotice = undefined;
+		saving = saving.then(() => savePhotos(place.id, next).then(() => {}));
+	}
+
+	/** After the contribution is saved: uploads what is left (also "Try again"). */
+	async function sendPhotos() {
+		if (!result || uploading) return;
+		uploading = true;
+		uploads = await uploadPhotos(createSupabaseClient(), result.id, uploads);
+		uploading = false;
+		if (uploads.some((upload) => upload.state === 'done')) {
+			invalidatePlaceDetail(city.id, place.slug);
+			notifyPlaceUpdated(place.slug);
+			void invalidate(PLACE_DEPENDENCY);
+		}
+	}
+
 	async function everythingStillRight() {
 		draft = confirmAll(draft, initial);
 		missing = undefined;
@@ -309,6 +351,14 @@
 
 		sent = draft as CompleteDraft;
 		step = 'thanks';
+		// Beyond today's slots the database would refuse them anyway: no request for those.
+		const slots = result.photoSlots;
+		uploads = newUploads(photos).map((upload, i) =>
+			i < slots ? upload : { ...upload, state: 'limit' }
+		);
+		photos = [];
+		void clearPhotos(place.id);
+		void sendPhotos();
 		invalidatePlaceDetail(city.id, place.slug);
 		notifyPlaceUpdated(place.slug);
 		void invalidate(PLACE_DEPENDENCY);
@@ -323,6 +373,13 @@
 		initial = saved.initial;
 		source = saved.source;
 		wantsLocation ||= saved.wantsLocation;
+		if (saved.photoIds.length > 0) {
+			void loadPhotos(place.id).then((stored) => {
+				const kept = matchStoredPhotos(saved.photoIds, stored);
+				photos = [...kept.photos, ...photos].slice(0, PHOTOS_PER_CONTRIBUTION);
+				if (kept.missing > 0) photosNotice = m.contribute_photos_readd();
+			});
+		}
 		if (saved.pendingSubmit) {
 			sheetShown = true;
 			awaitingSignIn = true;
@@ -353,6 +410,9 @@
 		root?.scrollIntoView({ block: 'start' });
 		const saved = parseDraft(takeStash(draftKey(place.id)), { placeId: place.id });
 		if (saved) restore(saved);
+		// Photos left by a draft that is not coming back (tab closed, another visit).
+		else void clearPhotos(place.id);
+		void pruneStoredPhotos();
 		if (wantsLocation) void locate();
 
 		return onBeforeLeave(() => {
@@ -367,7 +427,8 @@
 				initial: $state.snapshot(initial),
 				source,
 				pendingSubmit: awaitingSignIn,
-				wantsLocation
+				wantsLocation,
+				photoIds: photos.map((photo) => photo.id)
 			} satisfies StashedDraft);
 		});
 	});
@@ -395,6 +456,7 @@
 	 */
 	function discard() {
 		discarded = true;
+		void clearPhotos(place.id);
 		const target = pendingNavigation;
 		pendingNavigation = undefined;
 		const onDialogEntry = page.state.sheet === 'discard-draft';
@@ -430,6 +492,9 @@
 			{result}
 			{mapHref}
 			{placeHref}
+			{uploads}
+			{uploading}
+			onretry={() => void sendPhotos()}
 		/>
 	{:else}
 		<header class="top">
@@ -544,6 +609,17 @@
 					options={extraOptions}
 					selected={draft.extras}
 					ontoggle={(extra: Extra) => (draft = toggleExtra(draft, extra))}
+				/>
+			</section>
+
+			<section class="q">
+				<div class="ql"><h2 id="{uid}-photos">{m.contribute_photos()}</h2></div>
+				<PhotoPicker
+					labelledby="{uid}-photos"
+					{photos}
+					notice={photosNotice}
+					onadd={(photo) => setPhotos([...photos, photo])}
+					onremove={(id) => setPhotos(photos.filter((photo) => photo.id !== id))}
 				/>
 			</section>
 

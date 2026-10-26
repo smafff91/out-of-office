@@ -54,8 +54,9 @@ export default defineConfig(
 				},
 				{
 					selector:
-						'Identifier[name=/^(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET|RESEND_API_KEY|SEND_EMAIL_HOOK_SECRET)$/], Literal[value=/SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET|RESEND_API_KEY|SEND_EMAIL_HOOK_SECRET/]',
-					message: 'Sign-in secrets are for `supabase config push` only, never for the site.'
+						'Identifier[name=/^(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET|RESEND_API_KEY|SEND_EMAIL_HOOK_SECRET|STORAGE_CLEANUP_SECRET)$/], Literal[value=/SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET|RESEND_API_KEY|SEND_EMAIL_HOOK_SECRET|STORAGE_CLEANUP_SECRET/]',
+					message:
+						'Function and sign-in secrets are for the CLI and the scripts only, never for the site.'
 				}
 			]
 		}

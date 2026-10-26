@@ -1,6 +1,8 @@
 # platform
 
-Adapters for device features: geolocation, camera/photo upload, sharing, opening external apps.
+Adapters for device features: geolocation, choosing photos (`photos.ts`), sharing, opening external
+apps. Compressing and uploading photos is plain web code (`src/lib/photos/`, `src/lib/supabase/photos.ts`)
+and works the same in the app.
 
 Today they wrap browser APIs; after launch they will wrap Capacitor plugins with the same interface.
 Components never call these APIs directly: they import from here.

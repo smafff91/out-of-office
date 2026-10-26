@@ -2,7 +2,9 @@
  * Sends the secrets of the send-email Edge Function to the linked project, with
  * `npx supabase secrets set`, without ever printing a value (only names).
  *
- *   npm run functions:secrets
+ *   npm run functions:secrets            the linked (development) project, values from .env
+ *   npm run functions:secrets -- --prod  production (PROD_PROJECT_REF), values from .env.production,
+ *                                        without linking the folder to it
  *
  * Reads SEND_EMAIL_HOOK_SECRET, RESEND_API_KEY and EMAIL_FROM from .env. What is missing:
  * - SEND_EMAIL_HOOK_SECRET: generated (v1,whsec_ + 32 random bytes in base64) and added to .env,
@@ -17,9 +19,10 @@ import { spawnSync } from 'node:child_process';
 import { appendFile, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { parseEnv } from 'node:util';
+import { parseArgs, parseEnv } from 'node:util';
 
-const ENV_FILE = '.env';
+const { values: args } = parseArgs({ options: { prod: { type: 'boolean', default: false } } });
+const ENV_FILE = args.prod ? '.env.production' : '.env';
 const DEV_SENDER = 'Out of Office <onboarding@resend.dev>';
 const FUNCTION_SECRETS = ['SEND_EMAIL_HOOK_SECRET', 'RESEND_API_KEY', 'EMAIL_FROM'] as const;
 
@@ -32,10 +35,14 @@ const envText = await readFile(ENV_FILE, 'utf8').catch(() => fail(`${ENV_FILE} n
 const env = parseEnv(envText) as Record<string, string | undefined>;
 const value = (name: string) => env[name]?.trim() || undefined;
 
-const linkedRef = await readFile('supabase/.temp/project-ref', 'utf8')
-	.then((ref) => ref.trim())
-	.catch(() => fail('No linked project (supabase/.temp/project-ref): run `npx supabase link`.'));
-const isDev = linkedRef === value('DEV_PROJECT_REF');
+const linkedRef = args.prod
+	? (value('PROD_PROJECT_REF') ?? fail(`Missing PROD_PROJECT_REF in ${ENV_FILE}.`))
+	: await readFile('supabase/.temp/project-ref', 'utf8')
+			.then((ref) => ref.trim())
+			.catch(() =>
+				fail('No linked project (supabase/.temp/project-ref): run `npx supabase link`.')
+			);
+const isDev = !args.prod && linkedRef === value('DEV_PROJECT_REF');
 
 /** Lines to add to .env, written before anything is sent. */
 const additions: [string, string][] = [];
@@ -50,7 +57,7 @@ if (!value('SEND_EMAIL_HOOK_URI')) {
 	const url = value('PUBLIC_SUPABASE_URL') ?? fail(`Missing PUBLIC_SUPABASE_URL in ${ENV_FILE}.`);
 	const host = new URL(url).hostname;
 	if (host !== `${linkedRef}.supabase.co`) {
-		fail(`PUBLIC_SUPABASE_URL is not the linked project (${linkedRef}): nothing changed.`);
+		fail(`PUBLIC_SUPABASE_URL is not the target project (${linkedRef}): nothing changed.`);
 	}
 	additions.push(['SEND_EMAIL_HOOK_URI', `https://${host}/functions/v1/send-email`]);
 }
@@ -84,9 +91,11 @@ try {
 		{ mode: 0o600 }
 	);
 	console.log(`→ ${FUNCTION_SECRETS.join(', ')} on ${linkedRef}`);
-	const result = spawnSync('npx', ['supabase', 'secrets', 'set', '--env-file', file], {
-		stdio: 'inherit'
-	});
+	const result = spawnSync(
+		'npx',
+		['supabase', 'secrets', 'set', '--env-file', file, '--project-ref', linkedRef],
+		{ stdio: 'inherit' }
+	);
 	if (result.status !== 0) {
 		process.exitCode = 1;
 		console.error('\n✖ supabase secrets set failed: nothing else changed on the project.');

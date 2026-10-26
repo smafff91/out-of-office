@@ -48,7 +48,9 @@ insert into public.certification_settings (
 	score_min_votes,
 	checkin_max_accuracy_m,
 	daily_contribution_limit,
-	founding_limit
+	founding_limit,
+	photos_per_contribution,
+	daily_photo_limit
 )
-values (null, 10, 0.50, 14, 0.75, 0.60, 10, 12, 2, 30, 12, 30, 100, 5, 100, 20, 50)
+values (null, 10, 0.50, 14, 0.75, 0.60, 10, 12, 2, 30, 12, 30, 100, 5, 100, 20, 50, 3, 15)
 on conflict (city_id) do nothing;

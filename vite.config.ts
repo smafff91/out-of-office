@@ -12,6 +12,9 @@ export default defineConfig({
 	define: {
 		__BUILD_TARGET__: JSON.stringify(target)
 	},
+	// The WebP encoder for Safari loads its WebAssembly file relative to itself: pre-bundling in
+	// dev would move the module away from it (src/lib/photos/compress.ts).
+	optimizeDeps: { exclude: ['@jsquash/webp'] },
 	// MapLibre's worker is an ES module that imports shared code (src/lib/map/engine.ts).
 	worker: { format: 'es' },
 	// Build outputs live inside the project: a build next to a running dev server must not

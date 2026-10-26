@@ -3,6 +3,7 @@
  * Only the rows on screen are fetched; ordering by distance happens in the browser.
  */
 import type { LngLat, PlaceLevel } from '#lib/map/index.ts';
+import { isPhotoPath } from '#lib/photos/urls.ts';
 import type { createSupabaseClient } from './client.ts';
 import type { Database } from './database.types.ts';
 
@@ -33,6 +34,8 @@ export type ListItem = {
 	outlets: Outlets | null;
 	noise: Noise | null;
 	laptopRules: LaptopRule[];
+	/** The latest visible photo (its thumbnail is the row's cover), or null. */
+	coverPath: string | null;
 };
 
 export type RankedPlace = {
@@ -43,7 +46,7 @@ export type RankedPlace = {
 };
 
 const ITEM_COLUMNS =
-	'slug, name, level, amenity, lng, lat, neighborhood, opening_hours, timezone, votes, yes_votes, score_pct, has_score, wifi, outlets, noise, laptop_rules';
+	'slug, name, level, amenity, lng, lat, neighborhood, opening_hours, timezone, votes, yes_votes, score_pct, has_score, wifi, outlets, noise, laptop_rules, cover_path';
 /** Rows per request: one page of the list. */
 export const PAGE_SIZE = 20;
 
@@ -64,7 +67,8 @@ export function toListItem(row: Omit<ItemRow, 'city_id'>): ListItem {
 		wifi: row.wifi as Wifi | null,
 		outlets: row.outlets as Outlets | null,
 		noise: row.noise as Noise | null,
-		laptopRules: (row.laptop_rules ?? []) as LaptopRule[]
+		laptopRules: (row.laptop_rules ?? []) as LaptopRule[],
+		coverPath: isPhotoPath(row.cover_path) ? row.cover_path : null
 	};
 }
 

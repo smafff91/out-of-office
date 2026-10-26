@@ -272,7 +272,7 @@
 	"place_closed": "Closed",
 	"place_address": "Address",
 	"place_osm_data": "Place data © OpenStreetMap contributors",
-	"place_photo_credit": "Photo: {author} ({source}) · {license}",
+	"place_photo_by": "Photo by {name}",
 	"place_preview": "Place preview",
 	"place_how_certification_works": "How certification works",
 	"action_see_details": "See details",
@@ -417,6 +417,29 @@
 	"contribute_note": "Short note",
 	"contribute_note_placeholder": "e.g. Best tables with outlets are upstairs",
 	"contribute_note_count": "{count} / {max}",
+	"contribute_photos": "Photos",
+	"contribute_add_photo": "Add photo",
+	"contribute_photos_hint": "Show tables and outlets. Please avoid other people's faces.",
+	"contribute_photos_terms": "By sending, you confirm these photos are yours and show no recognizable faces, as set out in our Terms.",
+	"contribute_photo_alt": "Your photo {number}",
+	"contribute_photo_remove": "Remove photo {number}",
+	"contribute_photo_preparing": "Preparing photo…",
+	"contribute_photo_unreadable": "We couldn't open this photo. Try another one.",
+	"contribute_photos_readd": "Please add your photos again.",
+	"contribute_photos_too_many": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "You can add up to {countText} photo.",
+				"countPlural=*": "You can add up to {countText} photos."
+			}
+		}
+	],
 	"action_send_update": "Send update",
 	"contribute_sending": "Sending…",
 	"contribute_name_shown": "Your first name will appear on this place",
@@ -442,6 +465,22 @@
 	"thanks_founding_title": "Founding contributor",
 	"thanks_founding_body": "You're one of the first {count} users mapping work-friendly cafés in {city}. The badge stays on your name.",
 	"thanks_replaced": "This replaces your previous update for this place.",
+	"thanks_photos_uploading": "Uploading photos…",
+	"thanks_photos_failed": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} photo couldn't be uploaded",
+				"countPlural=*": "{countText} photos couldn't be uploaded"
+			}
+		}
+	],
+	"thanks_photos_limit": "You've reached today's photo limit. The rest of your update was saved.",
 	"action_find_another_place": "Find another place",
 	"action_back_to_place": "Back to {place}"
 }

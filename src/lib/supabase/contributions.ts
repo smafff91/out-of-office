@@ -27,6 +27,10 @@ export type SubmitResult = {
 	confirmations: { wifi: number; outlets: number; noise: number; longStays: number };
 	contributors: number;
 	minUsers: number;
+	/** The new contribution: its photos are uploaded with it (src/lib/supabase/photos.ts). */
+	id: string;
+	/** Photos this update can still take today (3 at most). */
+	photoSlots: number;
 };
 
 /** A complete draft (firstMissing() is undefined). */
@@ -77,7 +81,9 @@ export async function submitContribution(
 			longStays: confirmations.long_stays ?? 1
 		},
 		contributors: Number(result.contributors ?? 1),
-		minUsers: Number(result.min_users ?? 10)
+		minUsers: Number(result.min_users ?? 10),
+		id: String(result.id ?? ''),
+		photoSlots: Number(result.photo_slots ?? 0)
 	};
 }
 

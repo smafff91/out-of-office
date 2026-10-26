@@ -423,6 +423,12 @@ deno_version = 2
 verify_jwt = false
 import_map = "./functions/send-email/deno.json"
 
+# Called by pg_cron without a user token: the shared secret in x-cleanup-secret checks the caller
+# (`npm run photos -- --setup-cleanup`).
+[functions.storage-cleanup]
+verify_jwt = false
+import_map = "./functions/storage-cleanup/deno.json"
+
 [analytics]
 enabled = true
 port = 54327
@@ -450,3 +456,17 @@ enabled = true
 # formatted with uppercase keywords, indent 2, max width 180, trailing commas,
 # and column/key alignment. Set to "null" to emit raw, unformatted SQL.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":180,\"commaStyle\":\"trailing\"}"
+
+# Production (launch checklist in CLAUDE.md): this folder is never linked to it. Uncomment and
+# put the production project ref (not a secret) in project_id: `npm run prod -- config-push`
+# (config push --project-ref) then applies these values over the development ones above. The
+# env(...) values (Google, Resend, hook) come from .env.production, loaded by that script.
+# [remotes.production]
+# project_id = "<production-project-ref>"
+#
+# [remotes.production.auth]
+# site_url = "https://<domain>"
+# additional_redirect_urls = ["https://<domain>/**"]
+#
+# [remotes.production.auth.email.smtp]
+# admin_email = "hello@<domain>"

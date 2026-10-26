@@ -3,6 +3,9 @@
  * Only aggregates: counts, prevailing values and days in the city's timezone.
  */
 import type { LngLat, PlaceFeature, PlaceLevel } from '#lib/map/index.ts';
+import type { PlacePhoto } from '#lib/places/photos.ts';
+import { isPhotoPath } from '#lib/photos/urls.ts';
+import { publicPhotoUrl } from './photos.ts';
 import type { createSupabaseClient } from './client.ts';
 import type { Database } from './database.types.ts';
 import type { LaptopRule, Noise, Outlets, Wifi } from './places.ts';
@@ -74,13 +77,18 @@ export type PlaceDetail = {
 	extras: ConfirmedExtra[];
 	/** Check-in thresholds, only to show the distance in the form (the database decides). */
 	checkin: { radiusM: number; maxAccuracyM: number };
-	/** Public names and notes: the place page only (fetchPlaceCommunity). */
+	/** The latest visible photos (3 at most, newest first), for the preview strip. */
+	photoPaths: string[];
+	/** Visible photos in the gallery (12 at most), for "+N". */
+	photoCount: number;
+	/** Public names, notes and the gallery: the place page only (fetchPlaceCommunity). */
 	contributorNames?: string[];
 	notes?: PlaceNote[];
+	photos?: PlacePhoto[];
 };
 
 const COLUMNS =
-	'id, slug, name, amenity, level, cert_origin, certified_on, neighborhood, district, address, lng, lat, opening_hours, timezone, internet_access_osm, osm_type, osm_id, may_have_closed, votes, yes_votes, score_pct, has_score, contributors, min_users, attributes, laptop_rules, extras, checkin_radius_m, checkin_max_accuracy_m';
+	'id, slug, name, amenity, level, cert_origin, certified_on, neighborhood, district, address, lng, lat, opening_hours, timezone, internet_access_osm, osm_type, osm_id, may_have_closed, votes, yes_votes, score_pct, has_score, contributors, min_users, attributes, laptop_rules, extras, checkin_radius_m, checkin_max_accuracy_m, photo_paths, photo_count';
 
 /** Contributions change slowly: a preview opened a minute ago is fresh enough for its page. */
 const CACHE_MS = 60_000;
@@ -153,7 +161,9 @@ export function toPlaceDetail(row: Omit<DetailRow, 'city_id'>): PlaceDetail {
 		checkin: {
 			radiusM: row.checkin_radius_m ?? 100,
 			maxAccuracyM: row.checkin_max_accuracy_m ?? 100
-		}
+		},
+		photoPaths: (row.photo_paths ?? []).filter(isPhotoPath),
+		photoCount: row.photo_count ?? 0
 	};
 }
 
@@ -191,27 +201,55 @@ export function invalidatePlaceDetail(cityId: string, slug: string) {
 	cache.delete(`${cityId}/${slug}`);
 }
 
-/** Public names ("Shared by …") and notes of a place, for its page. */
+/** A photo of place_photos, with its two public addresses. */
+export function toPlacePhoto(row: {
+	path: string | null;
+	width: number | null;
+	height: number | null;
+	credit: string | null;
+}): PlacePhoto | undefined {
+	if (!isPhotoPath(row.path)) return undefined;
+	const url = publicPhotoUrl('large', row.path);
+	const thumbUrl = publicPhotoUrl('thumb', row.path);
+	if (!url || !thumbUrl) return undefined;
+	return {
+		url,
+		thumbUrl,
+		width: row.width ?? undefined,
+		height: row.height ?? undefined,
+		...(row.credit && { author: row.credit })
+	};
+}
+
+/** Public names ("Shared by …"), notes and photos of a place, for its page. */
 export async function fetchPlaceCommunity(
 	supabase: Client,
 	placeId: string
-): Promise<{ contributorNames: string[]; notes: PlaceNote[] }> {
-	const [names, notes] = await Promise.all([
+): Promise<{ contributorNames: string[]; notes: PlaceNote[]; photos: PlacePhoto[] }> {
+	const [names, notes, photos] = await Promise.all([
 		supabase.from('place_contributors').select('display_name').eq('place_id', placeId),
 		supabase
 			.from('place_notes')
 			.select('note, created_month')
 			.eq('place_id', placeId)
 			.order('created_month', { ascending: false })
-			.limit(20)
+			.limit(20),
+		// The 12 latest visible photos (the view keeps no more), newest first.
+		supabase
+			.from('place_photos')
+			.select('path, width, height, credit')
+			.eq('place_id', placeId)
+			.order('sort_order')
 	]);
 	if (names.error) throw new Error(names.error.message);
 	if (notes.error) throw new Error(notes.error.message);
+	if (photos.error) throw new Error(photos.error.message);
 	return {
 		contributorNames: names.data.flatMap((row) => (row.display_name ? [row.display_name] : [])),
 		notes: notes.data.flatMap((row) =>
 			row.note && row.created_month ? [{ note: row.note, month: row.created_month }] : []
-		)
+		),
+		photos: photos.data.flatMap((row) => toPlacePhoto(row) ?? [])
 	};
 }
 

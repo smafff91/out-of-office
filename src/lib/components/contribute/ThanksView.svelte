@@ -1,6 +1,8 @@
 <script lang="ts">
 	// After an update (LatteThanks): the answers just sent with their confirmations, the
 	// Founding contributor badge if it came with this update, and the way to certification.
+	// Photos are uploaded while this shows: "Uploading photos…", then the ones that failed with
+	// "Try again" (the update itself is already saved).
 	import type { Draft } from '#lib/contribute/draft.ts';
 	import CertificationProgress from '#lib/components/place/CertificationProgress.svelte';
 	import Icon from '#lib/components/place/Icon.svelte';
@@ -8,6 +10,7 @@
 	import { formatNumber } from '#lib/i18n/format.ts';
 	import * as m from '#lib/paraglide/messages.js';
 	import type { CompleteDraft, SubmitResult } from '#lib/supabase/contributions.ts';
+	import type { PhotoUpload } from '#lib/supabase/photos.ts';
 
 	type Props = {
 		placeName: string;
@@ -18,9 +21,26 @@
 		result: SubmitResult;
 		mapHref: string;
 		placeHref: string;
+		uploads: PhotoUpload[];
+		uploading: boolean;
+		onretry: () => void;
 	};
 
-	let { placeName, cityName, name, draft, result, mapHref, placeHref }: Props = $props();
+	let {
+		placeName,
+		cityName,
+		name,
+		draft,
+		result,
+		mapHref,
+		placeHref,
+		uploads,
+		uploading,
+		onretry
+	}: Props = $props();
+
+	const failed = $derived(uploads.filter((upload) => upload.state === 'failed').length);
+	const overLimit = $derived(uploads.some((upload) => upload.state === 'limit'));
 
 	const rows = $derived([
 		{ key: 'wifi', text: ATTRIBUTE_PILLS.wifi[draft.wifi](), count: result.confirmations.wifi },
@@ -53,6 +73,26 @@
 			<p class="replaced">{m.thanks_replaced()}</p>
 		{/if}
 	</div>
+
+	{#if uploads.length > 0}
+		<div class="photos" role="status">
+			{#if uploading}
+				<p>{m.thanks_photos_uploading()}</p>
+			{:else}
+				{#if failed > 0}
+					<p class="failed">
+						{m.thanks_photos_failed({ count: failed })} ·
+						<button class="retry tap-target" type="button" onclick={onretry}>
+							{m.action_try_again()}
+						</button>
+					</p>
+				{/if}
+				{#if overLimit}
+					<p>{m.thanks_photos_limit()}</p>
+				{/if}
+			{/if}
+		</div>
+	{/if}
 
 	<ul class="rows">
 		{#each rows as row (row.key)}
@@ -140,6 +180,32 @@
 
 	.replaced {
 		font-size: 14px;
+	}
+
+	.photos {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.photos p {
+		font-size: 14px;
+	}
+
+	.failed {
+		color: var(--danger);
+	}
+
+	.retry {
+		padding: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		font-weight: 700;
+		color: var(--ink);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		cursor: pointer;
 	}
 
 	.rows {

@@ -25,7 +25,8 @@ export const ICONS = {
 	cafe: {
 		d: 'M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3v3M12 3v3'
 	},
-	bar: { d: 'M6 3h12l-6 9zM12 12v8M8 21h8M8.2 6h7.6' }
+	bar: { d: 'M6 3h12l-6 9zM12 12v8M8 21h8M8.2 6h7.6' },
+	camera: { d: 'M4 8h3l2-3h6l2 3h3v11H4z', circles: [[12, 13, 3.5]] }
 } satisfies Record<string, IconShape>;
 
 export type IconName = keyof typeof ICONS;

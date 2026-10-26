@@ -7,6 +7,8 @@
 	import { daysSince } from '#lib/places/dates.ts';
 	import { directionsUrl } from '#lib/platform/directions.ts';
 	import type { PlaceDetail } from '#lib/supabase/place-details.ts';
+	import { publicPhotoUrl } from '#lib/supabase/photos.ts';
+	import type { PlacePhoto } from '#lib/places/photos.ts';
 	import Icon from './Icon.svelte';
 	import PhotoGallery from './PhotoGallery.svelte';
 	import { ATTRIBUTE_PILLS, distanceLabel, openingLabel, osmWifi } from './labels.ts';
@@ -27,6 +29,14 @@
 	let { name, level, place, distance, href, onopen, onclose }: Props = $props();
 
 	const unchecked = $derived(level === 'osm_only');
+
+	/** The three latest thumbnails (the first one is the cover); credits only on the place page. */
+	const photos = $derived(
+		(place?.photoPaths ?? []).flatMap((path): PlacePhoto[] => {
+			const thumbUrl = publicPhotoUrl('thumb', path);
+			return thumbUrl ? [{ url: thumbUrl, thumbUrl }] : [];
+		})
+	);
 
 	const meta = $derived(
 		[
@@ -82,7 +92,13 @@
 
 <div class="preview">
 	{#if !unchecked}
-		<PhotoGallery photos={[]} amenity={place?.amenity ?? null} {name} variant="strip" />
+		<PhotoGallery
+			{photos}
+			total={place?.photoCount}
+			amenity={place?.amenity ?? null}
+			{name}
+			variant="strip"
+		/>
 	{/if}
 
 	<div class="head">

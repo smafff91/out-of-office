@@ -208,7 +208,12 @@
 		</div>
 	{:else}
 		<div class="hero" class:certified>
-			<PhotoGallery photos={[]} amenity={place.amenity} name={place.name} variant="hero" />
+			<PhotoGallery
+				photos={place.photos ?? []}
+				amenity={place.amenity}
+				name={place.name}
+				variant="hero"
+			/>
 			<div class="hero-buttons">
 				{@render backButton()}
 				{@render shareButton()}
