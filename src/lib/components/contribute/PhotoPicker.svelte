@@ -134,11 +134,11 @@
 	{/if}
 </div>
 
+{#if replacesOlder}
+	<p class="replace"><Icon name="refresh" />{m.contribute_photos_replace()}</p>
+{/if}
 {#if error || notice}
 	<p class="error" role="alert">{error ? ERRORS[error]() : notice}</p>
-{/if}
-{#if replacesOlder}
-	<p class="hint">{m.contribute_photos_replace()}</p>
 {/if}
 <p class="hint">{m.contribute_photos_hint()}</p>
 <p class="hint">{m.contribute_photos_terms()}</p>
@@ -221,6 +221,7 @@
 	}
 
 	.hint,
+	.replace,
 	.error {
 		margin: 0;
 		font-size: 13px;
@@ -233,5 +234,22 @@
 
 	.error {
 		color: var(--danger);
+	}
+
+	/* Set apart from the hint and the Terms line: an icon and a stronger weight. */
+	.replace {
+		display: flex;
+		align-items: flex-start;
+		gap: 6px;
+		font-weight: 600;
+		color: var(--muted);
+	}
+
+	.replace :global(.icon) {
+		flex-shrink: 0;
+		width: 16px;
+		height: 16px;
+		margin-top: 1px;
+		color: var(--icon);
 	}
 </style>

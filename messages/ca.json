@@ -443,7 +443,7 @@
 	],
 	"action_send_update": "Envia l'actualització",
 	"contribute_sending": "Enviant…",
-	"contribute_name_shown": "El teu nom apareixerà en aquest lloc",
+	"contribute_name_shown": "Hi apareixes com a {name}",
 	"contribute_name_hidden": "Hi apareixes de manera anònima",
 	"contribute_change_name": "Canviar com apareix el teu nom",
 	"contribute_required": "Tria una resposta",

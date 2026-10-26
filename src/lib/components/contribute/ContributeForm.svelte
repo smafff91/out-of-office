@@ -153,9 +153,10 @@
 	// Photos count as changes too.
 	const dirty = $derived(!sameDraft(draft, initial) || photos.length > 0);
 	const showConfirmAll = $derived(source !== 'none' && canConfirmAll(initial));
+	// The choice holds for every place: "Shown as Ana" or "You're anonymous".
 	const nameLine = $derived(
-		session.profile?.showName === true
-			? m.contribute_name_shown()
+		session.profile?.showName === true && session.profile.displayName
+			? m.contribute_name_shown({ name: session.profile.displayName })
 			: session.profile?.showName === false
 				? m.contribute_name_hidden()
 				: undefined

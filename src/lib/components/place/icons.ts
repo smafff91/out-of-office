@@ -26,6 +26,7 @@ export const ICONS = {
 		d: 'M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3v3M12 3v3'
 	},
 	bar: { d: 'M6 3h12l-6 9zM12 12v8M8 21h8M8.2 6h7.6' },
+	refresh: { d: 'M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9M18.5 3v4h-4M5.5 21v-4h4' },
 	camera: { d: 'M4 8h3l2-3h6l2 3h3v11H4z', circles: [[12, 13, 3.5]] }
 } satisfies Record<string, IconShape>;
 

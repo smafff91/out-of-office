@@ -273,8 +273,8 @@ contribute_photos_too_many [countPlural=one],You can add up to {countText} photo
 contribute_photos_too_many [countPlural=*],You can add up to {countText} photos.,Puedes añadir hasta {countText} fotos.,to review,Pots afegir fins a {countText} fotos.,to review
 action_send_update,Send update,Enviar actualización,to review,Envia l'actualització,to review
 contribute_sending,Sending…,Enviando…,to review,Enviant…,to review
-contribute_name_shown,Your first name will appear on this place,Tu nombre aparecerá en este sitio,to review,El teu nom apareixerà en aquest lloc,to review
-contribute_name_hidden,You're anonymous on this place,Apareces de forma anónima en este sitio,to review,Hi apareixes de manera anònima,to review
+contribute_name_shown,Shown as {name},Apareces como {name},to review,Hi apareixes com a {name},to review
+contribute_name_hidden,You're anonymous,Apareces de forma anónima,to review,Hi apareixes de manera anònima,to review
 contribute_change_name,Change how your name appears,Cambiar cómo aparece tu nombre,to review,Canviar com apareix el teu nom,to review
 contribute_required,Choose an answer,Elige una respuesta,to review,Tria una resposta,to review
 contribute_discard_title,Discard your update?,¿Descartar tu actualización?,to review,Vols descartar l'actualització?,to review
