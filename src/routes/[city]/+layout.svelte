@@ -27,6 +27,7 @@
 	import SortControl from '#lib/components/home/SortControl.svelte';
 	import TopBar from '#lib/components/home/TopBar.svelte';
 	import { onBeforeLeave, stash, takeStash } from '#lib/auth/handoff.ts';
+	import { onPlaceUpdated } from '#lib/contribute/updates.ts';
 	import PlacePreview from '#lib/components/place/PlacePreview.svelte';
 	import { localizeHref } from '#lib/i18n/locale.ts';
 	import {
@@ -195,13 +196,34 @@
 		if (desktop || !placeSlug) mapWanted = true;
 	});
 
-	// Center the map on the place in the preview or on its page (once per place). The preview
-	// first gets its final height (details loaded), so the pin lands above it, not under it.
+	// Center the map on the selected place.
+	// - Desktop: on each arrival on a place page or form (from the list, a link or the address
+	//   bar), in the map beside the panel. After a tap on its pin, from the page to the form of the
+	//   same place, or back from a language reload, it moves only if the pin is hidden or at an edge.
+	// - Phones: once per place. The preview first gets its final height (details loaded), so the
+	//   pin lands above it, not under it.
 	let centeredOn: string | undefined;
+	let centeredPath: string | undefined;
+	/** The place whose pin was just tapped on the map (desktop). */
+	let tappedPin: string | undefined;
+	/** The camera was restored after a language reload: keep it if the place is in view. */
+	let keepCamera = false;
 	$effect(() => {
 		const point = selected?.geometry.coordinates;
-		if (!selectedSlug) centeredOn = undefined;
-		if (!selectedSlug || !point || centeredOn === selectedSlug) return;
+		if (!selectedSlug) centeredOn = centeredPath = undefined;
+		if (!selectedSlug || !point) return;
+		if (desktop) {
+			const path = page.url.pathname;
+			if (!map || centeredPath === path) return;
+			const ifHidden = keepCamera || tappedPin === selectedSlug || centeredOn === selectedSlug;
+			centeredPath = path;
+			centeredOn = selectedSlug;
+			tappedPin = undefined;
+			keepCamera = false;
+			requestAnimationFrame(() => map?.showPlace(point, { ifHidden }));
+			return;
+		}
+		if (centeredOn === selectedSlug) return;
 		if (previewSlug && (!previews.has(previewSlug) || !previewHeight)) return;
 		centeredOn = selectedSlug;
 		// After the new insets reach the map.
@@ -271,6 +293,7 @@
 	/** The screen as it was before a language reload. Runs after hydration (onMount). */
 	function restoreView(saved: CityViewState) {
 		restoredCamera = saved.camera;
+		keepCamera = !!saved.camera;
 		snap = saved.snap;
 		sort = saved.sort;
 		certifiedOnly = saved.certifiedOnly;
@@ -344,10 +367,23 @@
 			}
 		});
 
+		// After an update: the place's pin, row and preview are fetched again (a gray pin turns
+		// into a community one, the score moves).
+		const stopUpdates = onPlaceUpdated((slug) => {
+			items.delete(slug);
+			previews.delete(slug);
+			failed.delete(slug);
+			ranking = undefined;
+			fetchCityPlaces(supabase, city.id)
+				.then((collection) => (places = collection))
+				.catch((error: unknown) => handleError('Could not load the places', error));
+		});
+
 		return () => {
 			clearTimeout(noticeTimer);
 			media.removeEventListener('change', updateLayout);
 			stopSaving();
+			stopUpdates();
 		};
 	});
 
@@ -394,6 +430,11 @@
 	}
 
 	const placeHref = (slug: string) => localizeHref(`/${city.slug}/${slug}`);
+
+	function onPinClick(slug: string) {
+		if (desktop) tappedPin = slug;
+		select(slug);
+	}
 
 	/** A pin, a row or a search result: the preview on phones, the place page on desktop. */
 	function select(slug: string) {
@@ -534,14 +575,14 @@
 			<CityMap
 				bind:this={map}
 				center={restoredCamera?.center ?? openPlace?.point ?? city.center}
-				zoom={restoredCamera?.zoom}
+				zoom={restoredCamera?.zoom ?? (openPlace ? 15 : undefined)}
 				bounds={restoredCamera ? undefined : page.state.area}
 				{places}
 				{user}
 				{insets}
 				{certifiedOnly}
 				{selected}
-				onplaceclick={select}
+				onplaceclick={onPinClick}
 				onmove={onMapMove}
 			/>
 		{/if}

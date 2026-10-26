@@ -323,6 +323,7 @@
 	"profile_sign_out": "Sign out",
 	"profile_name_choice_title": "Show your name?",
 	"profile_name_choice_body": "Choose whether your first name appears on the places you update. You can change it later.",
+	"profile_name_choice_everywhere": "This applies to all places, including updates you've already sent.",
 	"profile_show_name": "Show my name on places",
 	"profile_stay_anonymous": "Stay anonymous",
 	"profile_name_label": "First name",
@@ -349,5 +350,98 @@
 	"language_all": "All languages",
 	"language_search": "Search languages",
 	"language_none": "No language matches.",
-	"language_button_label": "Language: {language}"
+	"language_button_label": "Language: {language}",
+	"action_check_in_here": "Check in here",
+	"action_add_it": "Add it",
+	"place_shared_by": "Shared by {names}",
+	"place_others": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} other",
+				"countPlural=*": "{countText} others"
+			}
+		}
+	],
+	"place_more_details": "More details",
+	"place_notes": "Notes",
+	"laptop_rule_time_limit_hours": "Time limit for laptops: {hours}",
+	"extra_air_conditioning": "Air conditioning",
+	"extra_toilet": "Toilet",
+	"extra_large_tables": "Large tables",
+	"extra_minimum_spend": "Minimum spend",
+	"contribute_meta_title": "Update {name}",
+	"contribute_checkin_verified": "You're here · check-in verified",
+	"contribute_checkin_distance": "{distance} away",
+	"contribute_checkin_idle_title": "Are you there now?",
+	"contribute_checkin_idle_body": "Check in to help it get certified. Your update counts either way.",
+	"contribute_checkin_locating": "Finding your location…",
+	"contribute_checkin_far": "You're {distance} away: your update still counts, but not as a check-in",
+	"contribute_checkin_imprecise": "Your location isn't precise enough for a check-in: your update still counts",
+	"contribute_checkin_unavailable": "We couldn't get your location: your update still counts, but not as a check-in",
+	"action_im_here_now": "I'm here now",
+	"action_try_again": "Try again",
+	"contribute_work_again": "Would you work here again?",
+	"contribute_yes": "Yes",
+	"contribute_no": "No",
+	"contribute_still_right": "Still right?",
+	"contribute_still_right_body": "We filled in what others reported. Change only what's different.",
+	"contribute_own_answers_body": "These are your answers from your last update. Sending updates them.",
+	"contribute_whats_it_like": "What's it like?",
+	"action_everything_still_right": "Everything's still right",
+	"contribute_now": "now: {value} · {ago}",
+	"contribute_rules_count": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} rule",
+				"countPlural=*": "{countText} rules"
+			}
+		}
+	],
+	"contribute_optional": "Optional",
+	"contribute_laptop_rules": "Laptop rules",
+	"contribute_rule_time_limit": "Time limit",
+	"contribute_rule_none": "No rules",
+	"contribute_time_limit_label": "How long?",
+	"contribute_note": "Short note",
+	"contribute_note_placeholder": "e.g. Best tables with outlets are upstairs",
+	"contribute_note_count": "{count} / {max}",
+	"action_send_update": "Send update",
+	"contribute_sending": "Sending…",
+	"contribute_name_shown": "Your first name will appear on this place",
+	"contribute_name_hidden": "You're anonymous on this place",
+	"contribute_change_name": "Change how your name appears",
+	"contribute_required": "Choose an answer",
+	"contribute_discard_title": "Discard your update?",
+	"contribute_discard_body": "Your answers on this page will be lost.",
+	"action_discard": "Discard",
+	"action_keep_editing": "Keep editing",
+	"action_change": "Change",
+	"contribute_error_offline": "You're offline. Your answers are still here: send them when you're back online.",
+	"contribute_error_daily_limit": "You've reached today's limit for updates. Try again tomorrow.",
+	"contribute_error_email_not_confirmed": "Your email address isn't confirmed yet. Sign in again with the code we email you.",
+	"contribute_error_sign_in_cancelled": "Sign-in canceled. Your answers are still here.",
+	"contribute_error_place_not_found": "This place is no longer on the map.",
+	"contribute_error_unknown": "Couldn't send your update. Your answers are still here: try again.",
+	"thanks_title_name": "Thanks, {name}",
+	"thanks_title": "Thanks!",
+	"thanks_body_checkin": "Your check-in at {place} is live. The next person looking for a place to work will see it.",
+	"thanks_body_update": "Your update for {place} is live. The next person looking for a place to work will see it.",
+	"thanks_just_now": "just now",
+	"thanks_founding_title": "Founding contributor",
+	"thanks_founding_body": "You're one of the first {count} users mapping work-friendly cafés in {city}. The badge stays on your name.",
+	"thanks_replaced": "This replaces your previous update for this place.",
+	"action_find_another_place": "Find another place",
+	"action_back_to_place": "Back to {place}"
 }

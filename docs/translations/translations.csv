@@ -171,7 +171,7 @@ auth_code_label,6-digit code,Código de 6 cifras,to review,Codi de 6 xifres,to r
 auth_code_submit,Sign in,Entrar,to review,Entra,to review
 auth_code_resend,Send a new code,Enviar un código nuevo,to review,Envia un codi nou,to review
 auth_code_resend_in,New code in {seconds} s,Código nuevo en {seconds} s,to review,Codi nou d'aquí a {seconds} s,to review
-auth_code_sent_again,We sent a new code.,Te hemos enviado un código nuevo.,to review,T'hem enviat un codi nou.,to review
+auth_code_sent_again,We sent a new code. Earlier codes no longer work.,Te hemos enviado un código nuevo. Los anteriores ya no sirven.,to review,T'hem enviat un codi nou. Els anteriors ja no serveixen.,to review
 auth_code_change_email,Use a different email,Usar otro email,to review,Fes servir un altre correu,to review
 auth_sending,Sending…,Enviando…,to review,S'està enviant…,to review
 auth_verifying,Checking…,Comprobando…,to review,S'està comprovant…,to review
@@ -185,11 +185,11 @@ auth_error_google_cancelled,"Google sign-in was canceled. Try again, or use your
 auth_error_offline,You're offline. Check your connection and try again.,Estás sin conexión. Revisa la conexión y vuelve a probar.,to review,No tens connexió. Revisa-la i torna-ho a provar.,to review
 auth_error_unknown,Something went wrong. Try again in a moment.,Algo ha fallado. Vuelve a intentarlo en un momento.,to review,Alguna cosa ha fallat. Torna-ho a provar d'aquí a un moment.,to review
 auth_callback_status,Signing you in…,Iniciando sesión…,to review,S'està iniciant la sessió…,to review
-profile_menu,Account and language,Cuenta e idioma,to review,Compte i idioma,to review
 profile_your_account,Your account,Tu cuenta,to review,El teu compte,to review
 profile_sign_out,Sign out,Cerrar sesión,to review,Tanca la sessió,to review
 profile_name_choice_title,Show your name?,¿Mostrar tu nombre?,to review,Vols mostrar el teu nom?,to review
 profile_name_choice_body,Choose whether your first name appears on the places you update. You can change it later.,Elige si tu nombre aparece en los sitios que actualizas. Puedes cambiarlo más adelante.,to review,Tria si el teu nom apareix als llocs que actualitzes. Ho pots canviar més endavant.,to review
+profile_name_choice_everywhere,"This applies to all places, including updates you've already sent.","Se aplica a todos los sitios, también a las actualizaciones que ya enviaste.",to review,"S'aplica a tots els llocs, també a les actualitzacions que ja has enviat.",to review
 profile_show_name,Show my name on places,Mostrar mi nombre en los sitios,to review,Mostra el meu nom als llocs,to review
 profile_stay_anonymous,Stay anonymous,Seguir en el anonimato,to review,Continua en l'anonimat,to review
 profile_name_label,First name,Nombre,to review,Nom,to review
@@ -207,3 +207,82 @@ email_signin_link_intro,Or sign in with one tap:,O entra con un toque:,to review
 email_signin_button,Sign in,Entrar,to review,Entra,to review
 email_signin_expiry,The code and the button work once and expire in {minutes} minutes.,El código y el botón sirven una sola vez y caducan en {minutes} minutos.,to review,El codi i el botó serveixen un sol cop i caduquen d'aquí a {minutes} minuts.,to review
 email_signin_ignore,"If you didn't ask to sign in, you can ignore this email.","Si no has pedido entrar, puedes ignorar este email.",to review,"Si no has demanat entrar, pots ignorar aquest correu.",to review
+auth_error_send_failed,We couldn't send the email. Check the address or continue with Google.,No hemos podido enviar el email. Revisa la dirección o continúa con Google.,to review,No hem pogut enviar el correu. Revisa l'adreça o continua amb Google.,to review
+auth_error_wrong_code_latest,That code isn't right. Use the code from the most recent email.,El código no es correcto. Usa el código del email más reciente.,to review,El codi no és correcte. Fes servir el codi del correu més recent.,to review
+auth_error_too_many_seconds,Too many attempts. Try again in {seconds} s.,Demasiados intentos. Vuelve a probar en {seconds} s.,to review,Massa intents. Torna-ho a provar d'aquí a {seconds} s.,to review
+auth_error_too_many_minutes,Too many attempts. Try again in {minutes} min.,Demasiados intentos. Vuelve a probar en {minutes} min.,to review,Massa intents. Torna-ho a provar d'aquí a {minutes} min.,to review
+account_menu,Account menu,Menú de la cuenta,to review,Menú del compte,to review
+language_suggested,Suggested,Sugeridos,to review,Suggerits,to review
+language_all,All languages,Todos los idiomas,to review,Tots els idiomes,to review
+language_search,Search languages,Buscar idiomas,to review,Cerca idiomes,to review
+language_none,No language matches.,Ningún idioma coincide.,to review,Cap idioma coincideix.,to review
+language_button_label,Language: {language},Idioma: {language},to review,Idioma: {language},to review
+action_check_in_here,Check in here,Haz check-in aquí,to review,Fes check-in aquí,to review
+action_add_it,Add it,Añádelo,to review,Afegeix-ho,to review
+place_shared_by,Shared by {names},Compartido por {names},to review,Compartit per {names},to review
+place_others [countPlural=one],{countText} other,{countText} más,to review,{countText} més,to review
+place_others [countPlural=*],{countText} others,{countText} más,to review,{countText} més,to review
+place_more_details,More details,Más detalles,to review,Més detalls,to review
+place_notes,Notes,Notas,to review,Notes,to review
+laptop_rule_time_limit_hours,Time limit for laptops: {hours},Límite de tiempo para portátiles: {hours},to review,Límit de temps per a portàtils: {hours},to review
+extra_air_conditioning,Air conditioning,Aire acondicionado,to review,Aire condicionat,to review
+extra_toilet,Toilet,Baño,to review,Lavabo,to review
+extra_large_tables,Large tables,Mesas grandes,to review,Taules grans,to review
+extra_minimum_spend,Minimum spend,Consumo mínimo,to review,Consumició mínima,to review
+contribute_meta_title,Update {name},Actualiza {name},to review,Actualitza {name},to review
+contribute_checkin_verified,You're here · check-in verified,Estás aquí · check-in verificado,to review,Ets aquí · check-in verificat,to review
+contribute_checkin_distance,{distance} away,A {distance},to review,A {distance},to review
+contribute_checkin_idle_title,Are you there now?,¿Estás allí ahora?,to review,Hi ets ara?,to review
+contribute_checkin_idle_body,Check in to help it get certified. Your update counts either way.,Haz check-in para ayudar a certificarlo. Tu actualización cuenta igualmente.,to review,Fes check-in per ajudar a certificar-lo. La teva actualització compta igualment.,to review
+contribute_checkin_locating,Finding your location…,Buscando tu ubicación…,to review,Buscant la teva ubicació…,to review
+contribute_checkin_far,"You're {distance} away: your update still counts, but not as a check-in","Estás a {distance}: tu actualización cuenta, pero no como check-in",to review,"Ets a {distance}: la teva actualització compta, però no com a check-in",to review
+contribute_checkin_imprecise,Your location isn't precise enough for a check-in: your update still counts,Tu ubicación no es lo bastante precisa para un check-in: tu actualización cuenta igualmente,to review,La teva ubicació no és prou precisa per a un check-in: la teva actualització compta igualment,to review
+contribute_checkin_unavailable,"We couldn't get your location: your update still counts, but not as a check-in","No hemos podido obtener tu ubicación: tu actualización cuenta, pero no como check-in",to review,"No hem pogut obtenir la teva ubicació: la teva actualització compta, però no com a check-in",to review
+action_im_here_now,I'm here now,Estoy aquí ahora,to review,Ara hi soc,to review
+action_try_again,Try again,Reintentar,to review,Torna-ho a provar,to review
+contribute_work_again,Would you work here again?,¿Volverías a trabajar aquí?,to review,Hi tornaries a treballar?,to review
+contribute_yes,Yes,Sí,to review,Sí,to review
+contribute_no,No,No,to review,No,to review
+contribute_still_right,Still right?,¿Sigue igual?,to review,Continua igual?,to review
+contribute_still_right_body,We filled in what others reported. Change only what's different.,Hemos rellenado lo que contaron otros usuarios. Cambia solo lo que sea distinto.,to review,Hem omplert el que van explicar altres usuaris. Canvia només el que sigui diferent.,to review
+contribute_own_answers_body,These are your answers from your last update. Sending updates them.,"Son las respuestas de tu última actualización. Al enviar, se actualizan.",to review,"Són les respostes de la teva última actualització. En enviar, s'actualitzen.",to review
+contribute_whats_it_like,What's it like?,¿Cómo es?,to review,Com és?,to review
+action_everything_still_right,Everything's still right,Todo sigue igual,to review,Tot continua igual,to review
+contribute_now,now: {value} · {ago},ahora: {value} · {ago},to review,ara: {value} · {ago},to review
+contribute_rules_count [countPlural=one],{countText} rule,{countText} norma,to review,{countText} norma,to review
+contribute_rules_count [countPlural=*],{countText} rules,{countText} normas,to review,{countText} normes,to review
+contribute_optional,Optional,Opcional,to review,Opcional,to review
+contribute_laptop_rules,Laptop rules,Normas para portátiles,to review,Normes per a portàtils,to review
+contribute_rule_time_limit,Time limit,Límite de tiempo,to review,Límit de temps,to review
+contribute_rule_none,No rules,Sin normas,to review,Sense normes,to review
+contribute_time_limit_label,How long?,¿Cuánto tiempo?,to review,Quant de temps?,to review
+contribute_note,Short note,Nota breve,to review,Nota breu,to review
+contribute_note_placeholder,e.g. Best tables with outlets are upstairs,p. ej. Las mejores mesas con enchufes están arriba,to review,p. ex. Les millors taules amb endolls són a dalt,to review
+contribute_note_count,{count} / {max},{count} / {max},to review,{count} / {max},to review
+action_send_update,Send update,Enviar actualización,to review,Envia l'actualització,to review
+contribute_sending,Sending…,Enviando…,to review,Enviant…,to review
+contribute_name_shown,Your first name will appear on this place,Tu nombre aparecerá en este sitio,to review,El teu nom apareixerà en aquest lloc,to review
+contribute_name_hidden,You're anonymous on this place,Apareces de forma anónima en este sitio,to review,Hi apareixes de manera anònima,to review
+contribute_change_name,Change how your name appears,Cambiar cómo aparece tu nombre,to review,Canviar com apareix el teu nom,to review
+contribute_required,Choose an answer,Elige una respuesta,to review,Tria una resposta,to review
+contribute_discard_title,Discard your update?,¿Descartar tu actualización?,to review,Vols descartar l'actualització?,to review
+contribute_discard_body,Your answers on this page will be lost.,Se perderán las respuestas de esta página.,to review,Es perdran les respostes d'aquesta pàgina.,to review
+action_discard,Discard,Descartar,to review,Descarta,to review
+action_keep_editing,Keep editing,Seguir editando,to review,Continua editant,to review
+action_change,Change,Cambiar,to review,Canviar,to review
+contribute_error_offline,You're offline. Your answers are still here: send them when you're back online.,Estás sin conexión. Tus respuestas siguen aquí: envíalas cuando vuelvas a tener conexión.,to review,No tens connexió. Les teves respostes continuen aquí: envia-les quan tornis a tenir connexió.,to review
+contribute_error_daily_limit,You've reached today's limit for updates. Try again tomorrow.,Has llegado al límite de actualizaciones de hoy. Vuelve a intentarlo mañana.,to review,Has arribat al límit d'actualitzacions d'avui. Torna-ho a provar demà.,to review
+contribute_error_email_not_confirmed,Your email address isn't confirmed yet. Sign in again with the code we email you.,Tu correo aún no está confirmado. Vuelve a iniciar sesión con el código que te enviamos.,to review,El teu correu encara no està confirmat. Torna a iniciar la sessió amb el codi que t'enviem.,to review
+contribute_error_sign_in_cancelled,Sign-in canceled. Your answers are still here.,Inicio de sesión cancelado. Tus respuestas siguen aquí.,to review,Inici de sessió cancel·lat. Les teves respostes continuen aquí.,to review
+contribute_error_place_not_found,This place is no longer on the map.,Este sitio ya no está en el mapa.,to review,Aquest lloc ja no és al mapa.,to review
+contribute_error_unknown,Couldn't send your update. Your answers are still here: try again.,No se ha podido enviar tu actualización. Tus respuestas siguen aquí: inténtalo de nuevo.,to review,No s'ha pogut enviar l'actualització. Les teves respostes continuen aquí: torna-ho a provar.,to review
+thanks_title_name,"Thanks, {name}","Gracias, {name}",to review,"Gràcies, {name}",to review
+thanks_title,Thanks!,¡Gracias!,to review,Gràcies!,to review
+thanks_body_checkin,Your check-in at {place} is live. The next person looking for a place to work will see it.,Tu check-in en {place} ya está publicado. La próxima persona que busque un sitio para trabajar lo verá.,to review,El teu check-in a {place} ja és publicat. La propera persona que busqui un lloc per treballar el veurà.,to review
+thanks_body_update,Your update for {place} is live. The next person looking for a place to work will see it.,Tu actualización de {place} ya está publicada. La próxima persona que busque un sitio para trabajar la verá.,to review,La teva actualització de {place} ja és publicada. La propera persona que busqui un lloc per treballar la veurà.,to review
+thanks_just_now,just now,ahora mismo,to review,ara mateix,to review
+thanks_founding_title,Founding contributor,Miembro fundador,to review,Membre fundador,to review
+thanks_founding_body,You're one of the first {count} users mapping work-friendly cafés in {city}. The badge stays on your name.,Eres uno de los primeros {count} usuarios que mapean cafés para trabajar en {city}. La insignia se queda en tu nombre.,to review,Ets un dels primers {count} usuaris que mapen cafès per treballar a {city}. La insígnia es queda al teu nom.,to review
+thanks_replaced,This replaces your previous update for this place.,Sustituye tu actualización anterior de este sitio.,to review,Substitueix la teva actualització anterior d'aquest lloc.,to review
+action_find_another_place,Find another place,Buscar otro sitio,to review,Busca un altre lloc,to review
+action_back_to_place,Back to {place},Volver a {place},to review,Torna a {place},to review

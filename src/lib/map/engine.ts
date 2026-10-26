@@ -39,6 +39,10 @@ export type MapController = {
 	setSelected(place: PlaceFeature | undefined): void;
 	setInsets(insets: Insets): void;
 	flyTo(center: LngLat, zoom?: number): void;
+	/** Brings a place to the middle of the free area: a short move, zooming in only if far out. */
+	centerOn(center: LngLat): void;
+	/** True when the point sits in the free area, at least `margin` px away from its edges. */
+	shows(point: LngLat, margin: number): boolean;
 	fitBounds(bounds: Bounds): void;
 	zoomIn(): void;
 	zoomOut(): void;
@@ -269,6 +273,25 @@ export function createMap(
 				padding: insets,
 				essential: true
 			});
+		},
+		centerOn(center) {
+			map.easeTo({
+				center,
+				zoom: Math.max(map.getZoom(), 15),
+				padding: insets,
+				duration: 600,
+				essential: true
+			});
+		},
+		shows(point, margin) {
+			const { x, y } = map.project(point);
+			const { clientWidth, clientHeight } = map.getContainer();
+			return (
+				x >= insets.left + margin &&
+				x <= clientWidth - insets.right - margin &&
+				y >= insets.top + margin &&
+				y <= clientHeight - insets.bottom - margin
+			);
 		},
 		fitBounds(bounds) {
 			map.fitBounds(bounds, { padding: insets, essential: true, maxZoom: 16 });

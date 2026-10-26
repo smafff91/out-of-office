@@ -15,9 +15,19 @@
 		confirmations?: number;
 		lastConfirmedOn?: string;
 		timezone: string;
+		/** Unknown attribute: "Add it" opens the contribution form. */
+		addHref?: string;
 	};
 
-	let { icon, name, value, confirmations = 0, lastConfirmedOn, timezone }: Props = $props();
+	let {
+		icon,
+		name,
+		value,
+		confirmations = 0,
+		lastConfirmedOn,
+		timezone,
+		addHref
+	}: Props = $props();
 
 	const freshness = $derived(
 		lastConfirmedOn
@@ -35,6 +45,8 @@
 	<span class="value">{value ?? m.place_not_known()}</span>
 	{#if freshness}
 		<span class="fresh">{freshness}</span>
+	{:else if !value && addHref}
+		<a class="add tap-target" href={addHref}>{m.action_add_it()}</a>
 	{/if}
 </div>
 
@@ -75,6 +87,13 @@
 		font-size: 18px;
 		font-weight: 700;
 		letter-spacing: var(--tracking-tight);
+	}
+
+	.add {
+		align-self: flex-start;
+		font-size: 13px;
+		font-weight: 700;
+		color: var(--ink);
 	}
 
 	.fresh {

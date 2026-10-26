@@ -70,11 +70,12 @@ Slug dei locali generati una volta e **salvati**: non cambiano se OSM rinomina i
 ## Modello dati (sintesi — dettagli in docs/contesto-progetto.md)
 - `cities` — slug, nome, centro, bbox/area OSM, attiva sì/no
 - `places` — city_id (sempre esplicito), osm_type + osm_id, slug, nome, geom (PostGIS), indirizzo, quartiere, opening_hours, telefono, sito, instagram, `internet_access_osm` (mostrato come "unconfirmed"), `osm_missing_since`; certificazione: `cert_origin` (manual/community), `certified_at`, `revoked_at`
-- `contributions` — user, place, `would_work_again` bool, wifi (none/slow/fast), outlets (none/a_few/plenty), noise (quiet/noisy), long_stays (welcome/not_really), laptop_rules, nota ≤140 caratteri, `checked_in` bool + distanza in metri (**non salvare le coordinate dell'utente**), created_at
-- `photos` (storage path, autore, stato moderazione), `reports`, `city_votes` ("Not in {city} yet"), `profiles` (nome pubblico, ruolo user/admin, founding contributor)
+- `contributions` — user, place, `city_id` (dal locale, via trigger), `would_work_again` bool, wifi (none/slow/fast), outlets (none/a_few/plenty), noise (quiet/noisy), long_stays (welcome/not_really), laptop_rules (+ `time_limit_hours` 1/2/3), extras, nota ≤140 caratteri, `checked_in` bool = verified (**mai coordinate né distanza**), created_at, `superseded_at`/`superseded_by` (storico: nessun contributo si cancella)
+- `founding_contributors` — posti numerati per città (`city_id`, `seat`, `user_id` null se l'account è cancellato: il posto resta occupato); limite in `certification_settings.founding_limit`
+- `photos` (storage path, autore, stato moderazione), `reports`, `city_votes` ("Not in {city} yet"), `profiles` (nome pubblico, `show_name`, lingua, ruolo user/admin)
 - Livello derivato del locale: `osm_only` → `community` (≥1 contributo) → `certified`
 - Ogni attributo mostrato con **valore prevalente, numero di conferme e data dell'ultima conferma**
-- Un voto per utente per locale ogni 30 giorni: il più recente sostituisce il precedente
+- Un solo contributo **attivo** per utente e locale (indice unico parziale): il nuovo sostituisce il precedente, che resta nello storico come superato, a qualunque età; entro 30 giorni il ringraziamento lo dice. Viste pubbliche e conteggi leggono solo `active_contributions` (vista interna, senza grant)
 - Soglie di certificazione in un'unica tabella di configurazione, non sparse nel codice
 - RLS attiva su **ogni** tabella; admin solo via ruolo nel database
 
@@ -82,7 +83,8 @@ Slug dei locali generati una volta e **salvati**: non cambiano se OSM rinomina i
 - Score = % di "sì" a "Would you work here again?". Da 5 voti: "94% would work here again"; sotto: "2 of 2"; senza voti: niente score.
 - "Top rated" = limite inferiore dell'intervallo di Wilson (z = 1.96). Sezioni: ≥5 voti → "Not enough votes yet" → senza info.
 - Ordinamento di default: Nearest. Unico filtro: "Certified for remote work", spento di default.
-- Check-in verificato se entro ~100 m dal locale (calcolato in SQL con PostGIS).
+- Check-in verificato solo nel database (`submit_contribution`): distanza ≤ `checkin_radius_m` (100) dal punto del locale e accuratezza dichiarata ≤ `checkin_max_accuracy_m` (100); coordinate mancanti o non valide = non verificato. Il client arrotonda a 4 decimali e le manda solo in POST; la distanza nel form è solo un'anteprima.
+- Contributi solo tramite l'RPC `submit_contribution` (nessun accesso diretto alla tabella): account con email confermata, `daily_contribution_limit` (20) nelle ultime 24 ore, locale `osm_only` → `community`, badge Founding ai primi `founding_limit` (50) utenti per città al loro primo contributo (lock per città + vincoli). Precompilazione con `my_recent_contribution`.
 - Certificazione automatica e revoca: esattamente come in `docs/certificazione.md`.
 - Login richiesto solo all'invio del contributo, senza perdere i dati già inseriti.
 - Foto: ridimensiona a 1200 px, WebP, **rimuovi EXIF** nel browser prima dell'upload.
@@ -107,17 +109,18 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 - **Plan mode** prima di ogni feature non banale; aspetta l'ok del fondatore prima di implementare.
 - Una feature per sessione, **un commit per feature** (messaggi in inglese, stile conventional commits).
 - Ogni modifica allo schema = nuova migrazione in `supabase/migrations/` (mai modificare quelle già applicate) + seed aggiornato, applicata al progetto di sviluppo con `npx supabase db push --include-seed` (chiede la password del database: lo lancia il fondatore nel suo terminale). Mai modifiche allo schema a mano dalla dashboard.
+  - Il nome di una migrazione nuova (`AAAAMMGGhhmmss_nome.sql`) va **dopo l'ultima esistente** (oggi `20261028120000`), non con la data del giorno: una migrazione con un orario precedente all'ultima applicata viene rifiutata da `db push`.
 - Dopo ogni migrazione: `npm run db:types` rigenera `src/lib/supabase/database.types.ts`. Per query di verifica sul progetto di sviluppo: `npx supabase db query --linked` (niente password).
 - `npx supabase db query --linked` solo per letture o per test dentro transazioni annullate; ogni modifica a schema, permessi o dati di configurazione passa da una migrazione. Mai collegare questa cartella al progetto di produzione.
   - Unica eccezione: i file in `supabase/dev/` (permessi solo per i dati di prova, mai in produzione), applicati solo con `npm run dev:grants`, che si rifiuta di partire se il progetto collegato non è `DEV_PROJECT_REF`.
 - L'esposizione automatica delle tabelle è disattivata: ogni migrazione concede i permessi (`grant`) ad `anon` e `authenticated` in modo esplicito, e attiva la RLS.
-- La tabella `contributions` non è leggibile pubblicamente (solo le proprie righe): la scheda usa le viste aggregate `place_scores`, `place_attributes`, `place_laptop_rules`, `place_notes`.
+- La tabella `contributions` non è leggibile né scrivibile dal client (nemmeno le proprie righe): si scrive solo con `submit_contribution`, la scheda usa le viste aggregate `place_details`, `place_scores`, `place_attributes`, `place_laptop_rules`, `place_notes`, `place_contributors`.
 - `profiles` è privata (ognuno legge e modifica solo la propria riga; update solo di `display_name`, `show_name`, `locale`). I nomi pubblici passano solo da `place_contributors` (`place_id`, `display_name`, se `show_name` è true): **mai un nome insieme a una data o a un identificativo**; `place_notes` non ha autore e ha solo il mese (`created_month`). `npm run test:db` lo verifica con la chiave pubblica; `supabase/tests/profile_visibility.sql` (transazione annullata) controlla RLS, trigger ed eliminazione.
 - Chiavi e segreti solo in `.env` (mai nel repository); tieni aggiornato `.env.example`.
 - Variabili d'ambiente dichiarate in `src/env.ts` (SvelteKit 3) e importate da `$app/env/public`; il client è `createSupabaseClient(fetch)` in `#lib/supabase/client.ts`.
 - Mappa: lo stile sta in `src/lib/map/style.json`, generato da `npm run map:style` (Positron di OpenFreeMap senza POI, colori Latte) e salvato nel repository; MapLibre si importa solo in `src/lib/map/engine.ts`, caricato dopo la pagina.
-- Dati di prova solo nel progetto di sviluppo: prima `npm run dev:grants`, poi `npm run dev:fixtures -- --city <slug>` (locali community/certificati e contributi anonimi; `--remove` toglie tutto); serve `DEV_PROJECT_REF` in `.env`, altrimenti gli script si rifiutano.
-- Test: `npm test` (vitest) per la logica pura in `src/lib/` (orari, ricerca, distanze, ordinamento, login). `npm run test:db` (rete, migrazione applicata) per le viste pubbliche con la chiave pubblica.
+- Dati di prova solo nel progetto di sviluppo: prima `npm run dev:grants`, poi `npm run dev:fixtures -- --city <slug>` (locali community/certificati e contributi anonimi; `--remove` toglie tutto); serve `DEV_PROJECT_REF` in `.env`, altrimenti gli script si rifiutano. `npm run dev:founding -- --city <slug> --reset` libera i posti Founding assegnati durante le prove.
+- Test: `npm test` (vitest) per la logica pura in `src/lib/` (orari, ricerca, distanze, ordinamento, login, bozza del contributo). `npm run test:db` (rete, migrazione applicata, `npm run dev:grants`, progetto collegato = sviluppo): viste pubbliche con la chiave pubblica, i test SQL di `supabase/tests/` in transazioni annullate (regole dei contributi, profili) e gli invii simultanei per i posti Founding (città e utenti di prova temporanei, creati e cancellati con la chiave segreta).
 - `npm run gen` rigenera i tipi Cloudflare (`worker-configuration.d.ts`): lancialo quando cambia `wrangler.jsonc`.
 - `CLAUDE.md`, `docs/` e `design/` sono esclusi da Prettier (`.prettierignore`): non riformattarli.
 - Dopo ogni feature: `npm test`, `npm run check` e `npm run lint` senza errori; spiega in 3-5 righe come provarla nel browser.
@@ -147,8 +150,11 @@ Stato live, filtro Wi‑Fi, filtro "open now", stelle, recensioni testuali, loya
 
 - [x] 7a. Login con Google o email (codice a 6 cifre + link, stessa email in EN/ES/CA), `SignInSheet` riutilizzabile (`openSignIn({ context: 'contribution', onsignedin })` per la 7b) e `SignInForm` dentro l'AccountSheet; guscio modale comune `#lib/components/sheet/Sheet.svelte`; account: AccountSheet sul telefono (Sign in / nome, Language, Sign out), su desktop "Sign in" diretto, globo per la lingua e menu dell'avatar; `NameChoice` + `saveProfile` pronti per la 7b; profili privati e viste `place_contributors`/`place_notes` senza nomi con date; `cities.languages` in `city_summaries`
 
+- [x] 7b. Form di contributo `/{city}/{place}/update` (noindex; su desktop nel pannello di sinistra), "Check in here" e "Add your experience", check-in verificato in PostGIS, login all'invio con bozza conservata (Google, cambio lingua), NameChoice al primo invio, ringraziamento con conferme, Founding contributor e barra di certificazione; RPC `submit_contribution` / `my_recent_contribution`, storico dei contributi, `founding_contributors`; scheda con "Shared by …", dettagli e note. Foto: 7c
+
 ## Checklist di lancio
 - Nessun elemento disattivato (`aria-disabled`) né commento `TODO(feature N)` nell'interfaccia: `grep -rn "aria-disabled\|TODO(feature" src/` deve essere vuoto.
 - Email: dominio verificato su Resend con **SPF, DKIM e DMARC**; `EMAIL_FROM` sul dominio (non `onboarding@resend.dev`) nei segreti della funzione e mittente di `[auth.email.smtp]` (ripiego); nel progetto di produzione una chiave Resend con soli permessi di invio e un segreto dell'hook suoi (`npm run functions:secrets`), deploy di `send-email`; `site_url` e `additional_redirect_urls` sul dominio; `[auth.rate_limit] email_sent` adeguato.
 - Privacy: Resend tra i fornitori che trattano dati personali (indirizzo email) nella pagina /privacy.
+- Founding contributor: se si è provato a contribuire in produzione prima del lancio, azzerare i posti della città (`reset_founding_contributors`, solo `service_role`).
 - Google: schermata di consenso pubblicata (non più in modalità test), dominio verificato, URL di redirect di produzione nel client OAuth.

@@ -5,8 +5,10 @@
 	// the small map; it never moves the map.
 	import { onMount } from 'svelte';
 	import { formatDate, formatDaysAgo, formatPercent } from '#lib/i18n/format.ts';
+	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { CityMap, type LngLat } from '#lib/map/index.ts';
 	import * as m from '#lib/paraglide/messages.js';
+	import { joinNames } from '#lib/places/contributors.ts';
 	import { daysSince } from '#lib/places/dates.ts';
 	import { distanceMeters } from '#lib/places/distance.ts';
 	import { weekSchedule } from '#lib/places/opening-hours.ts';
@@ -15,14 +17,16 @@
 	import { shareLink } from '#lib/platform/share.ts';
 	import { toFeature, type PlaceDetail } from '#lib/supabase/place-details.ts';
 	import AttributeTile from './AttributeTile.svelte';
+	import CertificationProgress from './CertificationProgress.svelte';
 	import Icon from './Icon.svelte';
 	import PhotoGallery from './PhotoGallery.svelte';
 	import WeekHours from './WeekHours.svelte';
 	import {
 		ATTRIBUTE_NAMES,
 		ATTRIBUTE_VALUES,
-		LAPTOP_RULES,
+		EXTRAS,
 		distanceLabel,
+		laptopRuleLabel,
 		openingLabel,
 		osmWifi
 	} from './labels.ts';
@@ -34,10 +38,12 @@
 		url: string;
 		/** Where Back goes without JavaScript (the city map). */
 		backHref: string;
+		/** The contribution form (/{city}/{place}/update). */
+		updateHref: string;
 		onback: (event: MouseEvent) => void;
 	};
 
-	let { place, url, backHref, onback }: Props = $props();
+	let { place, url, backHref, updateHref, onback }: Props = $props();
 
 	const NOTICE_MS = 3000;
 	const DESKTOP_QUERY = '(min-width: 1024px)';
@@ -98,8 +104,14 @@
 		];
 	});
 
-	const toGo = $derived(Math.max(0, place.minUsers - place.contributors));
-	const progress = $derived(Math.min(1, place.contributors / Math.max(1, place.minUsers)));
+	/** "Shared by Luca and Ana": names only, never a date or an identifier next to them. */
+	const sharedBy = $derived.by(() => {
+		const names = joinNames(place.contributorNames ?? [], {
+			locale: getLocale(),
+			others: (count) => m.place_others({ count })
+		});
+		return names ? m.place_shared_by({ names }) : undefined;
+	});
 
 	const osmUrl = $derived(
 		place.osm ? `https://www.openstreetmap.org/${place.osm.type}/${place.osm.id}` : undefined
@@ -284,10 +296,7 @@
 						<span class="grow">{m.place_attribute_long_stays()}</span><span class="dash">—</span>
 					</li>
 				</ul>
-				<!-- TODO(feature 7): contribution flow. -->
-				<button class="primary" type="button" aria-disabled="true">
-					{m.action_add_experience()}
-				</button>
+				<a class="primary" href={updateHref}>{m.action_add_experience()}</a>
 			</section>
 
 			{@render hoursAndAddress()}
@@ -306,6 +315,7 @@
 						confirmations={tile.confirmations}
 						lastConfirmedOn={tile.lastConfirmedOn}
 						timezone={place.timezone}
+						addHref={updateHref}
 					/>
 				{/each}
 			</div>
@@ -314,7 +324,7 @@
 				<div class="rule">
 					<span class="glyph"><Icon name="laptop" /></span>
 					<div>
-						<strong>{LAPTOP_RULES[rule.rule]()}</strong>
+						<strong>{laptopRuleLabel(rule.rule, rule.hours)}</strong>
 						<span class="mono">
 							{m.place_laptop_policy()} · {m.place_confirmations({ count: rule.confirmations })} ·
 							{ago(rule.lastConfirmedOn)}
@@ -323,28 +333,49 @@
 				</div>
 			{/each}
 
+			{#if place.extras.length}
+				<section class="block">
+					<h2>{m.place_more_details()}</h2>
+					<ul class="extras">
+						{#each place.extras as extra (extra.extra)}
+							<li>
+								<strong>{EXTRAS[extra.extra]()}</strong>
+								<span class="mono">
+									{m.place_confirmations({ count: extra.confirmations })} ·
+									{ago(extra.lastConfirmedOn)}
+								</span>
+							</li>
+						{/each}
+					</ul>
+				</section>
+			{/if}
+
+			{#if place.notes?.length}
+				<section class="block">
+					<h2>{m.place_notes()}</h2>
+					<ul class="notes">
+						{#each place.notes as note, index (index)}
+							<li>
+								<p>{note.note}</p>
+								<span class="mono">
+									{formatDate(`${note.month}-01`, {
+										month: 'short',
+										year: 'numeric',
+										timeZone: 'UTC'
+									})}
+								</span>
+							</li>
+						{/each}
+					</ul>
+				</section>
+			{/if}
+
+			{#if sharedBy}
+				<p class="shared-by">{sharedBy}</p>
+			{/if}
+
 			{#if !certified}
-				<div class="progress">
-					<div class="progress-head">
-						<strong>
-							{m.place_certification_progress({
-								count: place.contributors,
-								total: place.minUsers
-							})}
-						</strong>
-						<span class="mono">{m.place_to_go({ count: toGo })}</span>
-					</div>
-					<div
-						class="bar"
-						role="progressbar"
-						aria-valuemin={0}
-						aria-valuemax={place.minUsers}
-						aria-valuenow={place.contributors}
-					>
-						<span style:width="{progress * 100}%"></span>
-					</div>
-					<span class="hint">{m.place_check_in_hint()}</span>
-				</div>
+				<CertificationProgress contributors={place.contributors} minUsers={place.minUsers} hint />
 			{/if}
 
 			{@render hoursAndAddress()}
@@ -354,10 +385,7 @@
 
 	{#if !unchecked}
 		<div class="actions">
-			<!-- TODO(feature 7): contribution flow (check-in). -->
-			<button class="primary" type="button" aria-disabled="true">
-				{m.action_add_experience()}
-			</button>
+			<a class="primary" href="{updateHref}?checkin=1">{m.action_check_in_here()}</a>
 			<a
 				class="directions"
 				href={directionsUrl(place.point)}
@@ -594,40 +622,34 @@
 		border: 1.5px solid var(--muted);
 	}
 
-	.progress {
+	.extras,
+	.notes {
+		margin: 0;
+		padding: 0;
+		list-style: none;
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
-		padding: 14px 16px;
-		border-radius: var(--radius);
-		background: var(--surface);
-		box-shadow: 0 1px 3px var(--sh-4);
 	}
 
-	.progress-head {
+	.extras li,
+	.notes li {
 		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		gap: 12px;
-		font-size: 14px;
+		flex-direction: column;
+		gap: 2px;
+		padding: 10px 0;
+		border-top: 1px solid var(--line);
+		font-size: 15px;
 	}
 
-	.bar {
-		height: 6px;
-		border-radius: 3px;
-		background: var(--pill);
-		overflow: hidden;
-	}
-
-	.bar span {
-		display: block;
-		height: 100%;
-		background: var(--accent);
-	}
-
-	.hint {
-		font-size: 12px;
+	.notes p {
+		margin: 0;
 		line-height: 1.45;
+		overflow-wrap: anywhere;
+	}
+
+	.shared-by {
+		margin: 0;
+		font-size: 14px;
 		color: var(--muted);
 	}
 
@@ -679,14 +701,18 @@
 	}
 
 	.primary {
-		height: var(--btn-height);
-		border: 0;
+		min-height: var(--btn-height);
+		padding: 0 16px;
 		border-radius: var(--radius);
 		background: var(--btn);
 		color: var(--btnfg);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		text-decoration: none;
 		font-size: 16px;
 		font-weight: 700;
-		cursor: default;
 	}
 
 	.block {

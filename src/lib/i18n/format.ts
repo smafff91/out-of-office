@@ -54,6 +54,24 @@ export function formatKilometers(km: number): string {
 	}).format(km);
 }
 
+/** A short distance in meters: "35 m". */
+export function formatMeters(meters: number): string {
+	return new Intl.NumberFormat(getLocale(), {
+		style: 'unit',
+		unit: 'meter',
+		maximumFractionDigits: 0
+	}).format(meters);
+}
+
+/** A duration in whole hours: "2h" (en), "2 h" (es, ca). */
+export function formatHours(hours: number): string {
+	return new Intl.NumberFormat(getLocale(), {
+		style: 'unit',
+		unit: 'hour',
+		unitDisplay: 'narrow'
+	}).format(hours);
+}
+
 /** Short weekday name, Monday = 0: "Mon" (en), "lun" (es), "dl." (ca). */
 export function formatWeekday(day: number): string {
 	// 2024-01-01 was a Monday; UTC so the device timezone never shifts the day.

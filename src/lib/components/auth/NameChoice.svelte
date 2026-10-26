@@ -2,15 +2,22 @@
 	// "Show my name on places" / "Stay anonymous", asked on the first update (feature 7b mounts
 	// it). Nothing is preselected: the user has to pick. Showing the name asks for a first name,
 	// prefilled from Google (given_name) or empty for email sign-ins.
+	// Opened again from "Change" (`changing`): the current choice is selected and a line says it
+	// applies to every place, past updates included.
+	import { untrack } from 'svelte';
 	import { displayNameProblem, normalizeDisplayName } from '#lib/auth/display-name.ts';
 	import { saveProfile, session } from '#lib/auth/session.svelte.ts';
 	import { DISPLAY_NAME_MAX_LENGTH } from '#lib/config.ts';
 	import * as m from '#lib/paraglide/messages.js';
 
-	let { onsaved }: { onsaved?: (showName: boolean) => void } = $props();
+	let { changing = false, onsaved }: { changing?: boolean; onsaved?: (showName: boolean) => void } =
+		$props();
 
 	const id = $props.id();
-	let choice = $state<'show' | 'anonymous'>();
+	const current = session.profile?.showName;
+	let choice = $state<'show' | 'anonymous' | undefined>(
+		untrack(() => (changing && current != null ? (current ? 'show' : 'anonymous') : undefined))
+	);
 	let name = $state(session.profile?.displayName ?? '');
 	let tried = $state(false);
 	let saving = $state(false);
@@ -47,9 +54,12 @@
 </script>
 
 <form class="choice" novalidate onsubmit={save}>
-	<fieldset aria-describedby="{id}-body">
+	<fieldset aria-describedby={changing ? `${id}-body ${id}-everywhere` : `${id}-body`}>
 		<legend>{m.profile_name_choice_title()}</legend>
 		<p id="{id}-body">{m.profile_name_choice_body()}</p>
+		{#if changing}
+			<p class="everywhere" id="{id}-everywhere">{m.profile_name_choice_everywhere()}</p>
+		{/if}
 
 		<label class="option" class:on={choice === 'show'}>
 			<input type="radio" name="{id}-choice" value="show" bind:group={choice} />
@@ -117,6 +127,11 @@
 		font-size: 15px;
 		line-height: 1.5;
 		color: var(--muted);
+	}
+
+	.everywhere {
+		color: var(--ink);
+		font-weight: 600;
 	}
 
 	.option {

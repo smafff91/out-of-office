@@ -4,6 +4,7 @@ type IconShape = { d: string; circles?: [cx: number, cy: number, r: number][] };
 export const ICONS = {
 	back: { d: 'M15 5l-7 7 7 7' },
 	close: { d: 'M6 6l12 12M18 6L6 18' },
+	shield: { d: 'M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5zM8.5 12l2.5 2.5 4.5-5' },
 	share: { d: 'M12 3v12M7 8l5-5 5 5M5 14v6h14v-6' },
 	directions: { d: 'M3 11l18-8-8 18-2-8z' },
 	check: { d: 'M5 12l5 5L20 7' },

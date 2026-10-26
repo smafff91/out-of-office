@@ -13,6 +13,8 @@ export type PositionResult =
 export type PermissionStatus = 'granted' | 'denied' | 'prompt' | 'unknown';
 
 const TIMEOUT_MS = 10_000;
+/** A precise reading (GPS) can take longer, especially indoors. */
+const FRESH_TIMEOUT_MS = 15_000;
 /** A position this recent is reused instead of asking the device again. */
 const MAX_AGE_MS = 60_000;
 
@@ -25,6 +27,18 @@ export function getLastPosition(): Position | undefined {
 
 /** Asks for the current position; may show the system permission prompt. */
 export function requestPosition(): Promise<PositionResult> {
+	return readPosition({ enableHighAccuracy: false, timeout: TIMEOUT_MS, maximumAge: MAX_AGE_MS });
+}
+
+/**
+ * A new reading, never a cached one, as precise as the device can (check-in). May show the
+ * system permission prompt; slower than requestPosition().
+ */
+export function requestFreshPosition(): Promise<PositionResult> {
+	return readPosition({ enableHighAccuracy: true, timeout: FRESH_TIMEOUT_MS, maximumAge: 0 });
+}
+
+function readPosition(options: PositionOptions): Promise<PositionResult> {
 	if (typeof navigator === 'undefined' || !('geolocation' in navigator)) {
 		return Promise.resolve({ ok: false, reason: 'unsupported' });
 	}
@@ -43,7 +57,7 @@ export function requestPosition(): Promise<PositionResult> {
 							: 'unavailable';
 				resolve({ ok: false, reason });
 			},
-			{ enableHighAccuracy: false, timeout: TIMEOUT_MS, maximumAge: MAX_AGE_MS }
+			options
 		);
 	});
 }

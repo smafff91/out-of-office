@@ -10,8 +10,11 @@ export type Database = {
 		Tables: {
 			certification_settings: {
 				Row: {
+					checkin_max_accuracy_m: number;
 					checkin_radius_m: number;
 					city_id: string | null;
+					daily_contribution_limit: number;
+					founding_limit: number;
 					id: string;
 					manual_recheck_months: number;
 					min_checkin_ratio: number;
@@ -28,8 +31,11 @@ export type Database = {
 					vote_cooldown_days: number;
 				};
 				Insert: {
+					checkin_max_accuracy_m?: number;
 					checkin_radius_m: number;
 					city_id?: string | null;
+					daily_contribution_limit?: number;
+					founding_limit?: number;
 					id?: string;
 					manual_recheck_months: number;
 					min_checkin_ratio: number;
@@ -46,8 +52,11 @@ export type Database = {
 					vote_cooldown_days: number;
 				};
 				Update: {
+					checkin_max_accuracy_m?: number;
 					checkin_radius_m?: number;
 					city_id?: string | null;
+					daily_contribution_limit?: number;
+					founding_limit?: number;
 					id?: string;
 					manual_recheck_months?: number;
 					min_checkin_ratio?: number;
@@ -173,7 +182,7 @@ export type Database = {
 				Row: {
 					anon_key: string | null;
 					checked_in: boolean;
-					checkin_distance_m: number | null;
+					city_id: string;
 					created_at: string;
 					extras: Database['public']['Enums']['place_extra'][];
 					id: string;
@@ -183,6 +192,9 @@ export type Database = {
 					note: string | null;
 					outlets: Database['public']['Enums']['outlets_level'];
 					place_id: string;
+					superseded_at: string | null;
+					superseded_by: string | null;
+					time_limit_hours: number | null;
 					user_id: string | null;
 					wifi: Database['public']['Enums']['wifi_level'];
 					would_work_again: boolean;
@@ -190,7 +202,7 @@ export type Database = {
 				Insert: {
 					anon_key?: string | null;
 					checked_in?: boolean;
-					checkin_distance_m?: number | null;
+					city_id: string;
 					created_at?: string;
 					extras?: Database['public']['Enums']['place_extra'][];
 					id?: string;
@@ -200,6 +212,9 @@ export type Database = {
 					note?: string | null;
 					outlets: Database['public']['Enums']['outlets_level'];
 					place_id: string;
+					superseded_at?: string | null;
+					superseded_by?: string | null;
+					time_limit_hours?: number | null;
 					user_id?: string | null;
 					wifi: Database['public']['Enums']['wifi_level'];
 					would_work_again: boolean;
@@ -207,7 +222,7 @@ export type Database = {
 				Update: {
 					anon_key?: string | null;
 					checked_in?: boolean;
-					checkin_distance_m?: number | null;
+					city_id?: string;
 					created_at?: string;
 					extras?: Database['public']['Enums']['place_extra'][];
 					id?: string;
@@ -217,11 +232,35 @@ export type Database = {
 					note?: string | null;
 					outlets?: Database['public']['Enums']['outlets_level'];
 					place_id?: string;
+					superseded_at?: string | null;
+					superseded_by?: string | null;
+					time_limit_hours?: number | null;
 					user_id?: string | null;
 					wifi?: Database['public']['Enums']['wifi_level'];
 					would_work_again?: boolean;
 				};
 				Relationships: [
+					{
+						foreignKeyName: 'contributions_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'cities';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'city_summaries';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'place_details';
+						referencedColumns: ['id'];
+					},
 					{
 						foreignKeyName: 'contributions_place_id_fkey';
 						columns: ['place_id'];
@@ -230,7 +269,64 @@ export type Database = {
 						referencedColumns: ['id'];
 					},
 					{
+						foreignKeyName: 'contributions_superseded_by_fkey';
+						columns: ['superseded_by'];
+						isOneToOne: false;
+						referencedRelation: 'active_contributions';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_superseded_by_fkey';
+						columns: ['superseded_by'];
+						isOneToOne: false;
+						referencedRelation: 'contributions';
+						referencedColumns: ['id'];
+					},
+					{
 						foreignKeyName: 'contributions_user_id_fkey';
+						columns: ['user_id'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					}
+				];
+			};
+			founding_contributors: {
+				Row: {
+					awarded_at: string;
+					city_id: string;
+					seat: number;
+					user_id: string | null;
+				};
+				Insert: {
+					awarded_at?: string;
+					city_id: string;
+					seat: number;
+					user_id?: string | null;
+				};
+				Update: {
+					awarded_at?: string;
+					city_id?: string;
+					seat?: number;
+					user_id?: string | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'founding_contributors_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'cities';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'founding_contributors_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'city_summaries';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'founding_contributors_user_id_fkey';
 						columns: ['user_id'];
 						isOneToOne: false;
 						referencedRelation: 'profiles';
@@ -352,7 +448,21 @@ export type Database = {
 						foreignKeyName: 'photos_contribution_id_fkey';
 						columns: ['contribution_id'];
 						isOneToOne: false;
+						referencedRelation: 'active_contributions';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'photos_contribution_id_fkey';
+						columns: ['contribution_id'];
+						isOneToOne: false;
 						referencedRelation: 'contributions';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'photos_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'place_details';
 						referencedColumns: ['id'];
 					},
 					{
@@ -505,7 +615,6 @@ export type Database = {
 				Row: {
 					created_at: string;
 					display_name: string | null;
-					founding_contributor: boolean;
 					id: string;
 					locale: string | null;
 					locale_chosen_at: string | null;
@@ -515,7 +624,6 @@ export type Database = {
 				Insert: {
 					created_at?: string;
 					display_name?: string | null;
-					founding_contributor?: boolean;
 					id: string;
 					locale?: string | null;
 					locale_chosen_at?: string | null;
@@ -525,7 +633,6 @@ export type Database = {
 				Update: {
 					created_at?: string;
 					display_name?: string | null;
-					founding_contributor?: boolean;
 					id?: string;
 					locale?: string | null;
 					locale_chosen_at?: string | null;
@@ -576,6 +683,13 @@ export type Database = {
 						foreignKeyName: 'reports_contribution_id_fkey';
 						columns: ['contribution_id'];
 						isOneToOne: false;
+						referencedRelation: 'active_contributions';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'reports_contribution_id_fkey';
+						columns: ['contribution_id'];
+						isOneToOne: false;
 						referencedRelation: 'contributions';
 						referencedColumns: ['id'];
 					},
@@ -584,6 +698,13 @@ export type Database = {
 						columns: ['photo_id'];
 						isOneToOne: false;
 						referencedRelation: 'photos';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'reports_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'place_details';
 						referencedColumns: ['id'];
 					},
 					{
@@ -604,6 +725,119 @@ export type Database = {
 			};
 		};
 		Views: {
+			active_contributions: {
+				Row: {
+					anon_key: string | null;
+					checked_in: boolean | null;
+					city_id: string | null;
+					created_at: string | null;
+					extras: Database['public']['Enums']['place_extra'][] | null;
+					id: string | null;
+					laptop_rules: Database['public']['Enums']['laptop_rule'][] | null;
+					long_stays: Database['public']['Enums']['long_stays'] | null;
+					noise: Database['public']['Enums']['noise_level'] | null;
+					note: string | null;
+					outlets: Database['public']['Enums']['outlets_level'] | null;
+					place_id: string | null;
+					superseded_at: string | null;
+					superseded_by: string | null;
+					time_limit_hours: number | null;
+					user_id: string | null;
+					wifi: Database['public']['Enums']['wifi_level'] | null;
+					would_work_again: boolean | null;
+				};
+				Insert: {
+					anon_key?: string | null;
+					checked_in?: boolean | null;
+					city_id?: string | null;
+					created_at?: string | null;
+					extras?: Database['public']['Enums']['place_extra'][] | null;
+					id?: string | null;
+					laptop_rules?: Database['public']['Enums']['laptop_rule'][] | null;
+					long_stays?: Database['public']['Enums']['long_stays'] | null;
+					noise?: Database['public']['Enums']['noise_level'] | null;
+					note?: string | null;
+					outlets?: Database['public']['Enums']['outlets_level'] | null;
+					place_id?: string | null;
+					superseded_at?: string | null;
+					superseded_by?: string | null;
+					time_limit_hours?: number | null;
+					user_id?: string | null;
+					wifi?: Database['public']['Enums']['wifi_level'] | null;
+					would_work_again?: boolean | null;
+				};
+				Update: {
+					anon_key?: string | null;
+					checked_in?: boolean | null;
+					city_id?: string | null;
+					created_at?: string | null;
+					extras?: Database['public']['Enums']['place_extra'][] | null;
+					id?: string | null;
+					laptop_rules?: Database['public']['Enums']['laptop_rule'][] | null;
+					long_stays?: Database['public']['Enums']['long_stays'] | null;
+					noise?: Database['public']['Enums']['noise_level'] | null;
+					note?: string | null;
+					outlets?: Database['public']['Enums']['outlets_level'] | null;
+					place_id?: string | null;
+					superseded_at?: string | null;
+					superseded_by?: string | null;
+					time_limit_hours?: number | null;
+					user_id?: string | null;
+					wifi?: Database['public']['Enums']['wifi_level'] | null;
+					would_work_again?: boolean | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'contributions_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'cities';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_city_id_fkey';
+						columns: ['city_id'];
+						isOneToOne: false;
+						referencedRelation: 'city_summaries';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'place_details';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'places';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_superseded_by_fkey';
+						columns: ['superseded_by'];
+						isOneToOne: false;
+						referencedRelation: 'active_contributions';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_superseded_by_fkey';
+						columns: ['superseded_by'];
+						isOneToOne: false;
+						referencedRelation: 'contributions';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_user_id_fkey';
+						columns: ['user_id'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			city_ranking: {
 				Row: {
 					city_id: string | null;
@@ -700,6 +934,13 @@ export type Database = {
 						foreignKeyName: 'contributions_place_id_fkey';
 						columns: ['place_id'];
 						isOneToOne: false;
+						referencedRelation: 'place_details';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
 						referencedRelation: 'places';
 						referencedColumns: ['id'];
 					}
@@ -712,10 +953,14 @@ export type Database = {
 					attributes: Json | null;
 					cert_origin: Database['public']['Enums']['cert_origin'] | null;
 					certified_on: string | null;
+					checkin_max_accuracy_m: number | null;
+					checkin_radius_m: number | null;
 					city_id: string | null;
 					contributors: number | null;
 					district: string | null;
+					extras: Json | null;
 					has_score: boolean | null;
+					id: string | null;
 					internet_access_osm: string | null;
 					laptop_rules: Json | null;
 					lat: number | null;
@@ -759,6 +1004,13 @@ export type Database = {
 					rule: Database['public']['Enums']['laptop_rule'] | null;
 				};
 				Relationships: [
+					{
+						foreignKeyName: 'contributions_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'place_details';
+						referencedColumns: ['id'];
+					},
 					{
 						foreignKeyName: 'contributions_place_id_fkey';
 						columns: ['place_id'];
@@ -817,6 +1069,13 @@ export type Database = {
 						foreignKeyName: 'contributions_place_id_fkey';
 						columns: ['place_id'];
 						isOneToOne: false;
+						referencedRelation: 'place_details';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'contributions_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
 						referencedRelation: 'places';
 						referencedColumns: ['id'];
 					}
@@ -830,6 +1089,13 @@ export type Database = {
 					yes_votes: number | null;
 				};
 				Relationships: [
+					{
+						foreignKeyName: 'contributions_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: false;
+						referencedRelation: 'place_details';
+						referencedColumns: ['id'];
+					},
 					{
 						foreignKeyName: 'contributions_place_id_fkey';
 						columns: ['place_id'];
@@ -872,6 +1138,36 @@ export type Database = {
 				};
 			};
 			city_map_places: { Args: { p_city_id: string }; Returns: Json };
+			city_settings: {
+				Args: { p_city_id: string };
+				Returns: {
+					checkin_max_accuracy_m: number;
+					checkin_radius_m: number;
+					city_id: string | null;
+					daily_contribution_limit: number;
+					founding_limit: number;
+					id: string;
+					manual_recheck_months: number;
+					min_checkin_ratio: number;
+					min_score: number;
+					min_span_days: number;
+					min_users: number;
+					review_reports_count: number;
+					review_reports_window_days: number;
+					revoke_below_score: number;
+					revoke_min_votes: number;
+					revoke_window_months: number;
+					score_min_votes: number;
+					updated_at: string;
+					vote_cooldown_days: number;
+				};
+				SetofOptions: {
+					from: '*';
+					to: 'certification_settings';
+					isOneToOne: true;
+					isSetofReturn: false;
+				};
+			};
 			import_osm_boundaries: {
 				Args: { p_areas: Json; p_city_id: string; p_city_lines: Json };
 				Returns: Json;
@@ -879,7 +1175,43 @@ export type Database = {
 			is_admin: { Args: never; Returns: boolean };
 			is_api_caller: { Args: never; Returns: boolean };
 			locate_city: { Args: { p_lat: number; p_lng: number }; Returns: string };
+			my_recent_contribution: {
+				Args: { p_place_id: string };
+				Returns: {
+					extras: Database['public']['Enums']['place_extra'][];
+					laptop_rules: Database['public']['Enums']['laptop_rule'][];
+					long_stays: Database['public']['Enums']['long_stays'];
+					noise: Database['public']['Enums']['noise_level'];
+					note: string;
+					outlets: Database['public']['Enums']['outlets_level'];
+					time_limit_hours: number;
+					wifi: Database['public']['Enums']['wifi_level'];
+					would_work_again: boolean;
+				}[];
+			};
+			reset_founding_contributors: {
+				Args: { p_city_id: string };
+				Returns: number;
+			};
 			score_min_votes: { Args: { p_city_id: string }; Returns: number };
+			submit_contribution: {
+				Args: {
+					p_accuracy?: number;
+					p_extras?: Database['public']['Enums']['place_extra'][];
+					p_laptop_rules?: Database['public']['Enums']['laptop_rule'][];
+					p_lat?: number;
+					p_lng?: number;
+					p_long_stays: Database['public']['Enums']['long_stays'];
+					p_noise: Database['public']['Enums']['noise_level'];
+					p_note?: string;
+					p_outlets: Database['public']['Enums']['outlets_level'];
+					p_place_id: string;
+					p_time_limit_hours?: number;
+					p_wifi: Database['public']['Enums']['wifi_level'];
+					p_would_work_again: boolean;
+				};
+				Returns: Json;
+			};
 			wilson_lower_bound: {
 				Args: { p_total: number; p_yes: number };
 				Returns: number;

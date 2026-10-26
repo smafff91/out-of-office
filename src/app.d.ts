@@ -21,7 +21,7 @@ declare global {
 			/** Place shown in the tap preview over the map (phones); Back closes it. */
 			preview?: string;
 			/** A sheet or dialog is open (Sheet.svelte); Back closes it. */
-			sheet?: 'sign-in' | 'account' | 'language';
+			sheet?: 'sign-in' | 'account' | 'language' | 'name-choice' | 'discard-draft';
 		}
 	}
 }

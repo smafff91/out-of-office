@@ -24,9 +24,24 @@ export type PlaceAttributes = {
 	long_stays?: Confirmed<LongStays>;
 };
 
-export type ConfirmedRule = { rule: LaptopRule; confirmations: number; lastConfirmedOn: string };
+export type ConfirmedRule = {
+	rule: LaptopRule;
+	confirmations: number;
+	lastConfirmedOn: string;
+	/** Time limit only: the most frequent answer, when given. */
+	hours?: 1 | 2 | 3;
+};
+
+export type PlaceExtra = 'air_conditioning' | 'toilet' | 'large_tables' | 'minimum_spend';
+
+/** A detail at least one active contribution mentions (not choosing one is not a "no"). */
+export type ConfirmedExtra = { extra: PlaceExtra; confirmations: number; lastConfirmedOn: string };
+
+/** A short note, dated by month only ("YYYY-MM"), without its author. */
+export type PlaceNote = { note: string; month: string };
 
 export type PlaceDetail = {
+	id: string;
 	slug: string;
 	name: string;
 	amenity: 'cafe' | 'bar' | null;
@@ -56,10 +71,16 @@ export type PlaceDetail = {
 	minUsers: number;
 	attributes: PlaceAttributes;
 	laptopRules: ConfirmedRule[];
+	extras: ConfirmedExtra[];
+	/** Check-in thresholds, only to show the distance in the form (the database decides). */
+	checkin: { radiusM: number; maxAccuracyM: number };
+	/** Public names and notes: the place page only (fetchPlaceCommunity). */
+	contributorNames?: string[];
+	notes?: PlaceNote[];
 };
 
 const COLUMNS =
-	'slug, name, amenity, level, cert_origin, certified_on, neighborhood, district, address, lng, lat, opening_hours, timezone, internet_access_osm, osm_type, osm_id, may_have_closed, votes, yes_votes, score_pct, has_score, contributors, min_users, attributes, laptop_rules';
+	'id, slug, name, amenity, level, cert_origin, certified_on, neighborhood, district, address, lng, lat, opening_hours, timezone, internet_access_osm, osm_type, osm_id, may_have_closed, votes, yes_votes, score_pct, has_score, contributors, min_users, attributes, laptop_rules, extras, checkin_radius_m, checkin_max_accuracy_m';
 
 /** Contributions change slowly: a preview opened a minute ago is fresh enough for its page. */
 const CACHE_MS = 60_000;
@@ -68,9 +89,13 @@ const cache = new Map<string, { at: number; detail: PlaceDetail }>();
 type RawConfirmed = {
 	value?: string;
 	rule?: string;
+	extra?: string;
+	hours?: number;
 	confirmations: number;
 	last_confirmed_on: string;
 };
+
+const HOURS = new Set([1, 2, 3]);
 
 function toConfirmed<T>(raw: RawConfirmed | undefined): Confirmed<T> | undefined {
 	if (!raw?.value) return undefined;
@@ -84,7 +109,9 @@ function toConfirmed<T>(raw: RawConfirmed | undefined): Confirmed<T> | undefined
 export function toPlaceDetail(row: Omit<DetailRow, 'city_id'>): PlaceDetail {
 	const attributes = (row.attributes ?? {}) as Record<string, RawConfirmed>;
 	const rules = (row.laptop_rules ?? []) as RawConfirmed[];
+	const extras = (row.extras ?? []) as RawConfirmed[];
 	return {
+		id: row.id ?? '',
 		slug: row.slug ?? '',
 		name: row.name ?? '',
 		amenity: row.amenity,
@@ -115,8 +142,18 @@ export function toPlaceDetail(row: Omit<DetailRow, 'city_id'>): PlaceDetail {
 		laptopRules: rules.map((raw) => ({
 			rule: raw.rule as LaptopRule,
 			confirmations: raw.confirmations,
+			lastConfirmedOn: raw.last_confirmed_on,
+			...(raw.hours && HOURS.has(raw.hours) && { hours: raw.hours as 1 | 2 | 3 })
+		})),
+		extras: extras.map((raw) => ({
+			extra: raw.extra as PlaceExtra,
+			confirmations: raw.confirmations,
 			lastConfirmedOn: raw.last_confirmed_on
-		}))
+		})),
+		checkin: {
+			radiusM: row.checkin_radius_m ?? 100,
+			maxAccuracyM: row.checkin_max_accuracy_m ?? 100
+		}
 	};
 }
 
@@ -144,6 +181,38 @@ export async function fetchPlaceDetail(
 	const detail = toPlaceDetail(data);
 	if (browser) cache.set(key, { at: Date.now(), detail });
 	return detail;
+}
+
+/** Load dependency of the place page and its form (invalidate() after an update). */
+export const PLACE_DEPENDENCY = 'app:place';
+
+/** After an update: the next read of this place asks the database again. */
+export function invalidatePlaceDetail(cityId: string, slug: string) {
+	cache.delete(`${cityId}/${slug}`);
+}
+
+/** Public names ("Shared by …") and notes of a place, for its page. */
+export async function fetchPlaceCommunity(
+	supabase: Client,
+	placeId: string
+): Promise<{ contributorNames: string[]; notes: PlaceNote[] }> {
+	const [names, notes] = await Promise.all([
+		supabase.from('place_contributors').select('display_name').eq('place_id', placeId),
+		supabase
+			.from('place_notes')
+			.select('note, created_month')
+			.eq('place_id', placeId)
+			.order('created_month', { ascending: false })
+			.limit(20)
+	]);
+	if (names.error) throw new Error(names.error.message);
+	if (notes.error) throw new Error(notes.error.message);
+	return {
+		contributorNames: names.data.flatMap((row) => (row.display_name ? [row.display_name] : [])),
+		notes: notes.data.flatMap((row) =>
+			row.note && row.created_month ? [{ note: row.note, month: row.created_month }] : []
+		)
+	};
 }
 
 /** The place as a map pin. */

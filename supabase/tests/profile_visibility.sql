@@ -10,6 +10,7 @@ declare
 	v_shown uuid := gen_random_uuid();
 	v_hidden uuid := gen_random_uuid();
 	v_undecided uuid := gen_random_uuid();
+	v_full_name uuid := gen_random_uuid();
 	v_place uuid;
 	v_count integer;
 	v_text text;
@@ -18,10 +19,12 @@ begin
 	if v_place is null then raise exception 'no approved place to test with'; end if;
 
 	-- Sign-up: Google gives a given_name, email gives nothing; the locale comes from metadata.
+	-- Only given_name counts: no fallback to full_name or name.
 	insert into auth.users (id, email, raw_user_meta_data) values
 		(v_shown, 'shown@test.invalid', '{"given_name": "Zoe Anne", "locale": "ca"}'),
 		(v_hidden, 'hidden@test.invalid', '{"given_name": "Yann", "locale": "xx"}'),
-		(v_undecided, 'undecided@test.invalid', '{}');
+		(v_undecided, 'undecided@test.invalid', '{}'),
+		(v_full_name, 'full-name@test.invalid', '{"full_name": "Wanda Smith", "name": "Wanda Smith"}');
 
 	select display_name || '|' || coalesce(locale, '-') into v_text from public.profiles where id = v_shown;
 	if v_text <> 'Zoe|ca' then raise exception 'handle_new_user: got %', v_text; end if;
@@ -29,6 +32,8 @@ begin
 	if v_text <> 'Yann|-' then raise exception 'handle_new_user (bad locale): got %', v_text; end if;
 	select coalesce(display_name, '-') into v_text from public.profiles where id = v_undecided;
 	if v_text <> '-' then raise exception 'email sign-up should have no name, got %', v_text; end if;
+	select coalesce(display_name, '-') into v_text from public.profiles where id = v_full_name;
+	if v_text <> '-' then raise exception 'no given_name should mean no name, got %', v_text; end if;
 
 	update public.profiles set show_name = true where id = v_shown;
 	update public.profiles set show_name = false where id = v_hidden;
@@ -85,11 +90,6 @@ begin
 	begin
 		update public.profiles set role = 'admin' where id = v_shown;
 		raise exception 'role is writable';
-	exception when insufficient_privilege then null;
-	end;
-	begin
-		update public.profiles set founding_contributor = true where id = v_shown;
-		raise exception 'founding_contributor is writable';
 	exception when insufficient_privilege then null;
 	end;
 

@@ -40,6 +40,9 @@
 		onmove
 	}: Props = $props();
 
+	/** How far from the edges of the free area a pin still counts as well in view (px). */
+	const VISIBLE_MARGIN = 48;
+
 	let container: HTMLDivElement;
 	let controller = $state<MapController>();
 	/** A camera move asked for before MapLibre finished loading: applied once it is ready. */
@@ -100,6 +103,16 @@
 
 	export function flyTo(target: LngLat, targetZoom?: number) {
 		move((map) => map.flyTo(target, targetZoom));
+	}
+
+	/**
+	 * Centers the map on a place in the free area. With `ifHidden`, only when the place is out of
+	 * view or near an edge (the user just tapped its pin, or it is already in place).
+	 */
+	export function showPlace(target: LngLat, { ifHidden = false } = {}) {
+		move((map) => {
+			if (!ifHidden || !map.shows(target, VISIBLE_MARGIN)) map.centerOn(target);
+		});
 	}
 
 	export function fitBounds(target: Bounds) {

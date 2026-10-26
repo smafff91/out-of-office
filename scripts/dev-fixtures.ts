@@ -161,7 +161,7 @@ async function add() {
 			.eq('id', place.id);
 		if (error) fail(`Could not update ${place.name}: ${error.message}`);
 
-		const rows = testContributions(place.id, certified, index);
+		const rows = testContributions(place.id, city.id, certified, index);
 		const { data, error: insertError } = await supabase
 			.from('contributions')
 			.insert(rows)
@@ -198,7 +198,12 @@ function random(seed: number) {
  * places alternate between a few votes ("2 of 2") and 5+ votes (a percentage), so every
  * Top rated section has rows. Dates spread over the last 60 days.
  */
-function testContributions(placeId: string, certified: boolean, index: number): Contribution[] {
+function testContributions(
+	placeId: string,
+	cityId: string,
+	certified: boolean,
+	index: number
+): Contribution[] {
 	const next = random(index + 1);
 	const pick = <T>(values: readonly T[]) => values[Math.floor(next() * values.length)];
 	const count = certified
@@ -209,6 +214,8 @@ function testContributions(placeId: string, certified: boolean, index: number): 
 	const yesRate = certified ? 0.85 : 0.4 + next() * 0.5;
 	return Array.from({ length: count }, () => ({
 		place_id: placeId,
+		// Set again by the database from the place (contributions_c_set_city).
+		city_id: cityId,
 		anon_key: crypto.randomUUID(),
 		would_work_again: next() < yesRate,
 		wifi: pick(

@@ -124,10 +124,8 @@
 			<strong>{m.preview_be_first()}</strong>
 			<span>{m.preview_be_first_body()}</span>
 		</div>
-		<!-- TODO(feature 7): contribution flow. -->
-		<button class="primary" type="button" aria-disabled="true">
-			{m.action_add_work_info_here()}
-		</button>
+		<!-- "I'm here": opens the form as a check-in (asks for the position). -->
+		<a class="primary" href="{href}/update?checkin=1">{m.action_add_work_info_here()}</a>
 	{:else}
 		{#if pills.length}
 			<ul class="pills">
@@ -312,10 +310,6 @@
 		text-decoration: none;
 		font-size: 16px;
 		font-weight: 700;
-	}
-
-	.primary[aria-disabled='true'] {
-		cursor: default;
 	}
 
 	.actions {

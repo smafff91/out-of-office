@@ -45,7 +45,10 @@ insert into public.certification_settings (
 	manual_recheck_months,
 	vote_cooldown_days,
 	checkin_radius_m,
-	score_min_votes
+	score_min_votes,
+	checkin_max_accuracy_m,
+	daily_contribution_limit,
+	founding_limit
 )
-values (null, 10, 0.50, 14, 0.75, 0.60, 10, 12, 2, 30, 12, 30, 100, 5)
+values (null, 10, 0.50, 14, 0.75, 0.60, 10, 12, 2, 30, 12, 30, 100, 5, 100, 20, 50)
 on conflict (city_id) do nothing;

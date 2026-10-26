@@ -323,6 +323,7 @@
 	"profile_sign_out": "Cerrar sesión",
 	"profile_name_choice_title": "¿Mostrar tu nombre?",
 	"profile_name_choice_body": "Elige si tu nombre aparece en los sitios que actualizas. Puedes cambiarlo más adelante.",
+	"profile_name_choice_everywhere": "Se aplica a todos los sitios, también a las actualizaciones que ya enviaste.",
 	"profile_show_name": "Mostrar mi nombre en los sitios",
 	"profile_stay_anonymous": "Seguir en el anonimato",
 	"profile_name_label": "Nombre",
@@ -349,5 +350,98 @@
 	"language_all": "Todos los idiomas",
 	"language_search": "Buscar idiomas",
 	"language_none": "Ningún idioma coincide.",
-	"language_button_label": "Idioma: {language}"
+	"language_button_label": "Idioma: {language}",
+	"action_check_in_here": "Haz check-in aquí",
+	"action_add_it": "Añádelo",
+	"place_shared_by": "Compartido por {names}",
+	"place_others": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} más",
+				"countPlural=*": "{countText} más"
+			}
+		}
+	],
+	"place_more_details": "Más detalles",
+	"place_notes": "Notas",
+	"laptop_rule_time_limit_hours": "Límite de tiempo para portátiles: {hours}",
+	"extra_air_conditioning": "Aire acondicionado",
+	"extra_toilet": "Baño",
+	"extra_large_tables": "Mesas grandes",
+	"extra_minimum_spend": "Consumo mínimo",
+	"contribute_meta_title": "Actualiza {name}",
+	"contribute_checkin_verified": "Estás aquí · check-in verificado",
+	"contribute_checkin_distance": "A {distance}",
+	"contribute_checkin_idle_title": "¿Estás allí ahora?",
+	"contribute_checkin_idle_body": "Haz check-in para ayudar a certificarlo. Tu actualización cuenta igualmente.",
+	"contribute_checkin_locating": "Buscando tu ubicación…",
+	"contribute_checkin_far": "Estás a {distance}: tu actualización cuenta, pero no como check-in",
+	"contribute_checkin_imprecise": "Tu ubicación no es lo bastante precisa para un check-in: tu actualización cuenta igualmente",
+	"contribute_checkin_unavailable": "No hemos podido obtener tu ubicación: tu actualización cuenta, pero no como check-in",
+	"action_im_here_now": "Estoy aquí ahora",
+	"action_try_again": "Reintentar",
+	"contribute_work_again": "¿Volverías a trabajar aquí?",
+	"contribute_yes": "Sí",
+	"contribute_no": "No",
+	"contribute_still_right": "¿Sigue igual?",
+	"contribute_still_right_body": "Hemos rellenado lo que contaron otros usuarios. Cambia solo lo que sea distinto.",
+	"contribute_own_answers_body": "Son las respuestas de tu última actualización. Al enviar, se actualizan.",
+	"contribute_whats_it_like": "¿Cómo es?",
+	"action_everything_still_right": "Todo sigue igual",
+	"contribute_now": "ahora: {value} · {ago}",
+	"contribute_rules_count": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} norma",
+				"countPlural=*": "{countText} normas"
+			}
+		}
+	],
+	"contribute_optional": "Opcional",
+	"contribute_laptop_rules": "Normas para portátiles",
+	"contribute_rule_time_limit": "Límite de tiempo",
+	"contribute_rule_none": "Sin normas",
+	"contribute_time_limit_label": "¿Cuánto tiempo?",
+	"contribute_note": "Nota breve",
+	"contribute_note_placeholder": "p. ej. Las mejores mesas con enchufes están arriba",
+	"contribute_note_count": "{count} / {max}",
+	"action_send_update": "Enviar actualización",
+	"contribute_sending": "Enviando…",
+	"contribute_name_shown": "Tu nombre aparecerá en este sitio",
+	"contribute_name_hidden": "Apareces de forma anónima en este sitio",
+	"contribute_change_name": "Cambiar cómo aparece tu nombre",
+	"contribute_required": "Elige una respuesta",
+	"contribute_discard_title": "¿Descartar tu actualización?",
+	"contribute_discard_body": "Se perderán las respuestas de esta página.",
+	"action_discard": "Descartar",
+	"action_keep_editing": "Seguir editando",
+	"action_change": "Cambiar",
+	"contribute_error_offline": "Estás sin conexión. Tus respuestas siguen aquí: envíalas cuando vuelvas a tener conexión.",
+	"contribute_error_daily_limit": "Has llegado al límite de actualizaciones de hoy. Vuelve a intentarlo mañana.",
+	"contribute_error_email_not_confirmed": "Tu correo aún no está confirmado. Vuelve a iniciar sesión con el código que te enviamos.",
+	"contribute_error_sign_in_cancelled": "Inicio de sesión cancelado. Tus respuestas siguen aquí.",
+	"contribute_error_place_not_found": "Este sitio ya no está en el mapa.",
+	"contribute_error_unknown": "No se ha podido enviar tu actualización. Tus respuestas siguen aquí: inténtalo de nuevo.",
+	"thanks_title_name": "Gracias, {name}",
+	"thanks_title": "¡Gracias!",
+	"thanks_body_checkin": "Tu check-in en {place} ya está publicado. La próxima persona que busque un sitio para trabajar lo verá.",
+	"thanks_body_update": "Tu actualización de {place} ya está publicada. La próxima persona que busque un sitio para trabajar la verá.",
+	"thanks_just_now": "ahora mismo",
+	"thanks_founding_title": "Miembro fundador",
+	"thanks_founding_body": "Eres uno de los primeros {count} usuarios que mapean cafés para trabajar en {city}. La insignia se queda en tu nombre.",
+	"thanks_replaced": "Sustituye tu actualización anterior de este sitio.",
+	"action_find_another_place": "Buscar otro sitio",
+	"action_back_to_place": "Volver a {place}"
 }

@@ -26,6 +26,7 @@
 	);
 	const structuredData = $derived(jsonLd(placeStructuredData(place, url, city.name)));
 	const backHref = $derived(localizeHref(`/${city.slug}`));
+	const updateHref = $derived(localizeHref(`/${city.slug}/${place.slug}/update`));
 
 	/** Opened from the list or the map: Back returns there; otherwise it goes to the city map. */
 	let fromCity = false;
@@ -51,4 +52,4 @@
 	{@html `<script type="application/ld+json">${structuredData}<` + `/script>`}
 </svelte:head>
 
-<PlaceDetail {place} {url} {backHref} onback={back} />
+<PlaceDetail {place} {url} {backHref} {updateHref} onback={back} />

@@ -1,11 +1,11 @@
 /**
  * Texts for place data shared by the list, the preview and the place page.
  */
-import { formatKilometers, formatTime } from '#lib/i18n/format.ts';
+import { formatHours, formatKilometers, formatTime } from '#lib/i18n/format.ts';
 import * as m from '#lib/paraglide/messages.js';
 import { walkingEstimate } from '#lib/places/distance.ts';
 import { openingStatus } from '#lib/places/opening-hours.ts';
-import type { LongStays } from '#lib/supabase/place-details.ts';
+import type { LongStays, PlaceExtra } from '#lib/supabase/place-details.ts';
 import type { LaptopRule, Noise, Outlets, Wifi } from '#lib/supabase/places.ts';
 
 type Label = () => string;
@@ -39,7 +39,10 @@ export const ATTRIBUTE_PILLS: AttributeLabels = {
 	}
 };
 
-/** Short forms, under the attribute name in a tile: "Wi‑Fi / Fast". */
+/**
+ * Short forms, under the attribute name in a tile: "Wi‑Fi / Fast". "Long stays / Short stays
+ * only" reads better than "Not really" on its own (the form keeps "Not really").
+ */
 export const ATTRIBUTE_VALUES: AttributeLabels = {
 	wifi: {
 		none: m.attribute_short_wifi_none,
@@ -57,6 +60,15 @@ export const ATTRIBUTE_VALUES: AttributeLabels = {
 	},
 	long_stays: {
 		welcome: m.attribute_short_long_stays_welcome,
+		not_really: m.attribute_long_stays_not_really
+	}
+};
+
+/** The answers of the form's segmented controls: "None / Slow / Fast", "Welcome / Not really". */
+export const ATTRIBUTE_OPTIONS: AttributeLabels = {
+	...ATTRIBUTE_VALUES,
+	long_stays: {
+		welcome: m.attribute_short_long_stays_welcome,
 		not_really: m.attribute_short_long_stays_not_really
 	}
 };
@@ -72,6 +84,20 @@ export const LAPTOP_RULES: Record<LaptopRule, Label> = {
 	no_laptops_lunch: m.laptop_rule_no_laptops_lunch,
 	no_laptops_weekends: m.laptop_rule_no_laptops_weekends,
 	time_limit: m.laptop_rule_time_limit
+};
+
+/** "Time limit for laptops: 2h" when the hours are known. */
+export function laptopRuleLabel(rule: LaptopRule, hours?: number): string {
+	return rule === 'time_limit' && hours
+		? m.laptop_rule_time_limit_hours({ hours: formatHours(hours) })
+		: LAPTOP_RULES[rule]();
+}
+
+export const EXTRAS: Record<PlaceExtra, Label> = {
+	air_conditioning: m.extra_air_conditioning,
+	toilet: m.extra_toilet,
+	large_tables: m.extra_large_tables,
+	minimum_spend: m.extra_minimum_spend
 };
 
 /** "Open until 8:00 PM", "Opens 8:00 AM"…; undefined when the hours are unknown or uncertain. */

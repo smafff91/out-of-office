@@ -323,6 +323,7 @@
 	"profile_sign_out": "Tanca la sessió",
 	"profile_name_choice_title": "Vols mostrar el teu nom?",
 	"profile_name_choice_body": "Tria si el teu nom apareix als llocs que actualitzes. Ho pots canviar més endavant.",
+	"profile_name_choice_everywhere": "S'aplica a tots els llocs, també a les actualitzacions que ja has enviat.",
 	"profile_show_name": "Mostra el meu nom als llocs",
 	"profile_stay_anonymous": "Continua en l'anonimat",
 	"profile_name_label": "Nom",
@@ -349,5 +350,98 @@
 	"language_all": "Tots els idiomes",
 	"language_search": "Cerca idiomes",
 	"language_none": "Cap idioma coincideix.",
-	"language_button_label": "Idioma: {language}"
+	"language_button_label": "Idioma: {language}",
+	"action_check_in_here": "Fes check-in aquí",
+	"action_add_it": "Afegeix-ho",
+	"place_shared_by": "Compartit per {names}",
+	"place_others": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} més",
+				"countPlural=*": "{countText} més"
+			}
+		}
+	],
+	"place_more_details": "Més detalls",
+	"place_notes": "Notes",
+	"laptop_rule_time_limit_hours": "Límit de temps per a portàtils: {hours}",
+	"extra_air_conditioning": "Aire condicionat",
+	"extra_toilet": "Lavabo",
+	"extra_large_tables": "Taules grans",
+	"extra_minimum_spend": "Consumició mínima",
+	"contribute_meta_title": "Actualitza {name}",
+	"contribute_checkin_verified": "Ets aquí · check-in verificat",
+	"contribute_checkin_distance": "A {distance}",
+	"contribute_checkin_idle_title": "Hi ets ara?",
+	"contribute_checkin_idle_body": "Fes check-in per ajudar a certificar-lo. La teva actualització compta igualment.",
+	"contribute_checkin_locating": "Buscant la teva ubicació…",
+	"contribute_checkin_far": "Ets a {distance}: la teva actualització compta, però no com a check-in",
+	"contribute_checkin_imprecise": "La teva ubicació no és prou precisa per a un check-in: la teva actualització compta igualment",
+	"contribute_checkin_unavailable": "No hem pogut obtenir la teva ubicació: la teva actualització compta, però no com a check-in",
+	"action_im_here_now": "Ara hi soc",
+	"action_try_again": "Torna-ho a provar",
+	"contribute_work_again": "Hi tornaries a treballar?",
+	"contribute_yes": "Sí",
+	"contribute_no": "No",
+	"contribute_still_right": "Continua igual?",
+	"contribute_still_right_body": "Hem omplert el que van explicar altres usuaris. Canvia només el que sigui diferent.",
+	"contribute_own_answers_body": "Són les respostes de la teva última actualització. En enviar, s'actualitzen.",
+	"contribute_whats_it_like": "Com és?",
+	"action_everything_still_right": "Tot continua igual",
+	"contribute_now": "ara: {value} · {ago}",
+	"contribute_rules_count": [
+		{
+			"declarations": [
+				"input count",
+				"local countPlural = count: plural",
+				"local countText = count: number"
+			],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{countText} norma",
+				"countPlural=*": "{countText} normes"
+			}
+		}
+	],
+	"contribute_optional": "Opcional",
+	"contribute_laptop_rules": "Normes per a portàtils",
+	"contribute_rule_time_limit": "Límit de temps",
+	"contribute_rule_none": "Sense normes",
+	"contribute_time_limit_label": "Quant de temps?",
+	"contribute_note": "Nota breu",
+	"contribute_note_placeholder": "p. ex. Les millors taules amb endolls són a dalt",
+	"contribute_note_count": "{count} / {max}",
+	"action_send_update": "Envia l'actualització",
+	"contribute_sending": "Enviant…",
+	"contribute_name_shown": "El teu nom apareixerà en aquest lloc",
+	"contribute_name_hidden": "Hi apareixes de manera anònima",
+	"contribute_change_name": "Canviar com apareix el teu nom",
+	"contribute_required": "Tria una resposta",
+	"contribute_discard_title": "Vols descartar l'actualització?",
+	"contribute_discard_body": "Es perdran les respostes d'aquesta pàgina.",
+	"action_discard": "Descarta",
+	"action_keep_editing": "Continua editant",
+	"action_change": "Canviar",
+	"contribute_error_offline": "No tens connexió. Les teves respostes continuen aquí: envia-les quan tornis a tenir connexió.",
+	"contribute_error_daily_limit": "Has arribat al límit d'actualitzacions d'avui. Torna-ho a provar demà.",
+	"contribute_error_email_not_confirmed": "El teu correu encara no està confirmat. Torna a iniciar la sessió amb el codi que t'enviem.",
+	"contribute_error_sign_in_cancelled": "Inici de sessió cancel·lat. Les teves respostes continuen aquí.",
+	"contribute_error_place_not_found": "Aquest lloc ja no és al mapa.",
+	"contribute_error_unknown": "No s'ha pogut enviar l'actualització. Les teves respostes continuen aquí: torna-ho a provar.",
+	"thanks_title_name": "Gràcies, {name}",
+	"thanks_title": "Gràcies!",
+	"thanks_body_checkin": "El teu check-in a {place} ja és publicat. La propera persona que busqui un lloc per treballar el veurà.",
+	"thanks_body_update": "La teva actualització de {place} ja és publicada. La propera persona que busqui un lloc per treballar la veurà.",
+	"thanks_just_now": "ara mateix",
+	"thanks_founding_title": "Membre fundador",
+	"thanks_founding_body": "Ets un dels primers {count} usuaris que mapen cafès per treballar a {city}. La insígnia es queda al teu nom.",
+	"thanks_replaced": "Substitueix la teva actualització anterior d'aquest lloc.",
+	"action_find_another_place": "Busca un altre lloc",
+	"action_back_to_place": "Torna a {place}"
 }

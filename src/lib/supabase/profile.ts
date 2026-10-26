@@ -13,7 +13,6 @@ export type Profile = {
 	locale: Locale | null;
 	/** When the language was last picked (ms), to let the latest choice win on sign-in. */
 	localeChosenAt?: number;
-	foundingContributor: boolean;
 };
 
 export type ProfileUpdate = {
@@ -26,7 +25,7 @@ export type ProfileUpdate = {
 export async function fetchMyProfile(userId: string): Promise<Profile> {
 	const { data, error } = await createSupabaseClient()
 		.from('profiles')
-		.select('display_name, show_name, locale, locale_chosen_at, founding_contributor')
+		.select('display_name, show_name, locale, locale_chosen_at')
 		.eq('id', userId)
 		.single();
 	if (error) throw error;
@@ -34,8 +33,7 @@ export async function fetchMyProfile(userId: string): Promise<Profile> {
 		displayName: data.display_name,
 		showName: data.show_name,
 		locale: data.locale as Locale | null,
-		localeChosenAt: data.locale_chosen_at ? Date.parse(data.locale_chosen_at) : undefined,
-		foundingContributor: data.founding_contributor
+		localeChosenAt: data.locale_chosen_at ? Date.parse(data.locale_chosen_at) : undefined
 	};
 }
 
