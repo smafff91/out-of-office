@@ -89,9 +89,17 @@ export async function fetchListItems(
 }
 
 /** The rows nearest to the city center, for the server-rendered list (no user position). */
-export async function fetchCenterItems(supabase: Client, cityId: string): Promise<ListItem[]> {
+export async function fetchCenterItems(
+	supabase: Client,
+	cityId: string,
+	certifiedOnly = false
+): Promise<ListItem[]> {
 	const { data, error } = await supabase
-		.rpc('city_center_places', { p_city_id: cityId, p_limit: PAGE_SIZE })
+		.rpc('city_center_places', {
+			p_city_id: cityId,
+			p_limit: PAGE_SIZE,
+			p_certified_only: certifiedOnly
+		})
 		.select(ITEM_COLUMNS);
 	if (error) throw new Error(error.message);
 	return data.map(toListItem);

@@ -23,10 +23,12 @@ export type SubmitResult = {
 	founding: boolean;
 	foundingLimit: number;
 	level: PlaceLevel;
-	/** Active answers equal to the user's, per attribute. */
+	/** Counted answers equal to the user's, per attribute. */
 	confirmations: { wifi: number; outlets: number; noise: number; longStays: number };
 	contributors: number;
 	minUsers: number;
+	/** The team blocked the automatic certification: no "N of 10 users" bar. */
+	blocked: boolean;
 	/** The new contribution: its photos are uploaded with it (src/lib/supabase/photos.ts). */
 	id: string;
 	/** Photos this update can still take today (3 at most). */
@@ -82,6 +84,7 @@ export async function submitContribution(
 		},
 		contributors: Number(result.contributors ?? 1),
 		minUsers: Number(result.min_users ?? 10),
+		blocked: result.blocked === true,
 		id: String(result.id ?? ''),
 		photoSlots: Number(result.photo_slots ?? 0)
 	};

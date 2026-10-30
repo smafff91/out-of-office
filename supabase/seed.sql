@@ -13,7 +13,8 @@ insert into public.cities (
 	district_admin_level,
 	neighborhood_admin_level,
 	is_active,
-	languages
+	languages,
+	certified_filter_default
 )
 values (
 	'barcelona',
@@ -26,11 +27,12 @@ values (
 	9,
 	10,
 	true,
-	'{ca,es}'
+	'{ca,es}',
+	true
 )
 on conflict (slug) do nothing;
 
--- Default certification thresholds (docs/certificazione.md, v2).
+-- Default certification thresholds (docs/certificazione.md, v3.1).
 insert into public.certification_settings (
 	city_id,
 	min_users,
@@ -51,7 +53,14 @@ insert into public.certification_settings (
 	founding_limit,
 	photos_per_contribution,
 	daily_photo_limit,
-	photos_per_user_place
+	photos_per_user_place,
+	revoke_recent_days,
+	revoke_recent_min,
+	removed_notice_days,
+	daytime_from_hour,
+	daytime_to_hour,
+	daytime_min_hours,
+	daytime_min_weekdays
 )
-values (null, 10, 0.50, 14, 0.75, 0.60, 10, 12, 2, 30, 12, 30, 100, 5, 100, 20, 50, 3, 15, 3)
+values (null, 10, 0.50, 14, 0.75, 0.60, 10, 12, 2, 30, 12, 30, 100, 5, 100, 20, 50, 3, 15, 3, 90, 3, 90, 8, 18, 4, 3)
 on conflict (city_id) do nothing;

@@ -95,7 +95,8 @@
 		)
 	);
 	let sort = $state<Sort>('nearest');
-	let certifiedOnly = $state(false);
+	// On by default where the city says so; the user's choice lasts while they stay on the page.
+	let certifiedOnly = $state(untrack(() => data.city.certifiedFilterDefault));
 	let pages = $state(1);
 	let view = $state<MapView>();
 	let movedByUser = $state(false);
@@ -129,8 +130,9 @@
 
 	const sections = $derived.by((): Section[] | undefined => {
 		if (places) return buildSections(places, { origin, sort, certifiedOnly, ranking });
-		// Before the pins arrive (and on the server): the rows nearest to the city center.
-		if (sort !== 'nearest' || certifiedOnly) return undefined;
+		// Before the pins arrive (and on the server): the rows nearest to the city center, fetched
+		// with the city's default filter.
+		if (sort !== 'nearest' || certifiedOnly !== data.city.certifiedFilterDefault) return undefined;
 		return [
 			{
 				id: 'all',

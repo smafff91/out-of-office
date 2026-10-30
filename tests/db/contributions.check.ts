@@ -43,7 +43,7 @@ const ANSWERS = {
 
 // One file runs every SQL check, one after the other: two `supabase db query --linked` started
 // at the same time (test files run in parallel) can hang on the CLI's login role.
-describe.each(['contributions.sql', 'profile_visibility.sql', 'photos.sql'])(
+describe.each(['contributions.sql', 'profile_visibility.sql', 'photos.sql', 'certification.sql'])(
 	'supabase/tests/%s',
 	(file) => {
 		it('passes', () => {

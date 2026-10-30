@@ -8,6 +8,7 @@
 	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { CityMap, type LngLat } from '#lib/map/index.ts';
 	import * as m from '#lib/paraglide/messages.js';
+	import { certificationOrigin, certificationRemoved } from '#lib/places/certification.ts';
 	import { joinNames } from '#lib/places/contributors.ts';
 	import { daysSince } from '#lib/places/dates.ts';
 	import { distanceMeters } from '#lib/places/distance.ts';
@@ -71,15 +72,8 @@
 		].filter(Boolean)
 	);
 
-	const origin = $derived.by(() => {
-		if (!certified) return undefined;
-		if (place.certOrigin === 'manual' && place.certifiedOn) {
-			return m.place_cert_manual({
-				month: formatDate(place.certifiedOn, { month: 'short', year: 'numeric', timeZone: 'UTC' })
-			});
-		}
-		return m.place_confirmed_by({ count: place.contributors });
-	});
+	const origin = $derived(certificationOrigin(place));
+	const removed = $derived(certificationRemoved(place));
 
 	const tiles = $derived.by(() => {
 		const { wifi, outlets, noise, long_stays } = place.attributes;
@@ -240,7 +234,7 @@
 				{/if}
 			{:else}
 				<span class="label">
-					{unchecked ? m.place_level_unchecked() : m.place_level_community()}
+					{removed ?? (unchecked ? m.place_level_unchecked() : m.place_level_community())}
 				</span>
 			{/if}
 			<h1>{place.name}</h1>
@@ -379,7 +373,7 @@
 				<p class="shared-by">{sharedBy}</p>
 			{/if}
 
-			{#if !certified}
+			{#if !certified && place.canGetCertified}
 				<CertificationProgress contributors={place.contributors} minUsers={place.minUsers} hint />
 			{/if}
 

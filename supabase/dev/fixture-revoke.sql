@@ -4,3 +4,4 @@ revoke insert, delete on public.cities from service_role;
 revoke delete on public.places from service_role;
 revoke select, insert, delete on public.certification_settings from service_role;
 revoke select on public.founding_contributors from service_role;
+revoke select, delete on public.place_level_changes from service_role;

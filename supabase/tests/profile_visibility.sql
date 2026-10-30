@@ -20,11 +20,12 @@ begin
 
 	-- Sign-up: Google gives a given_name, email gives nothing; the locale comes from metadata.
 	-- Only given_name counts: no fallback to full_name or name.
-	insert into auth.users (id, email, raw_user_meta_data) values
-		(v_shown, 'shown@test.invalid', '{"given_name": "Zoe Anne", "locale": "ca"}'),
-		(v_hidden, 'hidden@test.invalid', '{"given_name": "Yann", "locale": "xx"}'),
-		(v_undecided, 'undecided@test.invalid', '{}'),
-		(v_full_name, 'full-name@test.invalid', '{"full_name": "Wanda Smith", "name": "Wanda Smith"}');
+	-- Confirmed emails: only their contributions count in the public views.
+	insert into auth.users (id, email, email_confirmed_at, raw_user_meta_data) values
+		(v_shown, 'shown@test.invalid', now(), '{"given_name": "Zoe Anne", "locale": "ca"}'),
+		(v_hidden, 'hidden@test.invalid', now(), '{"given_name": "Yann", "locale": "xx"}'),
+		(v_undecided, 'undecided@test.invalid', now(), '{}'),
+		(v_full_name, 'full-name@test.invalid', now(), '{"full_name": "Wanda Smith", "name": "Wanda Smith"}');
 
 	select display_name || '|' || coalesce(locale, '-') into v_text from public.profiles where id = v_shown;
 	if v_text <> 'Zoe|ca' then raise exception 'handle_new_user: got %', v_text; end if;

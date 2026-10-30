@@ -49,10 +49,14 @@ export type PlaceDetail = {
 	name: string;
 	amenity: 'cafe' | 'bar' | null;
 	level: PlaceLevel;
-	/** Certified places only. */
-	certOrigin: 'manual' | 'community' | null;
-	/** "YYYY-MM-DD", certified places only. */
+	/** Certified places only: "Picked by our team" or "Confirmed by N users". */
+	certOrigin: 'picked' | 'confirmed' | null;
+	/** First day of the month of the certification ("YYYY-MM-01"), certified places only. */
 	certifiedOn: string | null;
+	/** First day of the month of a recent removal: "Certification removed in …". */
+	removedOn: string | null;
+	/** False when the team blocked the automatic certification: no "N of 10 users" bar. */
+	canGetCertified: boolean;
 	neighborhood: string | null;
 	district: string | null;
 	address: string | null;
@@ -88,7 +92,7 @@ export type PlaceDetail = {
 };
 
 const COLUMNS =
-	'id, slug, name, amenity, level, cert_origin, certified_on, neighborhood, district, address, lng, lat, opening_hours, timezone, internet_access_osm, osm_type, osm_id, may_have_closed, votes, yes_votes, score_pct, has_score, contributors, min_users, attributes, laptop_rules, extras, checkin_radius_m, checkin_max_accuracy_m, photo_paths, photo_count';
+	'id, slug, name, amenity, level, cert_origin, certified_on, neighborhood, district, address, lng, lat, opening_hours, timezone, internet_access_osm, osm_type, osm_id, may_have_closed, votes, yes_votes, score_pct, has_score, contributors, min_users, attributes, laptop_rules, extras, checkin_radius_m, checkin_max_accuracy_m, photo_paths, photo_count, removed_on, can_get_certified';
 
 /** Contributions change slowly: a preview opened a minute ago is fresh enough for its page. */
 const CACHE_MS = 60_000;
@@ -126,6 +130,8 @@ export function toPlaceDetail(row: Omit<DetailRow, 'city_id'>): PlaceDetail {
 		level: row.level ?? 'osm_only',
 		certOrigin: row.cert_origin,
 		certifiedOn: row.certified_on,
+		removedOn: row.removed_on,
+		canGetCertified: row.can_get_certified ?? true,
 		neighborhood: row.neighborhood,
 		district: row.district,
 		address: row.address,

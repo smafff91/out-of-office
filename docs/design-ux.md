@@ -33,11 +33,11 @@
 ## Tre livelli di informazione
 1. **Not checked yet** — solo dati OSM. Puntino grigio piccolo; in lista testo attenuato + "No work info yet"; tap → anteprima "Be the first to check it" con CTA "I'm here · add work info". Tag Wi‑Fi OSM come "unconfirmed".
 2. **Community info** — ≥1 contributo, non certificato. Pin bianco con bordo espresso e punto centrale (niente crema). Scheda: "COMMUNITY INFO · NOT CERTIFIED YET", attributi noti con conferme, mancanti come riquadro tratteggiato "Not known · Add it", **barra di avanzamento "2 of 10 users to get certified · 8 to go"** che invita al check-in.
-3. **Certified for remote work** — visitato da noi o confermato dalla community. Pin espresso pieno con spunta crema, sigillo, foto. Unico livello che usa il crema. In scheda, sotto l'etichetta "CERTIFIED FOR REMOTE WORK", l'origine: "Visited by our team · certified Sep 2026" oppure "Confirmed by 12 users". Il sigillo porta alla pagina "How certification works".
+3. **Certified for remote work** — scelto dal team (Picked) o confermato dalla community. Pin espresso pieno con spunta crema, sigillo, foto. Unico livello che usa il crema. In scheda, sotto l'etichetta "CERTIFIED FOR REMOTE WORK", l'origine: "Picked by our team · Sep 2026" oppure "Confirmed by 12 users". Dopo una rimozione, per 90 giorni, al posto della riga del livello: "Certification removed in Oct 2026". Il sigillo porta alla pagina "How certification works".
 - **Home al lancio:** mappa piena di puntini grigi; messaggio "We're just getting started here · 1 certified and 2 checked nearby. 20 more cafés are waiting for someone to try them".
 
 ## Pagina "How certification works" (/about)
-Si apre toccando il sigillo nella scheda. Contenuto: titolo "Certified for remote work" · cosa significa il badge (filtra il rumore, non è una classifica) · i 4 criteri con icone · le due strade (card "Visited by our team" e "Confirmed by users" con le soglie 10+ / ½ check-in / 2 settimane / 75%+) · i tre tipi di pin · riquadro "Always independent" · invito a segnalare cambiamenti + "Find a place to work". Testo sorgente in `claude/certificazione.md`.
+Si apre toccando il sigillo nella scheda. Contenuto: titolo "Certified for remote work" · cosa significa il badge (filtra il rumore, non è una classifica) · i 4 criteri con icone · le due origini (card "Picked by our team" e "Confirmed by users" con le soglie 10+ / ½ check-in / 2 settimane / 75%+) · i tre tipi di pin · riquadro "Always independent" · invito a segnalare cambiamenti + "Find a place to work". Testo sorgente in `docs/certificazione.md`.
 
 ## Direzione visiva: tema Latte
 - Riferimento: Uber — un solo font forte, pochi colori, pulsanti grandi e pieni, molto spazio; toni del caffè al posto del bianco/nero puro.

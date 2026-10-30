@@ -117,7 +117,7 @@
 		</div>
 	{/if}
 
-	{#if result.level !== 'certified'}
+	{#if result.level !== 'certified' && !result.blocked}
 		<CertificationProgress contributors={result.contributors} minUsers={result.minUsers} />
 	{/if}
 

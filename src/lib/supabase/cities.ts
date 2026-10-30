@@ -22,6 +22,8 @@ export type CitySummary = {
 	places: number;
 	/** Languages spoken in the city (cities.languages): suggested first in the language picker. */
 	languages: string[];
+	/** The "Certified for remote work" filter starts on (cities.certified_filter_default). */
+	certifiedFilterDefault: boolean;
 };
 
 export type AreaSummary = {
@@ -36,7 +38,7 @@ export type AreaSummary = {
 };
 
 const CITY_COLUMNS =
-	'id, slug, name, center_lng, center_lat, west, south, east, north, certified_count, community_count, unchecked_count, places_count, languages';
+	'id, slug, name, center_lng, center_lat, west, south, east, north, certified_count, community_count, unchecked_count, places_count, languages, certified_filter_default';
 
 const bounds = (row: {
 	west: number | null;
@@ -56,7 +58,8 @@ function toCity(row: CityRow): CitySummary {
 		community: row.community_count ?? 0,
 		unchecked: row.unchecked_count ?? 0,
 		places: row.places_count ?? 0,
-		languages: row.languages ?? []
+		languages: row.languages ?? [],
+		certifiedFilterDefault: row.certified_filter_default ?? false
 	};
 }
 

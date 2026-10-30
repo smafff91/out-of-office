@@ -49,6 +49,11 @@ describe('city view across a reload', () => {
 		expect(takeStash(CITY_VIEW_KEY, storage)).toBeUndefined();
 	});
 
+	it('keeps the Certified filter switched off where it starts on', () => {
+		const off = serializeCityView({ ...saved, certifiedOnly: false });
+		expect(parseCityView(off, { city: 'barcelona', now: NOW })?.certifiedOnly).toBe(false);
+	});
+
 	it('is ignored for another city, when stale, or from the future', () => {
 		expect(parseCityView(saved, { city: 'madrid', now: NOW })).toBeUndefined();
 		expect(

@@ -10,6 +10,9 @@ export default defineConfig({
 	test: {
 		include: ['tests/db/**/*.check.ts'],
 		env: loadEnv('', process.cwd(), ''),
-		testTimeout: 20_000
+		testTimeout: 20_000,
+		// One file at a time: contributions and certification both call `supabase db query
+		// --linked`, and two of them at once can hang on the CLI's login role.
+		fileParallelism: false
 	}
 });

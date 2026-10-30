@@ -138,16 +138,16 @@ Al lancio: **tutta Barcellona fin da subito** (copertura base da OSM su tutta la
 - **Ordinamento "Top rated":** non per % pura (un 1 su 1 non deve superare 45 su 48) ma per un punteggio che tiene conto del numero di voti (es. limite inferiore dell'intervallo di Wilson); locali sotto i 5 voti in fondo, locali senza info per ultimi
 - Lo score è uno degli ingressi della certificazione automatica (vedi sotto)
 
-## Certificazione "Certified for remote work" (v2, deciso 28 set 2026 — dettagli in `claude/certificazione.md`)
+## Certificazione "Certified for remote work" (v3.1, 30 ott 2026 — fonte unica: `docs/certificazione.md`)
 
 - **Scopo: togliere il rumore, non premiare la qualità.** Esclude bar senza tavoli, locali solo colazione/brunch ad alto ricambio, locali solo serali. Un bar con tavoli dove nessuno ti manda via se lavori al computer è dentro. Le differenze di qualità le dicono score e scheda.
-- **4 criteri:** (1) tavoli a sedere adatti al laptop; (2) si può lavorare col laptop senza essere invitati ad andarsene, con eventuali limiti chiari e riportati in scheda; (3) Wi‑Fi per i clienti che regge un lavoro normale; (4) aperto di giorno nei feriali. Prese e rumore solo in scheda.
-- **Un badge, due strade:**
-  - **Manuale** — visita del fondatore (poi "ambassador" locali): per i 5-8 locali del lancio e i casi particolari. In scheda: "Visited by our team"
+- **4 criteri:** (1) tavoli a sedere adatti al laptop; (2) si può lavorare col laptop senza essere invitati ad andarsene, con eventuali limiti chiari e riportati in scheda; (3) Wi‑Fi per i clienti presente (Slow o Fast; la qualità va in scheda); (4) aperto di giorno nei feriali. Prese e rumore solo in scheda.
+- **Un badge, due origini:**
+  - **Picked** — scelta del team da fonti pubbliche e controllo da scrivania, anche senza visita (poi "ambassador" locali): i 30-40 locali del lancio, con `npm run certify -- --pick`. In scheda: "Picked by our team · Oct 2026"
   - **Automatica** — si attiva da sola con: ≥10 utenti diversi, almeno metà con check-in verificato, contributi distribuiti su ≥14 giorni, score ≥75%, maggioranza che conferma Wi‑Fi presente e "Long stays: Welcome", aperto di giorno, nessuna segnalazione aperta. In scheda: "Confirmed by 12 users"
 - **Controllo del fondatore:** lista "Nuovi certificati automatici" nel pannello admin con revoca in un tocco + controlli a campione
-- **Mantenimento:** revoca automatica se lo score scende sotto il 60% (≥10 voti) o i contributi recenti smentiscono Wi‑Fi/long stays; coda di revisione con ≥2 segnalazioni dello stesso problema in 30 giorni o cambio di gestione; i certificati manuali dopo 12 mesi restano se la community continua a confermarli
-- **Anti-manipolazione:** un voto per utente per locale ogni 30 giorni, solo account verificati, pattern sospetti → revisione invece di certificazione
+- **Mantenimento:** revoca automatica (entrambe le origini) se lo score scende sotto il 60% (≥10 voti in 12 mesi) o la maggioranza dei contributi degli ultimi 90 giorni dice Wi‑Fi "None" o "Long stays: Not really"; per 90 giorni la scheda mostra "Certification removed in …"; coda di revisione con ≥2 segnalazioni dello stesso problema in 30 giorni o cambio di gestione; i Picked dopo 12 mesi senza le condizioni automatiche compaiono in `certify --due` per un nuovo controllo
+- **Anti-manipolazione:** un solo voto attivo per utente e locale (il nuovo sostituisce il precedente), solo account verificati, pattern sospetti → revisione invece di certificazione
 - **Mai acquistabile**, separata dai futuri locali "promossi"
 
 ## Strategia dati
@@ -167,7 +167,7 @@ Al lancio: **tutta Barcellona fin da subito** (copertura base da OSM su tutta la
    - Altri opzionali: aria condizionata, tipo di tavoli/sedie, bagno disponibile, consumazione minima
 3. **Contenuti community:** **voto "would work here again" (sì/no)**, foto, tag strutturati, nota breve opzionale, check-in (geolocalizzato → contributo "verificato"). **Niente recensioni testuali classiche all'inizio** (poco utili per il caso d'uso, sezioni vuote con pochi utenti, moderazione onerosa).
 
-**Livello del locale (derivato):** `osm_only` (nessun contributo) → `community` (≥1 contributo) → `certified`, con **origine** (`manual` / `community`), data di certificazione ed eventuale data di revoca.
+**Livello del locale (derivato):** `osm_only` (nessun contributo) → `community` (≥1 contributo) → `certified`, con **origine** (`picked` / `confirmed`), data di certificazione ed eventuale data di revoca.
 
 **Principio trasversale:** ogni dato dei livelli 2 e 3 ha **autore, data e numero di conferme** (es. "wifi buono, confermato da 4 persone, ultima volta 3 giorni fa"). Rende visibile la freschezza, alimenta la certificazione automatica e predispone lo schema al futuro stato live.
 

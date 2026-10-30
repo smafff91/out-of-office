@@ -33,6 +33,18 @@ export function formatDate(
 }
 
 /**
+ * A month from a "YYYY-MM-DD" date: "Oct 2026" (en), "oct 2026" (es, ca). Read as UTC, so the
+ * device's timezone never moves it to the previous month.
+ */
+export function formatMonth(date: string, locale: string = getLocale()): string {
+	return new Intl.DateTimeFormat(locale, {
+		month: 'short',
+		year: 'numeric',
+		timeZone: 'UTC'
+	}).format(new Date(date));
+}
+
+/**
  * A time of day from "HH:MM" (opening hours): "8:00 PM" in English, "20:00" in Spanish and
  * Catalan. Built on a fixed UTC date so the device's timezone never shifts it.
  */

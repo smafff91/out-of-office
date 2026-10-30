@@ -29,6 +29,8 @@ function place(overrides: Partial<PlaceDetail> = {}): PlaceDetail {
 		level: 'community',
 		certOrigin: null,
 		certifiedOn: null,
+		removedOn: null,
+		canGetCertified: true,
 		neighborhood: null,
 		district: null,
 		address: null,

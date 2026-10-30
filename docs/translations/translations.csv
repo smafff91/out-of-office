@@ -97,7 +97,8 @@ place_kind_cafe,Café,Cafetería,to review,Cafeteria,to review
 place_kind_bar,Bar,Bar,to review,Bar,to review
 place_level_community,Community info · Not certified yet,Info de la comunidad · Aún sin certificar,to review,Info de la comunitat · Encara sense certificar,to review
 place_level_unchecked,Not checked for work yet,Aún sin revisar para trabajar,to review,Encara sense revisar per treballar,to review
-place_cert_manual,Visited by our team · certified {month},Visitado por nuestro equipo · certificado en {month},to review,Visitat pel nostre equip · certificat el {month},to review
+place_cert_picked,Picked by our team · {month},Elegido por nuestro equipo · {month},to review,Triat pel nostre equip · {month},to review
+place_cert_removed,Certification removed in {month},Certificación retirada en {month},to review,Certificació retirada · {month},to review
 place_score_few_long,{yes} of {total} would work here again,{yes} de {total} volverían a trabajar aquí,to review,{yes} de {total} hi tornarien a treballar,to review
 place_attribute_wifi,Wi‑Fi,Wifi,to review,Wifi,to review
 place_attribute_outlets,Outlets,Enchufes,to review,Endolls,to review
