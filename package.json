@@ -16,7 +16,7 @@
 		"gen": "node -e \"fs.rmSync('.svelte-kit/cloudflare',{recursive:true,force:true})\" && wrangler types",
 		"import:osm": "node --env-file=.env scripts/import-osm.ts",
 		"check:secrets": "node --env-file-if-exists=.env scripts/check-secrets.ts",
-		"db:types": "npx supabase gen types typescript --linked --schema public > src/lib/supabase/database.types.ts && prettier --write src/lib/supabase/database.types.ts",
+		"db:types": "npx supabase gen types typescript --remote --schema public > src/lib/supabase/database.types.ts && prettier --write src/lib/supabase/database.types.ts",
 		"check:i18n": "node scripts/check-i18n.ts",
 		"i18n:export": "node scripts/export-translations.ts",
 		"i18n:approve": "node scripts/approve-translations.ts",

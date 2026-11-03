@@ -1,6 +1,6 @@
 /**
  * Applies this repository to the PRODUCTION project without ever linking the folder to it (the
- * link, supabase/.temp/project-ref, always stays on development: `db query --linked`,
+ * link, supabase/.temp/project-ref, always stays on development: `db query --remote`,
  * `dev:grants` and `test:db` can never touch production). Values come from .env.production
  * (never committed: .env.* is ignored by Git), loaded by `npm run prod`.
  *
@@ -66,26 +66,26 @@ console.log(`Production project: ${prodRef}`);
 switch (command) {
 	case 'db-push': {
 		const dbUrl = requireEnv('PROD_DB_URL');
-		const hidden = ['--db-url', '<PROD_DB_URL>', '--include-seed'];
+		const hidden = ['--remote=<PROD_DB_URL>', '--include-seed'];
 		run(
-			['db', 'push', '--db-url', dbUrl, '--include-seed', '--dry-run'],
+			['db', 'push', `--remote=${dbUrl}`, '--include-seed', '--dry-run'],
 			['db', 'push', ...hidden, '--dry-run']
 		);
 		if (!(await confirm(`Apply these migrations to production? Type ${prodRef}: `, prodRef))) {
 			fail('Nothing applied.');
 		}
-		run(['db', 'push', '--db-url', dbUrl, '--include-seed'], ['db', 'push', ...hidden]);
+		run(['db', 'push', `--remote=${dbUrl}`, '--include-seed'], ['db', 'push', ...hidden]);
 		break;
 	}
 	case 'config-diff':
-		run(['config', 'diff', '--project-ref', prodRef]);
+		run(['config', 'diff', `--remote=${prodRef}`]);
 		break;
 	case 'config-push':
-		run(['config', 'push', '--project-ref', prodRef]);
+		run(['config', 'push', `--remote=${prodRef}`]);
 		break;
 	case 'deploy':
 		for (const name of FUNCTIONS) {
-			run(['functions', 'deploy', name, '--no-verify-jwt', '--use-api', '--project-ref', prodRef]);
+			run(['functions', 'deploy', name, '--no-verify-jwt', '--use-api', `--remote=${prodRef}`]);
 		}
 		break;
 	default:

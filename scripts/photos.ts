@@ -125,7 +125,7 @@ async function setupCleanup() {
 		await writeFile(file, `STORAGE_CLEANUP_SECRET=${secret}\n`, { mode: 0o600 });
 		const result = spawnSync(
 			'npx',
-			['supabase', 'secrets', 'set', '--env-file', file, '--project-ref', ref],
+			['supabase', 'secrets', 'set', '--env-file', file, `--remote=${ref}`],
 			{ encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }
 		);
 		if (result.status !== 0) {

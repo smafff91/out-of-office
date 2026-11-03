@@ -93,7 +93,7 @@ try {
 	console.log(`→ ${FUNCTION_SECRETS.join(', ')} on ${linkedRef}`);
 	const result = spawnSync(
 		'npx',
-		['supabase', 'secrets', 'set', '--env-file', file, '--project-ref', linkedRef],
+		['supabase', 'secrets', 'set', '--env-file', file, `--remote=${linkedRef}`],
 		{ stdio: 'inherit' }
 	);
 	if (result.status !== 0) {

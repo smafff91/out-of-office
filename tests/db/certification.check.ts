@@ -54,7 +54,7 @@ describe('opening hours', () => {
 			);
 			const result = spawnSync(
 				'npx',
-				['supabase', 'db', 'query', '--linked', '--yes', '-f', file],
+				['supabase', 'db', 'query', '--remote', '--yes', '-f', file],
 				{
 					encoding: 'utf8'
 				}
