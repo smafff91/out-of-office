@@ -31,6 +31,7 @@ Stesso pin, stesso badge "Certified for remote work". Cambia solo la riga sotto 
 ### Picked — "Picked by our team · Oct 2026"
 Selezione del team da **fonti pubbliche e controllo da scrivania** (regole sui laptop, orari, foto), anche senza visita. Al lancio: 30-40 locali scelti dal fondatore.
 - Si sceglie da Terminale: `npm run certify -- --pick <city>/<slug> --note "<fonti consultate>"` (la nota è obbligatoria e resta privata). Funziona anche su un locale senza contributi.
+- In blocco da un file (`data/picks/*.json`): `npm run certify -- --pick-file <file> [--dry-run]`. Una sola conferma; ogni riga con slug viene scelta con la sua nota (`sources_note`) e il mese del file (`picked_month`, che diventa la data del badge), più le informazioni del team; le righe senza slug si saltano, i locali già certificati ricevono solo le informazioni del team se cambiate.
 - La riga mostra **mese e anno della scelta**, nella lingua della pagina.
 - Il comando **rifiuta** il pick se il locale rientra già in una condizione di revoca (qui sotto) e dice quale: lo perderebbe al primo ricalcolo.
 - Un Picked che soddisfa le condizioni della certificazione automatica **diventa Confirmed da solo**.

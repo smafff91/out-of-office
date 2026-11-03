@@ -26,6 +26,7 @@
 		"dev:fixtures": "node --env-file=.env scripts/dev-fixtures.ts",
 		"dev:grants": "node --env-file=.env scripts/dev-grants.ts",
 		"dev:founding": "node --env-file=.env scripts/dev-founding.ts",
+		"picks:match": "node --env-file=.env scripts/match-picks.ts",
 		"photos": "node --env-file=.env scripts/photos.ts",
 		"photos:prod": "node --env-file=.env.production scripts/photos.ts",
 		"certify": "node --env-file=.env scripts/certify.ts",

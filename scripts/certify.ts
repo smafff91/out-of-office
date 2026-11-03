@@ -12,22 +12,39 @@
  *        removed in …" line on the place page (the reason is saved anyway).
  *   npm run certify -- --unblock <city>/<place> --reason "<why>"
  *        Allows the automatic certification again, then recomputes the place.
+ *   npm run certify -- --pick-file <file> [--dry-run]
+ *        Picks every row of a picks file that has a slug (note = sources_note, month =
+ *        picked_month) and saves its team info; rows without a slug are skipped, certified
+ *        places only get their team info updated. One confirmation for the whole file;
+ *        --dry-run writes nothing. File format: scripts/pick-file.ts.
  *   npm run certify -- --list <city>          certified places (origin, date, score, users), blocked ones
  *   npm run certify -- --recent <city>        automatic changes of the last 30 days
  *   npm run certify -- --due <city>           picks older than 12 months without the conditions
  *   npm run certify -- --recompute <city>     recomputes every place now (the daily job does it at 03:23)
  *   npm run certify:prod -- …                 the same on production (.env.production)
  *
- * --pick, --unpick and --unblock show the place first and ask to type its slug (--yes skips it).
+ * --pick, --unpick and --unblock show the place first and ask to type its slug; --pick-file asks
+ * to type the city slug (--yes skips both).
  * Rules: docs/certificazione.md; logic: supabase/migrations/20261031120000_certification.sql.
  */
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type PostgrestError } from '@supabase/supabase-js';
+import { readFile } from 'node:fs/promises';
 import { createInterface } from 'node:readline/promises';
 import { parseArgs } from 'node:util';
+import {
+	parsePicksFile,
+	planPicks,
+	runPicks,
+	summarize,
+	teamInfoPayload,
+	type PickClient
+} from './pick-file.ts';
 
 const { values: args } = parseArgs({
 	options: {
 		pick: { type: 'string' },
+		'pick-file': { type: 'string' },
+		'dry-run': { type: 'boolean', default: false },
 		unpick: { type: 'string' },
 		unblock: { type: 'string' },
 		list: { type: 'string' },
@@ -46,6 +63,7 @@ const USAGE = `Usage:
   npm run certify -- --pick <city>/<place> --note "<sources checked>"
   npm run certify -- --unpick <city>/<place> --reason "<why>" [--block] [--no-notice]
   npm run certify -- --unblock <city>/<place> --reason "<why>"
+  npm run certify -- --pick-file <file> [--dry-run]
   npm run certify -- --list <city> | --recent <city> | --due <city> | --recompute <city>`;
 
 /** What a missing condition means, for --due and the place summary. */
@@ -84,6 +102,7 @@ function requireEnv(name: string): string {
 // never reaches the database.
 const actions = [
 	args.pick,
+	args['pick-file'],
 	args.unpick,
 	args.unblock,
 	args.list,
@@ -101,6 +120,8 @@ if ((args.unpick !== undefined || args.unblock !== undefined) && !reason) {
 if ((args.block || args['no-notice']) && args.unpick === undefined) {
 	fail(`--block and --no-notice go with --unpick.\n\n${USAGE}`);
 }
+if (args['dry-run'] && args['pick-file'] === undefined)
+	fail(`--dry-run goes with --pick-file.\n\n${USAGE}`);
 
 const url = requireEnv('PUBLIC_SUPABASE_URL');
 const host = new URL(url).hostname;
@@ -165,28 +186,31 @@ async function placeId(target: string): Promise<string> {
 	return data.id as string;
 }
 
+/** The database's error, in words. */
+function errorText(error: PostgrestError): string {
+	if (error.message === 'would_be_revoked') {
+		const detail = JSON.parse(error.details ?? '{}') as Record<string, unknown>;
+		const numbers =
+			detail.reason === 'score_below'
+				? `score ${detail.score_pct}% on ${detail.votes} votes of the last 12 months`
+				: `${detail.count} of the ${detail.recent} updates of the last 90 days`;
+		return `Not picked: it would lose the badge at once (${REASONS[String(detail.reason)] ?? detail.reason}: ${numbers}).`;
+	}
+	const known: Record<string, string> = {
+		not_allowed: 'The key is not allowed to certify (is SUPABASE_SECRET_KEY the secret key?).',
+		place_missing_from_osm: 'The place is gone from OpenStreetMap: check it first.',
+		already_confirmed: 'Already certified by users (confirmed): nothing to pick.',
+		not_certified: 'The place is not certified.',
+		not_blocked: 'The automatic certification of this place is not blocked.',
+		invalid_team_info: 'Team info not valid.',
+		month_in_future: 'The month is in the future.'
+	};
+	return known[error.message] ?? error.message;
+}
+
 async function rpc<T>(name: string, params: Record<string, unknown>): Promise<T> {
 	const { data, error } = await supabase.rpc(name, params);
-	if (error) {
-		if (error.message === 'would_be_revoked') {
-			const detail = JSON.parse(error.details ?? '{}') as Record<string, unknown>;
-			const numbers =
-				detail.reason === 'score_below'
-					? `score ${detail.score_pct}% on ${detail.votes} votes of the last 12 months`
-					: `${detail.count} of the ${detail.recent} updates of the last 90 days`;
-			fail(
-				`Not picked: it would lose the badge at once (${REASONS[String(detail.reason)] ?? detail.reason}: ${numbers}).`
-			);
-		}
-		const known: Record<string, string> = {
-			not_allowed: 'The key is not allowed to certify (is SUPABASE_SECRET_KEY the secret key?).',
-			place_missing_from_osm: 'The place is gone from OpenStreetMap: check it first.',
-			already_confirmed: 'Already certified by users (confirmed): nothing to pick.',
-			not_certified: 'The place is not certified.',
-			not_blocked: 'The automatic certification of this place is not blocked.'
-		};
-		fail(known[error.message] ?? error.message);
-	}
+	if (error) fail(errorText(error));
 	return data as T;
 }
 
@@ -372,7 +396,128 @@ async function recompute(citySlug: string) {
 	console.log(`✔ ${result.checked} places recomputed, ${result.changes} changes (see --recent).`);
 }
 
+/** --pick-file through the secret key: errors are thrown, so one row never stops the others. */
+const pickClient: PickClient = {
+	async cityId(slug) {
+		const { data, error } = await supabase
+			.from('cities')
+			.select('id')
+			.eq('slug', slug)
+			.maybeSingle();
+		if (error) throw new Error(error.message);
+		return data?.id as string | undefined;
+	},
+	async place(city, slug) {
+		const { data, error } = await supabase
+			.from('places')
+			.select('id')
+			.eq('city_id', city)
+			.eq('slug', slug)
+			.maybeSingle();
+		if (error) throw new Error(error.message);
+		if (!data) return undefined;
+		const status = await supabase.rpc('certification_status', { p_place_id: data.id });
+		if (status.error) throw new Error(errorText(status.error));
+		const value = status.data as Status;
+		return {
+			id: data.id as string,
+			level: value.level,
+			origin: value.level === 'certified' ? value.origin : null,
+			missingFromOsm: value.missing_from_osm
+		};
+	},
+	async pick(placeId, note, pickedOn) {
+		const { data, error } = await supabase.rpc('pick_place', {
+			p_place_id: placeId,
+			p_note: note,
+			p_picked_on: pickedOn
+		});
+		if (error) throw new Error(errorText(error));
+		return data as { origin: string };
+	},
+	async setTeamInfo(placeId, info, month) {
+		const { data, error } = await supabase.rpc('set_place_team_info', {
+			p_place_id: placeId,
+			p_info: info,
+			p_month: month
+		});
+		if (error) throw new Error(errorText(error));
+		return data as string;
+	}
+};
+
+const ACTIONS = {
+	pick: 'pick + team info',
+	team_info: 'already certified: team info only (if different)',
+	no_slug: 'skip: no slug',
+	not_found: 'ERROR: slug not found',
+	missing_from_osm: 'ERROR: gone from OpenStreetMap'
+};
+
+async function pickFile(path: string) {
+	let raw: unknown;
+	try {
+		raw = JSON.parse(await readFile(path, 'utf8'));
+	} catch (error) {
+		fail(`Cannot read ${path}: ${error instanceof Error ? error.message : String(error)}`);
+	}
+	const { file, problems } = parsePicksFile(raw);
+	if (!file) fail(`${path} is not valid, nothing changed:\n  ${problems.join('\n  ')}`);
+
+	const dryRun = args['dry-run'];
+	const plan = await planPicks(file, pickClient).catch((error: Error) => fail(error.message));
+	console.log(
+		`\n${file.city} · month ${file.picked_month} · ${path}${dryRun ? ' · DRY RUN' : ''}\n`
+	);
+	for (const row of plan) {
+		const origin =
+			row.action === 'team_info'
+				? ` (${row.origin === 'confirmed' ? 'confirmed by users' : 'picked'})`
+				: '';
+		console.log(
+			`${String(row.line).padStart(3)}. ${row.row.slug ?? '—'} · ${row.row.name}: ${ACTIONS[row.action]}${origin}`
+		);
+		if (row.action === 'pick' || row.action === 'team_info') {
+			const info = Object.entries(teamInfoPayload(row.row.team))
+				.map(([key, value]) => `${key}=${Array.isArray(value) ? value.join('+') : String(value)}`)
+				.join(', ');
+			console.log(`       team: ${info || 'nothing known'}`);
+		}
+	}
+	const toPick = plan.filter((row) => row.action === 'pick').length;
+	const teamOnly = plan.filter((row) => row.action === 'team_info').length;
+	console.log(
+		`\n${toPick} to pick, ${teamOnly} already certified, ${plan.length - toPick - teamOnly} skipped or not found.`
+	);
+	if (!toPick && !teamOnly) fail('Nothing to do.');
+
+	if (!dryRun && !args.yes) {
+		const prompt = createInterface({ input: process.stdin, output: process.stdout });
+		const answer = await prompt.question(
+			`\nPick ${toPick} places on ${ref} (${label})? Type the city slug (${file.city}) to confirm: `
+		);
+		prompt.close();
+		if (answer.trim() !== file.city) fail('Nothing changed.');
+	}
+
+	const results = await runPicks(file, plan, pickClient, { dryRun });
+	for (const result of results.filter((r) => r.outcome === 'error')) {
+		console.log(`✖ ${result.line}. ${result.slug ?? result.name}: ${result.detail}`);
+	}
+	const total = summarize(results);
+	console.log(
+		`\n${dryRun ? 'Dry run, nothing written. Would pick' : '✔ Picked'} ${total.picked}` +
+			(total.pickedConfirmed ? ` (${total.pickedConfirmed} already confirmed by users)` : '') +
+			`, ${total.alreadyCertified} already certified, ${total.skipped} skipped, ${total.errors} errors.` +
+			(dryRun
+				? ''
+				: `\nTeam info: ${total.teamCreated} created, ${total.teamUpdated} updated, ${total.teamUnchanged} unchanged.`)
+	);
+	if (total.errors) process.exitCode = 1;
+}
+
 if (args.pick) await pick(args.pick);
+else if (args['pick-file']) await pickFile(args['pick-file']);
 else if (args.unpick) await unpick(args.unpick);
 else if (args.unblock) await unblock(args.unblock);
 else if (args.list) await list(args.list);

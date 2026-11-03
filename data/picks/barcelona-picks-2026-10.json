@@ -1,0 +1,680 @@
+{
+	"city": "barcelona",
+	"picked_month": "2026-10",
+	"places": [
+		{
+			"name": "Federal Café Gòtic",
+			"address": "Passatge de la Pau, 11",
+			"district": "Ciutat Vella",
+			"sources_note": "Apartment Barcelona 2025, These Gold Wings 2026, Barcelona Expat Life 2026, Freaking Nomads",
+			"team": {
+				"wifi": "fast",
+				"outlets": "a_few",
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": ["large_tables"],
+				"note": "Tables set aside for laptops."
+			},
+			"slug": null
+		},
+		{
+			"name": "Alsur Café",
+			"address": "Carrer de la Ribera, 18",
+			"district": "Ciutat Vella",
+			"sources_note": "These Gold Wings 2026, Barcelona Navigator 2026, Jess Bergin",
+			"team": {
+				"wifi": "available",
+				"outlets": "a_few",
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "alsur"
+		},
+		{
+			"name": "Hidden Coffee Roasters El Born",
+			"address": "Carrer dels Canvis Vells, 10",
+			"district": "Ciutat Vella",
+			"sources_note": "These Gold Wings 2026, BrewAtlas 2026, Double Skinny Macchiato 2026",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Some tables are for laptops only. Ask the staff."
+			},
+			"slug": "hidden-coffee-bcn"
+		},
+		{
+			"name": "Sandwichez",
+			"address": "Carrer de Trafalgar, 11",
+			"district": "Ciutat Vella",
+			"sources_note": "The Working Line 2025, Barcelona Secreta 2024, Honey Gouda 2026",
+			"team": {
+				"wifi": "available",
+				"outlets": "plenty",
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": ["large_tables"],
+				"note": "Wi-Fi is limited to about 1.5 hours per purchase."
+			},
+			"slug": null
+		},
+		{
+			"name": "Flax & Kale Tallers",
+			"address": "Carrer dels Tallers, 74B",
+			"district": "Ciutat Vella",
+			"sources_note": "The Working Line 2025, Jess Bergin, Barcinno",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": null
+		},
+		{
+			"name": "Federal Café Sant Antoni",
+			"address": "Carrer del Parlament, 39",
+			"district": "Sant Antoni",
+			"sources_note": "Barcelona Urbana 2026, Apartment Barcelona 2025, Culture Trip",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": ["large_tables"],
+				"note": "At busy times the Wi-Fi code expires after 60–90 minutes."
+			},
+			"slug": "federal-cafe"
+		},
+		{
+			"name": "Origin Specialty Coffee",
+			"address": "Carrer de Manso, 17",
+			"district": "Sant Antoni",
+			"sources_note": "European Coffee Trip, The Working Line 2025",
+			"team": {
+				"wifi": "available",
+				"outlets": "plenty",
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Soundproof booth for calls."
+			},
+			"slug": null
+		},
+		{
+			"name": "Morrow Coffee",
+			"address": "Gran Via de les Corts Catalanes, 403",
+			"district": "Sant Antoni",
+			"sources_note": "These Gold Wings 2026, Barcelona Urbana 2026, BrewAtlas 2026",
+			"team": {
+				"wifi": "fast",
+				"outlets": "plenty",
+				"noise": "quiet",
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "morrow-coffee"
+		},
+		{
+			"name": "Cactus Café",
+			"address": "Carrer de Blasco de Garay, 10",
+			"district": "Sants-Montjuïc (Poble Sec)",
+			"sources_note": "TEFL Iberia 2024",
+			"team": {
+				"wifi": "fast",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "cactus-cafe"
+		},
+		{
+			"name": "Three Marks Coffee",
+			"address": "Carrer d'Ausiàs Marc, 151",
+			"district": "Eixample",
+			"sources_note": "These Gold Wings 2026, Apartment Barcelona 2025, CoffeeLobo 2026, Johnny Africa 2026",
+			"team": {
+				"wifi": "available",
+				"outlets": "plenty",
+				"noise": "noisy",
+				"long_stays": null,
+				"laptop_rules": ["weekends"],
+				"extras": [],
+				"note": "Work area upstairs."
+			},
+			"slug": "three-marks-coffee-el-fort-pienc"
+		},
+		{
+			"name": "Laie Llibreria Cafè",
+			"address": "Carrer de Pau Claris, 85",
+			"district": "Eixample",
+			"sources_note": "Barcelona Urbana 2026, Barcelona Expat Life 2026, These Gold Wings 2026",
+			"team": {
+				"wifi": "available",
+				"outlets": "a_few",
+				"noise": "quiet",
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Works as a restaurant at lunch."
+			},
+			"slug": null
+		},
+		{
+			"name": "Sandwichez",
+			"address": "Carrer d'Aragó, 205",
+			"district": "Eixample",
+			"sources_note": "Barcelona Urbana 2026, Barcelona Expat Life 2026",
+			"team": {
+				"wifi": "fast",
+				"outlets": "plenty",
+				"noise": "quiet",
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Quiet floor upstairs. Wi-Fi is limited to about 1.5 hours per purchase."
+			},
+			"slug": null
+		},
+		{
+			"name": "SAGA Coffee Stories",
+			"address": "Carrer de Casp, 70",
+			"district": "Eixample",
+			"sources_note": "European Coffee Trip, BrewAtlas 2026, Le Petit Journal 2025",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": "quiet",
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "saga"
+		},
+		{
+			"name": "Casa Bonay (café or ground-floor bar of the hotel)",
+			"address": "Gran Via de les Corts Catalanes, 700",
+			"district": "Eixample",
+			"sources_note": "Barcelona Urbana 2026, Le Petit Journal 2025, Ukio 2024",
+			"team": {
+				"wifi": "fast",
+				"outlets": null,
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": ["large_tables"],
+				"note": "Hotel lobby. Turns into a cocktail bar in the evening."
+			},
+			"slug": null
+		},
+		{
+			"name": "Alsur Café",
+			"address": "Carrer de Roger de Llúria, 23",
+			"district": "Eixample",
+			"sources_note": "Apartment Barcelona 2025, Lost and Abroad",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": ["large_tables"],
+				"note": null
+			},
+			"slug": "alsur-cafe"
+		},
+		{
+			"name": "The Miners Sant Joan",
+			"address": "Passeig de Sant Joan, 87",
+			"district": "Eixample",
+			"sources_note": "European Coffee Trip",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": null
+		},
+		{
+			"name": "Green & Berry",
+			"address": "Carrer d'Enric Granados, 153",
+			"district": "Eixample",
+			"sources_note": "These Gold Wings 2026, Jess Bergin",
+			"team": {
+				"wifi": "fast",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Busy at lunch."
+			},
+			"slug": null
+		},
+		{
+			"name": "Apurado",
+			"address": "Carrer de Roger de Flor, 253",
+			"district": "Eixample",
+			"sources_note": "European Coffee Trip",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "apurado-cafe"
+		},
+		{
+			"name": "Honest Greens",
+			"address": "Avinguda de Vilanova, 3",
+			"district": "Eixample",
+			"sources_note": "Johnny Africa 2026, Le Petit Journal 2025",
+			"team": {
+				"wifi": "fast",
+				"outlets": null,
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Work upstairs. Busy at lunch."
+			},
+			"slug": null
+		},
+		{
+			"name": "Noah's Coffee",
+			"address": "Carrer de Bailèn, 14",
+			"district": "Eixample",
+			"sources_note": "CoffeeLobo 2026, Spinach Guide 2026",
+			"team": {
+				"wifi": "fast",
+				"outlets": null,
+				"noise": "quiet",
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "noahs-coffee"
+		},
+		{
+			"name": "Roast Club Cafe",
+			"address": "Carrer de València, 190",
+			"district": "Eixample",
+			"sources_note": "CoffeeLobo 2026, Bounce",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Busy around brunch."
+			},
+			"slug": null
+		},
+		{
+			"name": "SlowMov",
+			"address": "Carrer de Neptú, 36",
+			"district": "Gràcia",
+			"sources_note": "European Coffee Trip, CoffeeLobo 2026, These Gold Wings 2026",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": "quiet",
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Small. Best for shorter sessions."
+			},
+			"slug": "slowmov"
+		},
+		{
+			"name": "Buenas Migas",
+			"address": "Passeig de Gràcia, 120",
+			"district": "Gràcia",
+			"sources_note": "Founder's own observation, Honey Gouda 2026, Le Petit Journal 2025",
+			"team": {
+				"wifi": "slow",
+				"outlets": null,
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": ["large_tables"],
+				"note": null
+			},
+			"slug": "buenas-migas-la-vila-de-gracia"
+		},
+		{
+			"name": "The Miners Joanic",
+			"address": "Carrer de Pi i Margall, 13",
+			"district": "Gràcia",
+			"sources_note": "Caffe Atlas, European Coffee Trip (chain)",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "the-miners-el-camp-den-grassot-i-gracia-nova"
+		},
+		{
+			"name": "Sandwichez",
+			"address": "Carrer de Bruniquer, 33-35",
+			"district": "Gràcia",
+			"sources_note": "Honey Gouda 2026, Spinach Guide 2026",
+			"team": {
+				"wifi": "available",
+				"outlets": "plenty",
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Wi-Fi is limited to about 1.5 hours per purchase."
+			},
+			"slug": "sandwichez-la-vila-de-gracia"
+		},
+		{
+			"name": "Coffee Hackers",
+			"address": "Carrer de Saragossa, 60",
+			"district": "Sarrià-Sant Gervasi",
+			"sources_note": "European Coffee Trip, Johnny Africa 2026, CoffeeLobo 2026",
+			"team": {
+				"wifi": "fast",
+				"outlets": "plenty",
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Busy. Arrive before 11 AM."
+			},
+			"slug": null
+		},
+		{
+			"name": "Liadísimo",
+			"address": "Carrer de Guillem Tell, 23-25",
+			"district": "Sarrià-Sant Gervasi",
+			"sources_note": "These Gold Wings 2026, Honey Gouda 2026, Jean Galea",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "liadisimo-cafeteteria"
+		},
+		{
+			"name": "Sip by Sip",
+			"address": "Carrer d'Amigó, 18",
+			"district": "Sarrià-Sant Gervasi",
+			"sources_note": "European Coffee Trip",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": null
+		},
+		{
+			"name": "The Miners Via Augusta",
+			"address": "Via Augusta, 105",
+			"district": "Sarrià-Sant Gervasi",
+			"sources_note": "European Coffee Trip, Le Petit Journal 2025",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": null
+		},
+		{
+			"name": "Hidden Café Les Corts",
+			"address": "Carrer de Constança, 14",
+			"district": "Les Corts",
+			"sources_note": "The Way to Coffee 2026, European Coffee Trip",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "hidden-cafe-barcelona"
+		},
+		{
+			"name": "The Miners",
+			"address": "Carrer de Berlín, 82",
+			"district": "Les Corts",
+			"sources_note": "European Coffee Trip",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": null
+		},
+		{
+			"name": "On y va Les Corts",
+			"address": "Carrer de Cabestany, 15",
+			"district": "Les Corts",
+			"sources_note": "European Coffee Trip",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": null
+		},
+		{
+			"name": "Sula Espai",
+			"address": "Carrer d'Alcolea, 116",
+			"district": "Sants-Montjuïc (Sants)",
+			"sources_note": "European Coffee Trip, BrewAtlas 2026",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": null
+		},
+		{
+			"name": "Sopa",
+			"address": "Carrer de Roc Boronat, 114",
+			"district": "Sant Martí",
+			"sources_note": "These Gold Wings 2026, Barcelona Expat Life 2026, Fora Travel 2025, Barcinno",
+			"team": {
+				"wifi": "available",
+				"outlets": "plenty",
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": ["lunch"],
+				"extras": [],
+				"note": null
+			},
+			"slug": null
+		},
+		{
+			"name": "Federal Café Poblenou",
+			"address": "Carrer del Taulat, 109-111",
+			"district": "Sant Martí",
+			"sources_note": "Apartment Barcelona 2025, BCN English Speakers",
+			"team": {
+				"wifi": "fast",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "federal"
+		},
+		{
+			"name": "The Miners Poblenou",
+			"address": "Rambla del Poblenou, 107",
+			"district": "Sant Martí",
+			"sources_note": "European Coffee Trip",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "theminers"
+		},
+		{
+			"name": "Mono Café",
+			"address": "Carrer de Pujades, 134",
+			"district": "Sant Martí",
+			"sources_note": "Johnny Africa 2026, BCN English Speakers",
+			"team": {
+				"wifi": "slow",
+				"outlets": "plenty",
+				"noise": null,
+				"long_stays": "welcome",
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "mono-cafe"
+		},
+		{
+			"name": "Cafè Menssana",
+			"address": "Carrer de Sardenya, 48",
+			"district": "Sant Martí",
+			"sources_note": "TEFL Iberia 2024, Fora Travel 2025",
+			"team": {
+				"wifi": "fast",
+				"outlets": "plenty",
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "You can stay and work when it isn't busy."
+			},
+			"slug": null
+		},
+		{
+			"name": "Tarannà Cafè",
+			"address": "Carrer de Fluvià, 47",
+			"district": "Sant Martí",
+			"sources_note": "These Gold Wings 2026, BCN English Speakers",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "taranna-cafe"
+		},
+		{
+			"name": "bCoffee",
+			"address": "Carrer de Teodor Llorente, 23",
+			"district": "Horta-Guinardó",
+			"sources_note": "European Coffee Trip",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "bcoffee"
+		},
+		{
+			"name": "Vivari (branch to choose)",
+			"address": "to choose in the OSM import",
+			"district": "Sant Andreu",
+			"sources_note": "Honey Gouda 2026, These Gold Wings 2026 (chain)",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"choose_branch": true,
+			"slug": "cafeteria-vivari"
+		},
+		{
+			"name": "Vivari (branch to choose)",
+			"address": "to choose in the OSM import",
+			"district": "Nou Barris",
+			"sources_note": "Honey Gouda 2026, These Gold Wings 2026 (chain)",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"choose_branch": true,
+			"slug": null
+		}
+	]
+}
