@@ -1,10 +1,12 @@
 <script lang="ts">
 	// One work attribute on the place page (LattePlace): name, prevailing value, how many people
-	// confirmed it and when the latest did. Unknown: a dashed tile (LattePlaceCommunity).
+	// confirmed it and when the latest did, or "From our team · Oct 2026" for the team's value.
+	// Unknown: a dashed tile (LattePlaceCommunity).
 	import { formatDaysAgo } from '#lib/i18n/format.ts';
 	import * as m from '#lib/paraglide/messages.js';
 	import { daysSince } from '#lib/places/dates.ts';
 	import Icon from './Icon.svelte';
+	import { fromTeamLabel } from './labels.ts';
 	import type { IconName } from './icons.ts';
 
 	type Props = {
@@ -14,6 +16,8 @@
 		value?: string;
 		confirmations?: number;
 		lastConfirmedOn?: string;
+		/** The team's value: its month ("YYYY-MM") instead of confirmations. */
+		teamMonth?: string;
 		timezone: string;
 		/** Unknown attribute: "Add it" opens the contribution form. */
 		addHref?: string;
@@ -25,17 +29,20 @@
 		value,
 		confirmations = 0,
 		lastConfirmedOn,
+		teamMonth,
 		timezone,
 		addHref
 	}: Props = $props();
 
 	const freshness = $derived(
-		lastConfirmedOn
-			? [
-					m.place_confirmations({ count: confirmations }),
-					formatDaysAgo(daysSince(lastConfirmedOn, timezone))
-				].join(' · ')
-			: undefined
+		teamMonth
+			? fromTeamLabel(teamMonth)
+			: lastConfirmedOn
+				? [
+						m.place_confirmations({ count: confirmations }),
+						formatDaysAgo(daysSince(lastConfirmedOn, timezone))
+					].join(' · ')
+				: undefined
 	);
 </script>
 

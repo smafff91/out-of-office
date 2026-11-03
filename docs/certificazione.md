@@ -35,6 +35,13 @@ Selezione del team da **fonti pubbliche e controllo da scrivania** (regole sui l
 - Il comando **rifiuta** il pick se il locale rientra già in una condizione di revoca (qui sotto) e dice quale: lo perderebbe al primo ricalcolo.
 - Un Picked che soddisfa le condizioni della certificazione automatica **diventa Confirmed da solo**.
 
+#### Informazioni del team (feature 8b)
+Quando sceglie un locale, il team può salvare ciò che ha verificato da fonti pubbliche: Wi‑Fi (Fast / Slow / **Available**, solo del team: c'è ma non si sa quanto è veloce), prese, rumore, soste lunghe, regole sui laptop (pranzo, weekend), extras e una nota in inglese (≤ 140 caratteri). Ogni campo può mancare (= non noto).
+- Si vedono solo mentre il locale è certificato, con "From our team · Oct 2026" al posto di conferme e freschezza; la nota sta tra le note, in ordine di mese, con la stessa etichetta. Dopo un `--unpick` o una revoca restano salvate ma non si mostrano.
+- **Precedenza per attributo:** appena un contributo attivo risponde, vale la community. I 4 attributi principali sono obbligatori nel form, quindi passano tutti alla community al primo contributo; le regole sui laptop quando qualcuno risponde alla domanda; gli extras chip per chip.
+- **Non sono contributi:** non entrano in score, soglie, revoca, "Shared by", Founding contributor né conteggi di utenti.
+- Il form "Still right?" le usa per precompilare (non il Wi‑Fi "Available"); "Everything's still right" crea un normale contributo dell'utente.
+
 ### Confirmed — "Confirmed by 12 users"
 Il badge si attiva da solo quando un locale soddisfa **tutte** queste condizioni:
 
@@ -95,7 +102,7 @@ Se arrivano **2 o più segnalazioni** dello stesso problema in 30 giorni (es. nu
 
 ## Privacy
 
-Le viste pubbliche espongono solo livello, origine, mese della certificazione o della rimozione e numero di utenti. Mai la nota del pick, il motivo, chi ha scelto, le date esatte o gli identificativi.
+Le viste pubbliche espongono solo livello, origine, mese della certificazione o della rimozione, numero di utenti e, sui certificati, i valori e il mese delle informazioni del team. Mai la nota del pick, il motivo, chi ha scelto, le date esatte o gli identificativi.
 
 ## Indipendenza
 

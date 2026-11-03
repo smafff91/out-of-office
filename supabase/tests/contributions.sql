@@ -180,7 +180,7 @@ begin
 	-- Details: shown when one active contribution mentions them; superseded ones do not count.
 	select extras into v_json from public.place_details where id = v_a;
 	if v_json <> jsonb_build_array(jsonb_build_object('extra', 'toilet', 'confirmations', 1,
-		'last_confirmed_on', (now() at time zone 'Europe/Madrid')::date)) then
+		'last_confirmed_on', (now() at time zone 'Europe/Madrid')::date, 'source', 'users')) then
 		raise exception 'place_details extras: got %', v_json;
 	end if;
 

@@ -11,6 +11,8 @@ type Client = ReturnType<typeof createSupabaseClient>;
 type ItemRow = Database['public']['Views']['place_list_items']['Row'];
 
 export type Wifi = 'none' | 'slow' | 'fast';
+/** What a place can show: also 'available', the team's "there is Wi‑Fi" (never an answer of the form). */
+export type ShownWifi = Wifi | 'available';
 export type Outlets = 'none' | 'a_few' | 'plenty';
 export type Noise = 'quiet' | 'noisy';
 export type LaptopRule = 'no_laptops_lunch' | 'no_laptops_weekends' | 'time_limit';
@@ -30,7 +32,8 @@ export type ListItem = {
 	scorePct: number | null;
 	/** Enough votes to show a percentage (certification_settings.score_min_votes). */
 	hasScore: boolean;
-	wifi: Wifi | null;
+	/** The community's value, else the team's on a certified place. */
+	wifi: ShownWifi | null;
 	outlets: Outlets | null;
 	noise: Noise | null;
 	laptopRules: LaptopRule[];
@@ -64,7 +67,7 @@ export function toListItem(row: Omit<ItemRow, 'city_id'>): ListItem {
 		yesVotes: row.yes_votes ?? 0,
 		scorePct: row.score_pct,
 		hasScore: row.has_score ?? false,
-		wifi: row.wifi as Wifi | null,
+		wifi: row.wifi as ShownWifi | null,
 		outlets: row.outlets as Outlets | null,
 		noise: row.noise as Noise | null,
 		laptopRules: (row.laptop_rules ?? []) as LaptopRule[],

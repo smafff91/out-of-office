@@ -2,7 +2,7 @@
 	// The contribution form (LatteContribute), one page that scrolls, then the thanks screen
 	// (LatteThanks). Full screen on phones; the left panel on desktop, next to the map.
 	// - Prefilled with the user's own answers of the last 30 days, else with what the community
-	//   reported (draft.ts).
+	//   reported, else with what the team checked when it picked the place (draft.ts).
 	// - Sign-in only on "Send update" (LatteSignIn); the draft survives the Google redirect and
 	//   a language change (stash), and the sending carries on once signed in.
 	// - The position is asked when the form opens for a check-in or on "I'm here now", and read
@@ -60,7 +60,8 @@
 		ATTRIBUTE_OPTIONS,
 		ATTRIBUTE_VALUES,
 		EXTRAS as EXTRA_LABELS,
-		LAPTOP_RULES
+		LAPTOP_RULES,
+		fromTeamLabel
 	} from '#lib/components/place/labels.ts';
 	import Sheet from '#lib/components/sheet/Sheet.svelte';
 	import { formatDaysAgo, formatHours, formatNumber } from '#lib/i18n/format.ts';
@@ -81,6 +82,7 @@
 	import {
 		PLACE_DEPENDENCY,
 		invalidatePlaceDetail,
+		type Known,
 		type PlaceDetail
 	} from '#lib/supabase/place-details.ts';
 	import {
@@ -205,13 +207,19 @@
 	);
 	const rulesNow = $derived.by(() => {
 		const latest = place.laptopRules
-			.map((rule) => rule.lastConfirmedOn)
+			.flatMap((rule) => (rule.source === 'users' ? [rule.lastConfirmedOn] : []))
 			.sort()
 			.at(-1);
-		if (!latest) return undefined;
+		const team = place.laptopRules.find((rule) => rule.source === 'team');
+		const when = latest
+			? ago(latest)
+			: team?.source === 'team'
+				? fromTeamLabel(team.month)
+				: undefined;
+		if (!when) return undefined;
 		return m.contribute_now({
 			value: m.contribute_rules_count({ count: place.laptopRules.length }),
-			ago: ago(latest)
+			ago: when
 		});
 	});
 	const hourOptions = $derived(
@@ -226,14 +234,18 @@
 		return formatDaysAgo(daysSince(day, place.timezone));
 	}
 
+	/** "now: Fast · 3 days ago", or "now: Available · From our team · Oct 2026". */
 	function freshness<T extends string>(
-		attribute: { value: T; lastConfirmedOn: string } | undefined,
+		attribute: Known<T> | undefined,
 		labels: Record<T, () => string>
 	) {
 		if (!attribute) return undefined;
 		return m.contribute_now({
 			value: labels[attribute.value](),
-			ago: ago(attribute.lastConfirmedOn)
+			ago:
+				attribute.source === 'team'
+					? fromTeamLabel(attribute.month)
+					: ago(attribute.lastConfirmedOn)
 		});
 	}
 
@@ -567,7 +579,11 @@
 				{:else}
 					<h1>{m.contribute_still_right()}</h1>
 					<p>
-						{source === 'mine' ? m.contribute_own_answers_body() : m.contribute_still_right_body()}
+						{source === 'mine'
+							? m.contribute_own_answers_body()
+							: source === 'team'
+								? m.contribute_still_right_body_team()
+								: m.contribute_still_right_body()}
 					</p>
 				{/if}
 			</div>

@@ -46,13 +46,19 @@ describe('opening hours', () => {
 		const dir = mkdtempSync(path.join(tmpdir(), 'opening-hours-'));
 		const file = path.join(dir, 'query.sql');
 		try {
+			// The read-only role cannot call the internal function: a rolled-back transaction, with
+			// the --yes the CLI (3.x) asks for.
 			writeFileSync(
 				file,
-				`select s, public.opening_hours_week(s) as w from unnest(array[${samples.map(quote).join(',')}]::text[]) s;\n`
+				`begin;\nselect s, public.opening_hours_week(s) as w from unnest(array[${samples.map(quote).join(',')}]::text[]) s;\nrollback;\n`
 			);
-			const result = spawnSync('npx', ['supabase', 'db', 'query', '--linked', '-f', file], {
-				encoding: 'utf8'
-			});
+			const result = spawnSync(
+				'npx',
+				['supabase', 'db', 'query', '--linked', '--yes', '-f', file],
+				{
+					encoding: 'utf8'
+				}
+			);
 			expect(result.status, result.stderr).toBe(0);
 			const rows = (JSON.parse(result.stdout) as { rows: { s: string; w: unknown }[] }).rows;
 			expect(rows).toHaveLength(samples.length);
@@ -125,6 +131,14 @@ describe("the team's functions through the API", () => {
 		expect(pick.error).not.toBeNull();
 		const list = await anon.rpc('certification_list', { p_city_id: cityId });
 		expect(list.error).not.toBeNull();
+		const info = await anon.rpc('set_place_team_info', {
+			p_place_id: placeId,
+			p_info: { wifi: 'fast' },
+			p_month: '2026-10-01'
+		});
+		expect(info.error).not.toBeNull();
+		const table = await anon.from('place_team_info').select('place_id');
+		expect(table.error).not.toBeNull();
 	});
 
 	it('refuses a signed-in user who is not an admin', async () => {
@@ -132,23 +146,48 @@ describe("the team's functions through the API", () => {
 		expect(pick.error?.message).toBe('not_allowed');
 		const status = await user.rpc('certification_status', { p_place_id: placeId });
 		expect(status.error?.message).toBe('not_allowed');
+		const info = await user.rpc('set_place_team_info', {
+			p_place_id: placeId,
+			p_info: { wifi: 'fast' },
+			p_month: '2026-10-01'
+		});
+		expect(info.error?.message).toBe('not_allowed');
 	});
 
 	it('works with the secret key (npm run certify)', async () => {
 		const empty = await admin.rpc('pick_place', { p_place_id: placeId, p_note: ' ' });
 		expect(empty.error?.message).toBe('note_required');
 
-		const pick = await admin.rpc('pick_place', { p_place_id: placeId, p_note: 'desk check' });
+		const info = await admin.rpc('set_place_team_info', {
+			p_place_id: placeId,
+			p_info: { wifi: 'available', note: 'Work area upstairs.' },
+			p_month: '2026-10-01'
+		});
+		expect(info.error).toBeNull();
+		expect(info.data).toBe('created');
+
+		const pick = await admin.rpc('pick_place', {
+			p_place_id: placeId,
+			p_note: 'desk check',
+			p_picked_on: '2026-10-01'
+		});
 		expect(pick.error).toBeNull();
 		expect(pick.data).toMatchObject({ level: 'certified', origin: 'picked' });
 
 		const details = await anon
 			.from('place_details')
-			.select('level, cert_origin, certified_on')
+			.select('level, cert_origin, certified_on, attributes')
 			.eq('id', placeId)
 			.single();
 		expect(details.error).toBeNull();
-		expect(details.data).toMatchObject({ level: 'certified', cert_origin: 'picked' });
+		expect(details.data).toMatchObject({
+			level: 'certified',
+			cert_origin: 'picked',
+			certified_on: '2026-10-01',
+			attributes: { wifi: { value: 'available', source: 'team', month: '2026-10' } }
+		});
+		const notes = await anon.from('place_notes').select('note, from_team').eq('place_id', placeId);
+		expect(notes.data).toEqual([{ note: 'Work area upstairs.', from_team: true }]);
 
 		const unpick = await admin.rpc('unpick_place', {
 			p_place_id: placeId,

@@ -42,21 +42,25 @@ const ANSWERS = {
 };
 
 // One file runs every SQL check, one after the other: two `supabase db query --linked` started
-// at the same time (test files run in parallel) can hang on the CLI's login role.
-describe.each(['contributions.sql', 'profile_visibility.sql', 'photos.sql', 'certification.sql'])(
-	'supabase/tests/%s',
-	(file) => {
-		it('passes', () => {
-			const result = spawnSync(
-				'npx',
-				['supabase', 'db', 'query', '--linked', '-f', `supabase/tests/${file}`],
-				{ encoding: 'utf8' }
-			);
-			expect(result.status, result.stderr).toBe(0);
-			expect(result.stdout).toContain(`${file.replace('.sql', '')}: ok`);
-		}, 60_000);
-	}
-);
+// at the same time (test files run in parallel) can hang on the CLI's login role. --yes: the
+// CLI (3.x) asks before any statement that is not read-only; these all end in a rollback.
+describe.each([
+	'contributions.sql',
+	'profile_visibility.sql',
+	'photos.sql',
+	'certification.sql',
+	'team_info.sql'
+])('supabase/tests/%s', (file) => {
+	it('passes', () => {
+		const result = spawnSync(
+			'npx',
+			['supabase', 'db', 'query', '--linked', '--yes', '-f', `supabase/tests/${file}`],
+			{ encoding: 'utf8' }
+		);
+		expect(result.status, result.stderr).toBe(0);
+		expect(result.stdout).toContain(`${file.replace('.sql', '')}: ok`);
+	}, 60_000);
+});
 
 describe('with the public key', () => {
 	let placeId: string;

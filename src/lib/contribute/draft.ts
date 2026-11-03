@@ -68,9 +68,10 @@ export type MyContribution = {
 
 /**
  * Where the prefilled answers come from: the user's own recent update, what the community
- * reported (some attributes known), or nothing (a place without info).
+ * reported (some attributes known), only what the team checked when it picked the place, or
+ * nothing (a place without info).
  */
-export type PrefillSource = 'mine' | 'community' | 'none';
+export type PrefillSource = 'mine' | 'community' | 'team' | 'none';
 
 export function emptyDraft(): Draft {
 	return { rules: [], extras: [], note: '' };
@@ -97,21 +98,33 @@ export function prefill(
 		};
 	}
 	const { wifi, outlets, noise, long_stays } = place.attributes;
+	// The team's "Wi‑Fi available" says nothing about the speed: the user chooses.
+	const answerable = wifi?.value === 'available' ? undefined : wifi;
 	const rules = place.laptopRules.map((rule) => rule.rule);
 	const draft: Draft = {
 		...emptyDraft(),
-		wifi: wifi?.value,
+		wifi: answerable?.value as Wifi | undefined,
 		outlets: outlets?.value,
 		noise: noise?.value,
 		longStays: long_stays?.value,
 		rules,
 		hours: place.laptopRules.find((rule) => rule.rule === 'time_limit')?.hours
 	};
-	const known = wifi || outlets || noise || long_stays;
-	return { source: known ? 'community' : 'none', draft };
+	const used = [answerable, outlets, noise, long_stays, ...place.laptopRules].filter(
+		(known) => !!known
+	);
+	const source: PrefillSource = used.some((known) => known.source === 'users')
+		? 'community'
+		: used.length
+			? 'team'
+			: 'none';
+	return { source, draft };
 }
 
-/** "Everything's still right" is offered only when all four attributes were prefilled. */
+/**
+ * "Everything's still right" is offered only when all four attributes were prefilled (the
+ * team's values count; its "Wi‑Fi available" is not prefilled).
+ */
 export function canConfirmAll(initial: Draft): boolean {
 	return !!(initial.wifi && initial.outlets && initial.noise && initial.longStays);
 }
@@ -239,7 +252,7 @@ export function parseDraft(
 	if (value.savedAt > now + 60_000) return undefined;
 	const draft = parseAnswers(value.draft);
 	const initial = parseAnswers(value.initial);
-	const source = oneOf<PrefillSource>(['mine', 'community', 'none'], value.source);
+	const source = oneOf<PrefillSource>(['mine', 'community', 'team', 'none'], value.source);
 	if (!draft || !initial || !source) return undefined;
 	return {
 		v: 1,

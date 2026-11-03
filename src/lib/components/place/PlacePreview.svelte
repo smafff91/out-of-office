@@ -11,7 +11,13 @@
 	import type { PlacePhoto } from '#lib/places/photos.ts';
 	import Icon from './Icon.svelte';
 	import PhotoGallery from './PhotoGallery.svelte';
-	import { ATTRIBUTE_PILLS, distanceLabel, openingLabel, osmWifi } from './labels.ts';
+	import {
+		ATTRIBUTE_PILLS,
+		distanceLabel,
+		fromTeamLabel,
+		openingLabel,
+		osmWifi
+	} from './labels.ts';
 	import type { IconName } from './icons.ts';
 
 	type Props = {
@@ -64,19 +70,25 @@
 		return list;
 	});
 
-	/** "Confirmed by 4 users · last 3 days ago": the latest confirmation of any attribute. */
+	/**
+	 * "Confirmed by 4 users · last 3 days ago": the latest confirmation of any attribute. Without
+	 * one, "From our team · Oct 2026" when the pills show the team's values.
+	 */
 	const confirmed = $derived.by(() => {
-		if (!place?.contributors) return undefined;
-		const days = Object.values(place.attributes)
-			.map((attribute) => attribute?.lastConfirmedOn)
-			.filter((day): day is string => !!day)
+		if (!place) return undefined;
+		const shown = Object.values(place.attributes).filter((attribute) => !!attribute);
+		const day = shown
+			.flatMap((attribute) => (attribute.source === 'users' ? [attribute.lastConfirmedOn] : []))
 			.sort()
 			.at(-1);
-		if (!days) return undefined;
-		return m.preview_confirmed_last({
-			count: place.contributors,
-			ago: formatDaysAgo(daysSince(days, place.timezone))
-		});
+		if (day && place.contributors) {
+			return m.preview_confirmed_last({
+				count: place.contributors,
+				ago: formatDaysAgo(daysSince(day, place.timezone))
+			});
+		}
+		const team = shown.find((attribute) => attribute.source === 'team');
+		return team?.source === 'team' ? fromTeamLabel(team.month) : undefined;
 	});
 
 	const wifiFromOsm = $derived(place ? osmWifi(place.internetAccessOsm) : undefined);

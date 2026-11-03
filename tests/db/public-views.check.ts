@@ -18,7 +18,7 @@ const IDENTIFYING = ['id', 'user_id', 'profile_id', 'anon_key', 'author_name', '
 const FULL_DATES = ['created_on', 'created_at', 'updated_at', 'last_confirmed_on'];
 
 const VIEWS: Record<string, string[]> = {
-	place_notes: ['place_id', 'note', 'created_month'],
+	place_notes: ['place_id', 'note', 'created_month', 'from_team'],
 	place_contributors: ['place_id', 'display_name']
 };
 
@@ -135,8 +135,8 @@ describe('certification', () => {
 		}
 	});
 
-	it('place_level_changes and counted_contributions are not readable', async () => {
-		for (const table of ['place_level_changes', 'counted_contributions']) {
+	it('place_level_changes, counted_contributions and place_team_info are not readable', async () => {
+		for (const table of ['place_level_changes', 'counted_contributions', 'place_team_info']) {
 			const { data, error } = await anon.from(table).select('*').limit(1);
 			expect(error !== null || (data ?? []).length === 0, table).toBe(true);
 		}

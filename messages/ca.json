@@ -51,6 +51,7 @@
 	"place_walk_time": "A {minutes} min a peu",
 	"place_open_until": "Obert fins a les {time}",
 	"attribute_wifi_fast": "Wi‑Fi ràpida",
+	"attribute_wifi_available": "Wi‑Fi disponible",
 	"attribute_outlets_plenty": "Molts endolls",
 	"attribute_noise_quiet": "Tranquil",
 	"city_not_yet": "Encara no som a {city}",
@@ -202,6 +203,7 @@
 	"place_attribute_noise": "Soroll",
 	"place_attribute_long_stays": "Estades llargues",
 	"attribute_short_wifi_fast": "Ràpid",
+	"attribute_short_wifi_available": "Disponible",
 	"attribute_short_wifi_slow": "Lent",
 	"attribute_short_wifi_none": "No n'hi ha",
 	"attribute_short_outlets_plenty": "Molts",
@@ -214,6 +216,7 @@
 	"attribute_long_stays_welcome": "Estades llargues benvingudes",
 	"attribute_long_stays_not_really": "Només estades curtes",
 	"place_not_known": "Sense dades",
+	"place_from_team": "Del nostre equip · {month}",
 	"place_confirmations": [
 		{
 			"declarations": [
@@ -392,6 +395,7 @@
 	"contribute_no": "No",
 	"contribute_still_right": "Continua igual?",
 	"contribute_still_right_body": "Hem omplert el que van explicar altres usuaris. Canvia només el que sigui diferent.",
+	"contribute_still_right_body_team": "Hem omplert el que va trobar el nostre equip. Canvia només el que sigui diferent.",
 	"contribute_own_answers_body": "Són les respostes de la teva última actualització. En enviar, s'actualitzen.",
 	"contribute_whats_it_like": "Com és?",
 	"action_everything_still_right": "Tot continua igual",

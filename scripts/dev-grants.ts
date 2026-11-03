@@ -37,7 +37,7 @@ if (!url || new URL(url).hostname !== `${devRef}.supabase.co`) {
 
 const file = args.revoke ? 'supabase/dev/fixture-revoke.sql' : 'supabase/dev/fixture-grants.sql';
 console.log(`→ ${file} on ${devRef}`);
-const result = spawnSync('npx', ['supabase', 'db', 'query', '--linked', '-f', file], {
+const result = spawnSync('npx', ['supabase', 'db', 'query', '--linked', '--yes', '-f', file], {
 	stdio: 'inherit'
 });
 if (result.status !== 0) fail(`Could not apply ${file}.`);

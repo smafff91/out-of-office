@@ -1,17 +1,17 @@
 /**
  * Texts for place data shared by the list, the preview and the place page.
  */
-import { formatHours, formatKilometers, formatTime } from '#lib/i18n/format.ts';
+import { formatHours, formatKilometers, formatMonth, formatTime } from '#lib/i18n/format.ts';
 import * as m from '#lib/paraglide/messages.js';
 import { walkingEstimate } from '#lib/places/distance.ts';
 import { openingStatus } from '#lib/places/opening-hours.ts';
 import type { LongStays, PlaceExtra } from '#lib/supabase/place-details.ts';
-import type { LaptopRule, Noise, Outlets, Wifi } from '#lib/supabase/places.ts';
+import type { LaptopRule, Noise, Outlets, ShownWifi } from '#lib/supabase/places.ts';
 
 type Label = () => string;
 
 type AttributeLabels = {
-	wifi: Record<Wifi, Label>;
+	wifi: Record<ShownWifi, Label>;
 	outlets: Record<Outlets, Label>;
 	noise: Record<Noise, Label>;
 	long_stays: Record<LongStays, Label>;
@@ -22,7 +22,8 @@ export const ATTRIBUTE_PILLS: AttributeLabels = {
 	wifi: {
 		none: m.attribute_wifi_none,
 		slow: m.attribute_wifi_slow,
-		fast: m.attribute_wifi_fast
+		fast: m.attribute_wifi_fast,
+		available: m.attribute_wifi_available
 	},
 	outlets: {
 		none: m.attribute_outlets_none,
@@ -47,7 +48,8 @@ export const ATTRIBUTE_VALUES: AttributeLabels = {
 	wifi: {
 		none: m.attribute_short_wifi_none,
 		slow: m.attribute_short_wifi_slow,
-		fast: m.attribute_short_wifi_fast
+		fast: m.attribute_short_wifi_fast,
+		available: m.attribute_short_wifi_available
 	},
 	outlets: {
 		none: m.attribute_short_outlets_none,
@@ -85,6 +87,11 @@ export const LAPTOP_RULES: Record<LaptopRule, Label> = {
 	no_laptops_weekends: m.laptop_rule_no_laptops_weekends,
 	time_limit: m.laptop_rule_time_limit
 };
+
+/** "From our team · Oct 2026": a value the team checked, from the month "YYYY-MM". */
+export function fromTeamLabel(month: string): string {
+	return m.place_from_team({ month: formatMonth(`${month}-01`) });
+}
 
 /** "Time limit for laptops: 2h" when the hours are known. */
 export function laptopRuleLabel(rule: LaptopRule, hours?: number): string {

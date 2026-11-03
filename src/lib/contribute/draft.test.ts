@@ -19,6 +19,31 @@ import {
 } from './draft.ts';
 
 const DAY = '2026-10-20';
+const TEAM = { source: 'team', month: '2026-10' } as const;
+
+function users(confirmations: number) {
+	return { source: 'users', confirmations, lastConfirmedOn: DAY } as const;
+}
+
+/** A picked place nobody rated yet: only what the team checked. */
+function picked(overrides: Partial<PlaceDetail> = {}): PlaceDetail {
+	return place({
+		level: 'certified',
+		certOrigin: 'picked',
+		votes: 0,
+		yesVotes: 0,
+		scorePct: null,
+		contributors: 0,
+		attributes: {
+			wifi: { value: 'fast', ...TEAM },
+			outlets: { value: 'plenty', ...TEAM },
+			noise: { value: 'quiet', ...TEAM },
+			long_stays: { value: 'welcome', ...TEAM }
+		},
+		laptopRules: [{ rule: 'no_laptops_weekends', ...TEAM }],
+		...overrides
+	});
+}
 
 function place(overrides: Partial<PlaceDetail> = {}): PlaceDetail {
 	return {
@@ -47,14 +72,14 @@ function place(overrides: Partial<PlaceDetail> = {}): PlaceDetail {
 		contributors: 3,
 		minUsers: 10,
 		attributes: {
-			wifi: { value: 'fast', confirmations: 3, lastConfirmedOn: DAY },
-			outlets: { value: 'plenty', confirmations: 2, lastConfirmedOn: DAY },
-			noise: { value: 'quiet', confirmations: 3, lastConfirmedOn: DAY },
-			long_stays: { value: 'welcome', confirmations: 2, lastConfirmedOn: DAY }
+			wifi: { value: 'fast', ...users(3) },
+			outlets: { value: 'plenty', ...users(2) },
+			noise: { value: 'quiet', ...users(3) },
+			long_stays: { value: 'welcome', ...users(2) }
 		},
 		laptopRules: [
-			{ rule: 'no_laptops_lunch', confirmations: 2, lastConfirmedOn: DAY },
-			{ rule: 'time_limit', confirmations: 2, lastConfirmedOn: DAY, hours: 2 }
+			{ rule: 'no_laptops_lunch', ...users(2) },
+			{ rule: 'time_limit', ...users(2), hours: 2 }
 		],
 		extras: [],
 		checkin: { radiusM: 100, maxAccuracyM: 100 },
@@ -106,11 +131,48 @@ describe('prefill', () => {
 
 	it('leaves unknown attributes to choose', () => {
 		const { draft, source } = prefill(
-			place({ attributes: { wifi: { value: 'slow', confirmations: 1, lastConfirmedOn: DAY } } })
+			place({ attributes: { wifi: { value: 'slow', ...users(1) } } })
 		);
 		expect(source).toBe('community');
 		expect(draft.wifi).toBe('slow');
 		expect(draft.outlets).toBeUndefined();
+	});
+
+	it("takes the team's values when the community has none", () => {
+		const { draft, source } = prefill(picked());
+		expect(source).toBe('team');
+		expect(draft).toMatchObject({
+			wifi: 'fast',
+			outlets: 'plenty',
+			noise: 'quiet',
+			longStays: 'welcome',
+			rules: ['no_laptops_weekends']
+		});
+	});
+
+	it('leaves the Wi‑Fi to choose when the team only knows it is available', () => {
+		const team = picked();
+		const { draft, source } = prefill(
+			picked({ attributes: { ...team.attributes, wifi: { value: 'available', ...TEAM } } })
+		);
+		expect(source).toBe('team');
+		expect(draft.wifi).toBeUndefined();
+		expect(draft.outlets).toBe('plenty');
+	});
+
+	it("is the community's as soon as one value comes from users", () => {
+		const { draft, source } = prefill(
+			picked({
+				attributes: place().attributes,
+				laptopRules: [{ rule: 'no_laptops_weekends', ...TEAM }]
+			})
+		);
+		expect(source).toBe('community');
+		expect(draft).toMatchObject({ wifi: 'fast', rules: ['no_laptops_weekends'] });
+	});
+
+	it("prefers the user's own answers to the team's", () => {
+		expect(prefill(picked(), MINE).source).toBe('mine');
 	});
 });
 
@@ -120,6 +182,34 @@ describe("Everything's still right", () => {
 		const partial = place({ attributes: { ...place().attributes, noise: undefined } });
 		expect(canConfirmAll(prefill(partial).draft)).toBe(false);
 		expect(canConfirmAll(emptyDraft())).toBe(false);
+	});
+
+	it("counts the team's values", () => {
+		expect(canConfirmAll(prefill(picked()).draft)).toBe(true);
+		const team = picked();
+		const partial = picked({ attributes: { ...team.attributes, noise: undefined } });
+		expect(canConfirmAll(prefill(partial).draft)).toBe(false);
+	});
+
+	it("is not offered when the team's Wi‑Fi is only available", () => {
+		const team = picked();
+		const available = picked({
+			attributes: { ...team.attributes, wifi: { value: 'available', ...TEAM } }
+		});
+		expect(canConfirmAll(prefill(available).draft)).toBe(false);
+	});
+
+	it("sends the team's values as the user's own answers", () => {
+		const initial = prefill(picked()).draft;
+		const draft = confirmAll({ ...initial, workAgain: true }, initial);
+		expect(draft).toMatchObject({
+			workAgain: true,
+			wifi: 'fast',
+			outlets: 'plenty',
+			noise: 'quiet',
+			longStays: 'welcome'
+		});
+		expect(firstMissing(draft)).toBeUndefined();
 	});
 
 	it('takes back the four prefilled attributes and keeps the rest', () => {

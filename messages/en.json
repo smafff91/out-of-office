@@ -51,6 +51,7 @@
 	"place_walk_time": "{minutes} min walk",
 	"place_open_until": "Open until {time}",
 	"attribute_wifi_fast": "Fast Wi‑Fi",
+	"attribute_wifi_available": "Wi‑Fi available",
 	"attribute_outlets_plenty": "Plenty of outlets",
 	"attribute_noise_quiet": "Quiet",
 	"city_not_yet": "Not in {city} yet",
@@ -202,6 +203,7 @@
 	"place_attribute_noise": "Noise",
 	"place_attribute_long_stays": "Long stays",
 	"attribute_short_wifi_fast": "Fast",
+	"attribute_short_wifi_available": "Available",
 	"attribute_short_wifi_slow": "Slow",
 	"attribute_short_wifi_none": "None",
 	"attribute_short_outlets_plenty": "Plenty",
@@ -214,6 +216,7 @@
 	"attribute_long_stays_welcome": "Long stays welcome",
 	"attribute_long_stays_not_really": "Short stays only",
 	"place_not_known": "Not known",
+	"place_from_team": "From our team · {month}",
 	"place_confirmations": [
 		{
 			"declarations": [
@@ -392,6 +395,7 @@
 	"contribute_no": "No",
 	"contribute_still_right": "Still right?",
 	"contribute_still_right_body": "We filled in what others reported. Change only what's different.",
+	"contribute_still_right_body_team": "We filled in what our team found. Change only what's different.",
 	"contribute_own_answers_body": "These are your answers from your last update. Sending updates them.",
 	"contribute_whats_it_like": "What's it like?",
 	"action_everything_still_right": "Everything's still right",

@@ -621,6 +621,60 @@ export type Database = {
 					}
 				];
 			};
+			place_team_info: {
+				Row: {
+					checked_month: string;
+					extras: Database['public']['Enums']['place_extra'][] | null;
+					laptop_rules: Database['public']['Enums']['laptop_rule'][] | null;
+					long_stays: Database['public']['Enums']['long_stays'] | null;
+					noise: Database['public']['Enums']['noise_level'] | null;
+					note: string | null;
+					outlets: Database['public']['Enums']['outlets_level'] | null;
+					place_id: string;
+					updated_at: string;
+					wifi: string | null;
+				};
+				Insert: {
+					checked_month: string;
+					extras?: Database['public']['Enums']['place_extra'][] | null;
+					laptop_rules?: Database['public']['Enums']['laptop_rule'][] | null;
+					long_stays?: Database['public']['Enums']['long_stays'] | null;
+					noise?: Database['public']['Enums']['noise_level'] | null;
+					note?: string | null;
+					outlets?: Database['public']['Enums']['outlets_level'] | null;
+					place_id: string;
+					updated_at?: string;
+					wifi?: string | null;
+				};
+				Update: {
+					checked_month?: string;
+					extras?: Database['public']['Enums']['place_extra'][] | null;
+					laptop_rules?: Database['public']['Enums']['laptop_rule'][] | null;
+					long_stays?: Database['public']['Enums']['long_stays'] | null;
+					noise?: Database['public']['Enums']['noise_level'] | null;
+					note?: string | null;
+					outlets?: Database['public']['Enums']['outlets_level'] | null;
+					place_id?: string;
+					updated_at?: string;
+					wifi?: string | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'place_team_info_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: true;
+						referencedRelation: 'place_details';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'place_team_info_place_id_fkey';
+						columns: ['place_id'];
+						isOneToOne: true;
+						referencedRelation: 'places';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			places: {
 				Row: {
 					added_by: string | null;
@@ -1381,25 +1435,11 @@ export type Database = {
 			place_notes: {
 				Row: {
 					created_month: string | null;
+					from_team: boolean | null;
 					note: string | null;
 					place_id: string | null;
 				};
-				Relationships: [
-					{
-						foreignKeyName: 'contributions_place_id_fkey';
-						columns: ['place_id'];
-						isOneToOne: false;
-						referencedRelation: 'place_details';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'contributions_place_id_fkey';
-						columns: ['place_id'];
-						isOneToOne: false;
-						referencedRelation: 'places';
-						referencedColumns: ['id'];
-					}
-				];
+				Relationships: [];
 			};
 			place_photos: {
 				Row: {
@@ -1677,7 +1717,7 @@ export type Database = {
 			};
 			opening_hours_week: { Args: { p_text: string }; Returns: Json };
 			pick_place: {
-				Args: { p_note: string; p_place_id: string };
+				Args: { p_note: string; p_picked_on?: string; p_place_id: string };
 				Returns: Json;
 			};
 			publish_photo: { Args: { p_photo_id: string }; Returns: boolean };
@@ -1707,6 +1747,10 @@ export type Database = {
 			};
 			revocation_check: { Args: { p_place_id: string }; Returns: Json };
 			score_min_votes: { Args: { p_city_id: string }; Returns: number };
+			set_place_team_info: {
+				Args: { p_info: Json; p_month: string; p_place_id: string };
+				Returns: string;
+			};
 			submit_contribution: {
 				Args: {
 					p_accuracy?: number;

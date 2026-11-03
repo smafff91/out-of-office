@@ -16,7 +16,12 @@
 	import { directionsUrl } from '#lib/platform/directions.ts';
 	import { getPositionIfGranted } from '#lib/platform/geolocation.ts';
 	import { shareLink } from '#lib/platform/share.ts';
-	import { toFeature, type PlaceDetail } from '#lib/supabase/place-details.ts';
+	import {
+		toFeature,
+		type Known,
+		type PlaceDetail,
+		type Provenance
+	} from '#lib/supabase/place-details.ts';
 	import AttributeTile from './AttributeTile.svelte';
 	import CertificationProgress from './CertificationProgress.svelte';
 	import Icon from './Icon.svelte';
@@ -27,6 +32,7 @@
 		ATTRIBUTE_VALUES,
 		EXTRAS,
 		distanceLabel,
+		fromTeamLabel,
 		laptopRuleLabel,
 		openingLabel,
 		osmWifi
@@ -81,14 +87,17 @@
 			icon: IconName,
 			key: keyof typeof ATTRIBUTE_NAMES,
 			values: Record<T, () => string>,
-			attribute: { value: T; confirmations: number; lastConfirmedOn: string } | undefined
+			attribute: Known<T> | undefined
 		) => ({
 			icon,
 			key,
 			name: ATTRIBUTE_NAMES[key](),
 			value: attribute ? values[attribute.value]() : undefined,
-			confirmations: attribute?.confirmations,
-			lastConfirmedOn: attribute?.lastConfirmedOn
+			...(attribute?.source === 'users' && {
+				confirmations: attribute.confirmations,
+				lastConfirmedOn: attribute.lastConfirmedOn
+			}),
+			...(attribute?.source === 'team' && { teamMonth: attribute.month })
 		});
 		return [
 			tile('wifi', 'wifi', ATTRIBUTE_VALUES.wifi, wifi),
@@ -131,8 +140,11 @@
 		noticeTimer = setTimeout(() => (notice = undefined), NOTICE_MS);
 	}
 
-	function ago(day: string) {
-		return formatDaysAgo(daysSince(day, place.timezone));
+	/** "2 confirmations · 3 days ago", or "From our team · Oct 2026". */
+	function provenanceLabel(known: Provenance) {
+		return known.source === 'team'
+			? fromTeamLabel(known.month)
+			: `${m.place_confirmations({ count: known.confirmations })} · ${formatDaysAgo(daysSince(known.lastConfirmedOn, place.timezone))}`;
 	}
 </script>
 
@@ -313,6 +325,7 @@
 						value={tile.value}
 						confirmations={tile.confirmations}
 						lastConfirmedOn={tile.lastConfirmedOn}
+						teamMonth={tile.teamMonth}
 						timezone={place.timezone}
 						addHref={updateHref}
 					/>
@@ -325,8 +338,7 @@
 					<div>
 						<strong>{laptopRuleLabel(rule.rule, rule.hours)}</strong>
 						<span class="mono">
-							{m.place_laptop_policy()} · {m.place_confirmations({ count: rule.confirmations })} ·
-							{ago(rule.lastConfirmedOn)}
+							{m.place_laptop_policy()} · {provenanceLabel(rule)}
 						</span>
 					</div>
 				</div>
@@ -339,10 +351,7 @@
 						{#each place.extras as extra (extra.extra)}
 							<li>
 								<strong>{EXTRAS[extra.extra]()}</strong>
-								<span class="mono">
-									{m.place_confirmations({ count: extra.confirmations })} ·
-									{ago(extra.lastConfirmedOn)}
-								</span>
+								<span class="mono">{provenanceLabel(extra)}</span>
 							</li>
 						{/each}
 					</ul>
@@ -357,11 +366,13 @@
 							<li>
 								<p>{note.note}</p>
 								<span class="mono">
-									{formatDate(`${note.month}-01`, {
-										month: 'short',
-										year: 'numeric',
-										timeZone: 'UTC'
-									})}
+									{note.fromTeam
+										? fromTeamLabel(note.month)
+										: formatDate(`${note.month}-01`, {
+												month: 'short',
+												year: 'numeric',
+												timeZone: 'UTC'
+											})}
 								</span>
 							</li>
 						{/each}

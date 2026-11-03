@@ -1,6 +1,7 @@
 /**
  * One place for the tap preview and the place page (supabase/migrations/20261017120000_place_details.sql).
- * Only aggregates: counts, prevailing values and days in the city's timezone.
+ * Only aggregates: counts, prevailing values and days in the city's timezone, and on certified
+ * places the team's own values where the community has not answered (with their month).
  */
 import type { LngLat, PlaceFeature, PlaceLevel } from '#lib/map/index.ts';
 import type { PlacePhoto } from '#lib/places/photos.ts';
@@ -8,7 +9,7 @@ import { isPhotoPath } from '#lib/photos/urls.ts';
 import { publicPhotoUrl } from './photos.ts';
 import type { createSupabaseClient } from './client.ts';
 import type { Database } from './database.types.ts';
-import type { LaptopRule, Noise, Outlets, Wifi } from './places.ts';
+import type { LaptopRule, Noise, Outlets, ShownWifi } from './places.ts';
 
 type Client = ReturnType<typeof createSupabaseClient>;
 type DetailRow = Database['public']['Views']['place_details']['Row'];
@@ -17,31 +18,38 @@ const browser = typeof window !== 'undefined';
 
 export type LongStays = 'welcome' | 'not_really';
 
-/** The answer most people gave, how many gave it and the day of the latest one. */
-export type Confirmed<T> = { value: T; confirmations: number; lastConfirmedOn: string };
+/**
+ * Where a shown value comes from: the community (how many confirmed it and the day of the
+ * latest one), or the team's own check from public sources when it picked the place (its month,
+ * "YYYY-MM"; certified places only, until the community answers the same thing).
+ */
+export type Provenance =
+	| { source: 'users'; confirmations: number; lastConfirmedOn: string }
+	| { source: 'team'; month: string };
+
+/** The answer most people gave, or the team's. */
+export type Known<T> = { value: T } & Provenance;
 
 export type PlaceAttributes = {
-	wifi?: Confirmed<Wifi>;
-	outlets?: Confirmed<Outlets>;
-	noise?: Confirmed<Noise>;
-	long_stays?: Confirmed<LongStays>;
+	wifi?: Known<ShownWifi>;
+	outlets?: Known<Outlets>;
+	noise?: Known<Noise>;
+	long_stays?: Known<LongStays>;
 };
 
-export type ConfirmedRule = {
+export type KnownRule = {
 	rule: LaptopRule;
-	confirmations: number;
-	lastConfirmedOn: string;
 	/** Time limit only: the most frequent answer, when given. */
 	hours?: 1 | 2 | 3;
-};
+} & Provenance;
 
 export type PlaceExtra = 'air_conditioning' | 'toilet' | 'large_tables' | 'minimum_spend';
 
-/** A detail at least one active contribution mentions (not choosing one is not a "no"). */
-export type ConfirmedExtra = { extra: PlaceExtra; confirmations: number; lastConfirmedOn: string };
+/** A detail at least one active contribution (or the team) mentions: not choosing one is not a "no". */
+export type KnownExtra = { extra: PlaceExtra } & Provenance;
 
-/** A short note, dated by month only ("YYYY-MM"), without its author. */
-export type PlaceNote = { note: string; month: string };
+/** A short note, dated by month only ("YYYY-MM"), without its author; or the team's note. */
+export type PlaceNote = { note: string; month: string; fromTeam: boolean };
 
 export type PlaceDetail = {
 	id: string;
@@ -77,8 +85,8 @@ export type PlaceDetail = {
 	/** People needed for automatic certification (certification_settings). */
 	minUsers: number;
 	attributes: PlaceAttributes;
-	laptopRules: ConfirmedRule[];
-	extras: ConfirmedExtra[];
+	laptopRules: KnownRule[];
+	extras: KnownExtra[];
 	/** Check-in thresholds, only to show the distance in the form (the database decides). */
 	checkin: { radiusM: number; maxAccuracyM: number };
 	/** The latest visible photos (3 at most, newest first), for the preview strip. */
@@ -98,30 +106,39 @@ const COLUMNS =
 const CACHE_MS = 60_000;
 const cache = new Map<string, { at: number; detail: PlaceDetail }>();
 
-type RawConfirmed = {
+type RawKnown = {
 	value?: string;
 	rule?: string;
 	extra?: string;
 	hours?: number;
-	confirmations: number;
-	last_confirmed_on: string;
+	source?: string;
+	confirmations?: number;
+	last_confirmed_on?: string;
+	month?: string;
 };
 
 const HOURS = new Set([1, 2, 3]);
 
-function toConfirmed<T>(raw: RawConfirmed | undefined): Confirmed<T> | undefined {
-	if (!raw?.value) return undefined;
+function toProvenance(raw: RawKnown): Provenance | undefined {
+	if (raw.source === 'team') return raw.month ? { source: 'team', month: raw.month } : undefined;
+	if (!raw.last_confirmed_on) return undefined;
 	return {
-		value: raw.value as T,
-		confirmations: raw.confirmations,
+		source: 'users',
+		confirmations: raw.confirmations ?? 0,
 		lastConfirmedOn: raw.last_confirmed_on
 	};
 }
 
+function toKnown<T>(raw: RawKnown | undefined): Known<T> | undefined {
+	const provenance = raw && toProvenance(raw);
+	if (!raw?.value || !provenance) return undefined;
+	return { value: raw.value as T, ...provenance };
+}
+
 export function toPlaceDetail(row: Omit<DetailRow, 'city_id'>): PlaceDetail {
-	const attributes = (row.attributes ?? {}) as Record<string, RawConfirmed>;
-	const rules = (row.laptop_rules ?? []) as RawConfirmed[];
-	const extras = (row.extras ?? []) as RawConfirmed[];
+	const attributes = (row.attributes ?? {}) as Record<string, RawKnown>;
+	const rules = (row.laptop_rules ?? []) as RawKnown[];
+	const extras = (row.extras ?? []) as RawKnown[];
 	return {
 		id: row.id ?? '',
 		slug: row.slug ?? '',
@@ -148,22 +165,24 @@ export function toPlaceDetail(row: Omit<DetailRow, 'city_id'>): PlaceDetail {
 		contributors: row.contributors ?? 0,
 		minUsers: row.min_users ?? 10,
 		attributes: {
-			wifi: toConfirmed<Wifi>(attributes.wifi),
-			outlets: toConfirmed<Outlets>(attributes.outlets),
-			noise: toConfirmed<Noise>(attributes.noise),
-			long_stays: toConfirmed<LongStays>(attributes.long_stays)
+			wifi: toKnown<ShownWifi>(attributes.wifi),
+			outlets: toKnown<Outlets>(attributes.outlets),
+			noise: toKnown<Noise>(attributes.noise),
+			long_stays: toKnown<LongStays>(attributes.long_stays)
 		},
-		laptopRules: rules.map((raw) => ({
-			rule: raw.rule as LaptopRule,
-			confirmations: raw.confirmations,
-			lastConfirmedOn: raw.last_confirmed_on,
-			...(raw.hours && HOURS.has(raw.hours) && { hours: raw.hours as 1 | 2 | 3 })
-		})),
-		extras: extras.map((raw) => ({
-			extra: raw.extra as PlaceExtra,
-			confirmations: raw.confirmations,
-			lastConfirmedOn: raw.last_confirmed_on
-		})),
+		laptopRules: rules.flatMap((raw) => {
+			const provenance = toProvenance(raw);
+			if (!raw.rule || !provenance) return [];
+			return {
+				rule: raw.rule as LaptopRule,
+				...(raw.hours && HOURS.has(raw.hours) && { hours: raw.hours as 1 | 2 | 3 }),
+				...provenance
+			};
+		}),
+		extras: extras.flatMap((raw) => {
+			const provenance = toProvenance(raw);
+			return raw.extra && provenance ? { extra: raw.extra as PlaceExtra, ...provenance } : [];
+		}),
 		checkin: {
 			radiusM: row.checkin_radius_m ?? 100,
 			maxAccuracyM: row.checkin_max_accuracy_m ?? 100
@@ -236,7 +255,7 @@ export async function fetchPlaceCommunity(
 		supabase.from('place_contributors').select('display_name').eq('place_id', placeId),
 		supabase
 			.from('place_notes')
-			.select('note, created_month')
+			.select('note, created_month, from_team')
 			.eq('place_id', placeId)
 			.order('created_month', { ascending: false })
 			.limit(20),
@@ -253,7 +272,9 @@ export async function fetchPlaceCommunity(
 	return {
 		contributorNames: names.data.flatMap((row) => (row.display_name ? [row.display_name] : [])),
 		notes: notes.data.flatMap((row) =>
-			row.note && row.created_month ? [{ note: row.note, month: row.created_month }] : []
+			row.note && row.created_month
+				? [{ note: row.note, month: row.created_month, fromTeam: row.from_team ?? false }]
+				: []
 		),
 		photos: photos.data.flatMap((row) => toPlacePhoto(row) ?? [])
 	};

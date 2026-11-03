@@ -51,6 +51,7 @@
 	"place_walk_time": "A {minutes} min a pie",
 	"place_open_until": "Abierto hasta las {time}",
 	"attribute_wifi_fast": "Wi‑Fi rápido",
+	"attribute_wifi_available": "Wi‑Fi disponible",
 	"attribute_outlets_plenty": "Muchos enchufes",
 	"attribute_noise_quiet": "Tranquilo",
 	"city_not_yet": "Aún no estamos en {city}",
@@ -202,6 +203,7 @@
 	"place_attribute_noise": "Ruido",
 	"place_attribute_long_stays": "Estancias largas",
 	"attribute_short_wifi_fast": "Rápido",
+	"attribute_short_wifi_available": "Disponible",
 	"attribute_short_wifi_slow": "Lento",
 	"attribute_short_wifi_none": "No hay",
 	"attribute_short_outlets_plenty": "Muchos",
@@ -214,6 +216,7 @@
 	"attribute_long_stays_welcome": "Estancias largas bienvenidas",
 	"attribute_long_stays_not_really": "Solo estancias cortas",
 	"place_not_known": "Sin datos",
+	"place_from_team": "De nuestro equipo · {month}",
 	"place_confirmations": [
 		{
 			"declarations": [
@@ -392,6 +395,7 @@
 	"contribute_no": "No",
 	"contribute_still_right": "¿Sigue igual?",
 	"contribute_still_right_body": "Hemos rellenado lo que contaron otros usuarios. Cambia solo lo que sea distinto.",
+	"contribute_still_right_body_team": "Hemos rellenado lo que encontró nuestro equipo. Cambia solo lo que sea distinto.",
 	"contribute_own_answers_body": "Son las respuestas de tu última actualización. Al enviar, se actualizan.",
 	"contribute_whats_it_like": "¿Cómo es?",
 	"action_everything_still_right": "Todo sigue igual",
