@@ -11,9 +11,11 @@ const base = {
 
 describe('certificationOrigin', () => {
 	it('shows the month of a pick in the page language', () => {
-		expect(certificationOrigin(base, 'en')).toBe('Picked by our team · Oct 2026');
-		expect(certificationOrigin(base, 'es')).toBe('Elegido por nuestro equipo · oct 2026');
-		expect(certificationOrigin(base, 'ca')).toBe('Triat pel nostre equip · oct. del 2026');
+		expect(certificationOrigin(base, 'en')).toBe('Picked by our team · Oct\u00a02026');
+		expect(certificationOrigin(base, 'es')).toBe('Elegido por nuestro equipo · oct\u00a02026');
+		expect(certificationOrigin(base, 'ca')).toBe(
+			'Triat pel nostre equip · oct.\u00a0del\u00a02026'
+		);
 	});
 
 	it('shows the users of an automatic certification', () => {
@@ -34,11 +36,11 @@ describe('certificationRemoved', () => {
 	const removed = { ...base, level: 'community' as const, removedOn: '2026-10-01' };
 
 	it('shows the month of the removal in the page language', () => {
-		expect(certificationRemoved(removed, 'en')).toBe('Certification removed in Oct 2026');
-		expect(certificationRemoved(removed, 'es')).toBe('Certificación retirada en oct 2026');
+		expect(certificationRemoved(removed, 'en')).toBe('Certification removed in Oct\u00a02026');
+		expect(certificationRemoved(removed, 'es')).toBe('Certificación retirada en oct\u00a02026');
 		// Also after an unpick that left the place without contributions.
 		expect(certificationRemoved({ ...removed, level: 'osm_only' }, 'ca')).toBe(
-			'Certificació retirada · oct. del 2026'
+			'Certificació retirada · oct.\u00a0del\u00a02026'
 		);
 	});
 

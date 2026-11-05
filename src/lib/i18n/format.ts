@@ -24,24 +24,19 @@ export function formatDaysAgo(days: number): string {
 	return format.format(-Math.floor(days / 365), 'year');
 }
 
-/** A calendar date, e.g. "Sep 2026" or "sept 2026"; pass Intl options to change the shape. */
-export function formatDate(
-	date: Date | string,
-	options: Intl.DateTimeFormatOptions = { month: 'short', year: 'numeric' }
-): string {
-	return new Intl.DateTimeFormat(getLocale(), options).format(new Date(date));
-}
-
 /**
- * A month from a "YYYY-MM-DD" date: "Oct 2026" (en), "oct 2026" (es, ca). Read as UTC, so the
- * device's timezone never moves it to the previous month.
+ * A month from a "YYYY-MM-DD" date: "Oct 2026" (en), "oct 2026" (es), "oct. del 2026" (ca). Read
+ * as UTC, so the device's timezone never moves it to the previous month. Non-breaking spaces:
+ * a label that does not fit wraps before the month, never inside it.
  */
 export function formatMonth(date: string, locale: string = getLocale()): string {
 	return new Intl.DateTimeFormat(locale, {
 		month: 'short',
 		year: 'numeric',
 		timeZone: 'UTC'
-	}).format(new Date(date));
+	})
+		.format(new Date(date))
+		.replace(/\s/g, '\u00a0');
 }
 
 /**

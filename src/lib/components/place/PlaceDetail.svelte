@@ -4,7 +4,7 @@
 	// The user's position is used only if already granted, for the walking time and the dot on
 	// the small map; it never moves the map.
 	import { onMount } from 'svelte';
-	import { formatDate, formatDaysAgo, formatPercent } from '#lib/i18n/format.ts';
+	import { formatDaysAgo, formatMonth, formatPercent } from '#lib/i18n/format.ts';
 	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { CityMap, type LngLat } from '#lib/map/index.ts';
 	import * as m from '#lib/paraglide/messages.js';
@@ -366,13 +366,7 @@
 							<li>
 								<p>{note.note}</p>
 								<span class="mono">
-									{note.fromTeam
-										? fromTeamLabel(note.month)
-										: formatDate(`${note.month}-01`, {
-												month: 'short',
-												year: 'numeric',
-												timeZone: 'UTC'
-											})}
+									{note.fromTeam ? fromTeamLabel(note.month) : formatMonth(`${note.month}-01`)}
 								</span>
 							</li>
 						{/each}
