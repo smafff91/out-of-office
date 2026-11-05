@@ -79,10 +79,10 @@ export function formatHours(hours: number): string {
 	}).format(hours);
 }
 
-/** Short weekday name, Monday = 0: "Mon" (en), "lun" (es), "dl." (ca). */
-export function formatWeekday(day: number): string {
+/** Weekday name, Monday = 0: "Mon" (en), "lun" (es), "dl." (ca); long: "Monday", "lunes", "dilluns". */
+export function formatWeekday(day: number, style: 'short' | 'long' = 'short'): string {
 	// 2024-01-01 was a Monday; UTC so the device timezone never shifts the day.
-	return new Intl.DateTimeFormat(getLocale(), { weekday: 'short', timeZone: 'UTC' }).format(
+	return new Intl.DateTimeFormat(getLocale(), { weekday: style, timeZone: 'UTC' }).format(
 		new Date(Date.UTC(2024, 0, 1 + day))
 	);
 }

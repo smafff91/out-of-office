@@ -33,7 +33,9 @@
 	const cover = $derived(item?.coverPath ? publicPhotoUrl('thumb', item.coverPath) : undefined);
 
 	const distance = $derived(showDistance ? distanceLabel(entry.distance) : undefined);
-	const hours = $derived(item ? openingLabel(item.openingHours, item.timezone) : undefined);
+	const hours = $derived(
+		item ? openingLabel(item.openingHours, item.timezone, { form: 'short' }) : undefined
+	);
 
 	const meta = $derived(
 		[

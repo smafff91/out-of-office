@@ -13,6 +13,9 @@ export type OpeningStatus =
 	| { state: 'open_24h' }
 	| { state: 'open'; until: string }
 	| { state: 'opens'; at: string }
+	/** Today's hours are over: the next opening, in 1 to 7 days (Monday = 0). */
+	| { state: 'closed'; inDays: number; day: number; at: string }
+	/** No hours at all today. */
 	| { state: 'closed_today' };
 
 /** [start, end] in minutes from the start of the day; end may pass 1440 (after midnight). */
@@ -108,9 +111,9 @@ function localNow(now: Date, timeZone: string): { day: number; minute: number } 
 }
 
 /**
- * Status right now: open (until when), opens later today (at what time), or closed for the
- * rest of the day. Times are "HH:MM"; format them with formatTime(). Undefined when the hours
- * are missing or not readable with certainty.
+ * Status right now: open (until when), opens later today (at what time), closed after today's
+ * hours (with the next opening), or a day without hours. Times are "HH:MM"; format them with
+ * formatTime(). Undefined when the hours are missing or not readable with certainty.
  */
 export function openingStatus(
 	text: string | null | undefined,
@@ -136,7 +139,16 @@ export function openingStatus(
 		if (minute >= start && minute < end) return { state: 'open', until: hhmm(end) };
 	}
 	const next = today.filter(([start]) => start > minute).sort((a, b) => a[0] - b[0])[0];
-	return next ? { state: 'opens', at: hhmm(next[0]) } : { state: 'closed_today' };
+	if (next) return { state: 'opens', at: hhmm(next[0]) };
+	if (!today.length) return { state: 'closed_today' };
+
+	// Today has hours, so the search ends here at the latest, a week from now.
+	for (let inDays = 1; inDays <= 7; inDays++) {
+		const nextDay = (day + inDays) % 7;
+		const first = week[nextDay].toSorted((a, b) => a[0] - b[0])[0];
+		if (first) return { state: 'closed', inDays, day: nextDay, at: hhmm(first[0]) };
+	}
+	return { state: 'closed_today' };
 }
 
 export type DayHours = {

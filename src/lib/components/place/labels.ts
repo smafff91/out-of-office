@@ -1,7 +1,13 @@
 /**
  * Texts for place data shared by the list, the preview and the place page.
  */
-import { formatHours, formatKilometers, formatMonth, formatTime } from '#lib/i18n/format.ts';
+import {
+	formatHours,
+	formatKilometers,
+	formatMonth,
+	formatTime,
+	formatWeekday
+} from '#lib/i18n/format.ts';
 import * as m from '#lib/paraglide/messages.js';
 import { walkingEstimate } from '#lib/places/distance.ts';
 import { openingStatus } from '#lib/places/opening-hours.ts';
@@ -107,14 +113,31 @@ export const EXTRAS: Record<PlaceExtra, Label> = {
 	minimum_spend: m.extra_minimum_spend
 };
 
-/** "Open until 8:00 PM", "Opens 8:00 AM"…; undefined when the hours are unknown or uncertain. */
-export function openingLabel(openingHours: string | null, timezone: string): string | undefined {
-	const status = openingStatus(openingHours, timezone);
+/**
+ * "Open until 8:00 PM", "Opens at 8:00 AM", "Closed · Opens tomorrow at 8:00 AM"… Rows of the
+ * list use the short form ("Opens Mon 8:00 AM"). Undefined when the hours are unknown or uncertain.
+ */
+export function openingLabel(
+	openingHours: string | null,
+	timezone: string,
+	{ form = 'long', now }: { form?: 'long' | 'short'; now?: Date } = {}
+): string | undefined {
+	const status = openingStatus(openingHours, timezone, now);
 	if (!status) return undefined;
 	if (status.state === 'open') return m.place_open_until({ time: formatTime(status.until) });
 	if (status.state === 'opens') return m.place_opens_at({ time: formatTime(status.at) });
 	if (status.state === 'open_24h') return m.place_open_24h();
-	return m.place_closed_today();
+	if (status.state === 'closed_today') return m.place_closed_today();
+
+	const time = formatTime(status.at);
+	if (status.inDays === 1) {
+		return form === 'short'
+			? m.place_opens_tomorrow_short({ time })
+			: m.place_closed_opens_tomorrow({ time });
+	}
+	return form === 'short'
+		? m.place_opens_on_short({ day: formatWeekday(status.day), time })
+		: m.place_closed_opens_on({ day: formatWeekday(status.day, 'long'), time });
 }
 
 /** "7 min walk" or "2.4 km". */

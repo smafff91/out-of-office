@@ -18,6 +18,7 @@ place_no_work_info,No work info yet,Aún sin información para trabajar,to revie
 place_walk_time,{minutes} min walk,A {minutes} min a pie,to review,A {minutes} min a peu,to review
 place_open_until,Open until {time},Abierto hasta las {time},to review,Obert fins a les {time},to review
 attribute_wifi_fast,Fast Wi‑Fi,Wi‑Fi rápido,to review,Wi‑Fi ràpida,to review
+attribute_wifi_available,Wi‑Fi available,Wi‑Fi disponible,to review,Wi‑Fi disponible,to review
 attribute_outlets_plenty,Plenty of outlets,Muchos enchufes,to review,Molts endolls,to review
 attribute_noise_quiet,Quiet,Tranquilo,to review,Tranquil,to review
 city_not_yet,Not in {city} yet,Aún no estamos en {city},to review,Encara no som a {city},to review
@@ -60,7 +61,11 @@ sort_top_rated,Top rated,Mejor valorados,to review,Més ben valorats,to review
 list_not_enough_votes,Not enough votes yet,Aún no hay suficientes votos,to review,Encara no hi ha prou vots,to review
 action_show_more,Show more,Ver más,to review,Mostra'n més,to review
 action_search_area,Search this area,Buscar en esta zona,to review,Cerca en aquesta zona,to review
-place_opens_at,Opens {time},Abre a las {time},to review,Obre a les {time},to review
+place_opens_at,Opens at {time},Abre a las {time},to review,Obre a les {time},to review
+place_opens_tomorrow_short,Opens tomorrow {time},Abre mañana {time},to review,Obre demà {time},to review
+place_opens_on_short,Opens {day} {time},Abre {day} {time},to review,Obre {day} {time},to review
+place_closed_opens_tomorrow,Closed · Opens tomorrow at {time},Cerrado · Abre mañana a las {time},to review,Tancat · Obre demà a les {time},to review
+place_closed_opens_on,Closed · Opens {day} at {time},Cerrado · Abre el {day} a las {time},to review,Tancat · Obre {day} a les {time},to review
 place_closed_today,Closed today,Cerrado hoy,to review,Tancat avui,to review
 place_open_24h,Open 24 hours,Abierto 24 horas,to review,Obert 24 hores,to review
 attribute_wifi_none,No Wi‑Fi,Sin wifi,to review,Sense wifi,to review
@@ -105,6 +110,7 @@ place_attribute_outlets,Outlets,Enchufes,to review,Endolls,to review
 place_attribute_noise,Noise,Ruido,to review,Soroll,to review
 place_attribute_long_stays,Long stays,Estancias largas,to review,Estades llargues,to review
 attribute_short_wifi_fast,Fast,Rápido,to review,Ràpid,to review
+attribute_short_wifi_available,Available,Disponible,to review,Disponible,to review
 attribute_short_wifi_slow,Slow,Lento,to review,Lent,to review
 attribute_short_wifi_none,None,No hay,to review,No n'hi ha,to review
 attribute_short_outlets_plenty,Plenty,Muchos,to review,Molts,to review
@@ -117,6 +123,7 @@ attribute_short_long_stays_not_really,Not really,No mucho,to review,No gaire,to 
 attribute_long_stays_welcome,Long stays welcome,Estancias largas bienvenidas,to review,Estades llargues benvingudes,to review
 attribute_long_stays_not_really,Short stays only,Solo estancias cortas,to review,Només estades curtes,to review
 place_not_known,Not known,Sin datos,to review,Sense dades,to review
+place_from_team,From our team · {month},De nuestro equipo · {month},to review,Del nostre equip · {month},to review
 place_confirmations [countPlural=one],{countText} confirmation,{countText} confirmación,to review,{countText} confirmació,to review
 place_confirmations [countPlural=*],{countText} confirmations,{countText} confirmaciones,to review,{countText} confirmacions,to review
 place_laptop_policy,Laptop policy,Normas para portátiles,to review,Normes per a portàtils,to review
@@ -246,6 +253,7 @@ contribute_yes,Yes,Sí,to review,Sí,to review
 contribute_no,No,No,to review,No,to review
 contribute_still_right,Still right?,¿Sigue igual?,to review,Continua igual?,to review
 contribute_still_right_body,We filled in what others reported. Change only what's different.,Hemos rellenado lo que contaron otros usuarios. Cambia solo lo que sea distinto.,to review,Hem omplert el que van explicar altres usuaris. Canvia només el que sigui diferent.,to review
+contribute_still_right_body_team,We filled in what our team found. Change only what's different.,Hemos rellenado lo que encontró nuestro equipo. Cambia solo lo que sea distinto.,to review,Hem omplert el que va trobar el nostre equip. Canvia només el que sigui diferent.,to review
 contribute_own_answers_body,These are your answers from your last update. Sending updates them.,"Son las respuestas de tu última actualización. Al enviar, se actualizan.",to review,"Són les respostes de la teva última actualització. En enviar, s'actualitzen.",to review
 contribute_whats_it_like,What's it like?,¿Cómo es?,to review,Com és?,to review
 action_everything_still_right,Everything's still right,Todo sigue igual,to review,Tot continua igual,to review

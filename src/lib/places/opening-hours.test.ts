@@ -17,14 +17,44 @@ describe('openingStatus', () => {
 			state: 'opens',
 			at: '08:00'
 		});
-		expect(openingStatus(hours, TZ, at('2026-10-12T21:00'))).toEqual({ state: 'closed_today' });
+		expect(openingStatus(hours, TZ, at('2026-10-12T21:00'))).toEqual({
+			state: 'closed',
+			inDays: 1,
+			day: 1,
+			at: '08:00'
+		});
 		expect(openingStatus(hours, TZ, at('2026-10-18T12:00'))).toEqual({ state: 'closed_today' });
+	});
+
+	it('says closed today only on a day without hours', () => {
+		const hours = 'Mo-Fr 08:30-17:00; Sa 09:00-14:00; Su off';
+		// Thursday at 17:06: it was open today, it is only closed now.
+		expect(openingStatus(hours, TZ, at('2026-10-15T17:06'))?.state).toBe('closed');
+		expect(openingStatus(hours, TZ, at('2026-10-18T09:00'))).toEqual({ state: 'closed_today' });
+		expect(openingStatus(hours, TZ, at('2026-10-18T20:00'))).toEqual({ state: 'closed_today' });
+	});
+
+	it("finds the next opening after today's hours", () => {
+		// Saturday: Sunday is closed, so the next opening is Monday, the earliest range of the day.
+		expect(
+			openingStatus('Mo 16:00-20:00, 08:30-12:00; Sa 09:00-14:00', TZ, at('2026-10-17T15:00'))
+		).toEqual({ state: 'closed', inDays: 2, day: 0, at: '08:30' });
+		// Open one day a week: the same day next week.
+		expect(openingStatus('Fr 09:00-12:00', TZ, at('2026-10-16T13:00'))).toEqual({
+			state: 'closed',
+			inDays: 7,
+			day: 4,
+			at: '09:00'
+		});
 	});
 
 	it('uses the city timezone, not the device one', () => {
 		// 18:30 UTC is 20:30 in Barcelona: already closed there.
 		expect(openingStatus('Mo-Fr 08:00-20:00', TZ, new Date('2026-10-12T18:30:00Z'))).toEqual({
-			state: 'closed_today'
+			state: 'closed',
+			inDays: 1,
+			day: 1,
+			at: '08:00'
 		});
 	});
 
@@ -44,6 +74,25 @@ describe('openingStatus', () => {
 			state: 'open',
 			until: '00:00'
 		});
+	});
+
+	it('follows a place open until after midnight', () => {
+		const daily = 'Mo-Su 18:00-01:00';
+		expect(openingStatus(daily, TZ, at('2026-10-13T00:30'))).toEqual({
+			state: 'open',
+			until: '01:00'
+		});
+		expect(openingStatus(daily, TZ, at('2026-10-13T01:30'))).toEqual({
+			state: 'opens',
+			at: '18:00'
+		});
+		// Friday night only: Saturday is a day without hours once the night is over.
+		const friday = 'Fr 20:00-01:00';
+		expect(openingStatus(friday, TZ, at('2026-10-17T00:30'))).toEqual({
+			state: 'open',
+			until: '01:00'
+		});
+		expect(openingStatus(friday, TZ, at('2026-10-17T02:00'))).toEqual({ state: 'closed_today' });
 	});
 
 	it('lets later rules replace earlier ones and reads "off"', () => {
