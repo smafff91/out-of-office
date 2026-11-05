@@ -1,0 +1,150 @@
+{
+	"city": "barcelona",
+	"picked_month": "2026-11",
+	"places": [
+		{
+			"name": "Brot Cafè",
+			"address": "Carrer de Berlín, 82",
+			"district": "Les Corts",
+			"sources_note": "European Coffee Trip (laptop friendly, free Wi-Fi), 2026. Same address as The Miners Berlín in the October sources, not found in OSM.",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": null
+		},
+		{
+			"name": "SandwiChez Numància",
+			"address": "Carrer de Numància, 147",
+			"district": "Les Corts",
+			"sources_note": "Thatch (popular with remote workers, Travessera de les Corts branch), A Wifi Place 2026, Barcelona Secreta 2024 (chain)",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Wi-Fi is limited to about 1.5 hours per purchase."
+			},
+			"slug": null
+		},
+		{
+			"name": "SandwiChez Sants",
+			"address": "Carrer de Sants, 358",
+			"district": "Sants-Montjuïc",
+			"sources_note": "GastroRanking review set 2026 (laptop-friendly, quiet, bright), A Wifi Place 2026, Barcelona Secreta 2024",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Wi-Fi is limited to about 1.5 hours per purchase."
+			},
+			"slug": null
+		},
+		{
+			"name": "Vivari",
+			"address": "Avinguda de Madrid, 222",
+			"district": "Sants-Montjuïc",
+			"sources_note": "Es Parte del Viaje Sep 2026 (Wi-Fi ~160 Mbps, some outlets)",
+			"team": {
+				"wifi": "fast",
+				"outlets": "a_few",
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": null
+		},
+		{
+			"name": "SandwiChez Via Augusta",
+			"address": "Via Augusta, 117",
+			"district": "Sarrià-Sant Gervasi",
+			"sources_note": "Historic branch of the chain, GastroRanking review Oct 2026 (calm), Barcelona Secreta 2024",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Wi-Fi is limited to about 1.5 hours per purchase."
+			},
+			"slug": null
+		},
+		{
+			"name": "Sip Coffee Roasters",
+			"address": "Carrer del Pintor Fortuny, 22",
+			"district": "Ciutat Vella (Raval)",
+			"sources_note": "European Coffee Trip (laptop friendly, free Wi-Fi), Time Out 2025",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Small place with only five tables."
+			},
+			"slug": null
+		},
+		{
+			"name": "KRUDA Specialty Coffee",
+			"address": "Carrer de Berlín, 103",
+			"district": "Les Corts",
+			"sources_note": "European Coffee Trip (laptop friendly, free Wi-Fi)",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Closes at 1:30 PM on weekdays."
+			},
+			"slug": "kruda"
+		},
+		{
+			"name": "Dalston Coffee",
+			"address": "Carrer de les Ramelleres, 16",
+			"district": "Ciutat Vella (Raval)",
+			"sources_note": "European Coffee Trip and Caffe Atlas (free Wi-Fi)",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": null
+			},
+			"slug": "dalston-coffee"
+		},
+		{
+			"name": "SandwiChez Amigó",
+			"address": "Carrer d'Amigó, 63",
+			"district": "Sarrià-Sant Gervasi",
+			"sources_note": "Chain, Time Out",
+			"team": {
+				"wifi": "available",
+				"outlets": null,
+				"noise": null,
+				"long_stays": null,
+				"laptop_rules": [],
+				"extras": [],
+				"note": "Wi-Fi is limited to about 1.5 hours per purchase."
+			},
+			"slug": null
+		}
+	]
+}
