@@ -652,6 +652,8 @@
 		position: fixed;
 		inset: 0;
 		overflow: hidden;
+		/* Not even code may scroll it: scrollIntoView in the form would push the desktop bar away. */
+		overflow: clip;
 		--attribution-bottom: calc(var(--sheet, 260px) + 12px);
 		--bottom: calc(var(--sheet, 260px) + 16px);
 	}
